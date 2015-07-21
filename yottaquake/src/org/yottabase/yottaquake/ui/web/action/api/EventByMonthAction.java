@@ -25,19 +25,40 @@ public class EventByMonthAction extends AbstractAction{
 		JSONObject json = new JSONObject();
 		
 		JSONArray items = new JSONArray();
-		json.put("counts", items);
+		json.put("countByMonth", items);
 		json.put("count", count);
 		
-		JSONObject mounth = new JSONObject();
+		JSONObject mounth;
+		
+		mounth = new JSONObject();
 		mounth.put("month", "gen");
-		mounth.put("count", "10");
+		mounth.put("year", "2012");
+		mounth.put("count", "200");
 		items.put(mounth);
 		
-		JSONObject mounth2 = new JSONObject();
-		mounth2.put("month", "feb");
-		mounth2.put("count", "20");
-		items.put(mounth2);
+		mounth = new JSONObject();
+		mounth.put("month", "feb");
+		mounth.put("year", "2012");
+		mounth.put("count", "220");
+		items.put(mounth);
 		
+		mounth = new JSONObject();
+		mounth.put("month", "mar");
+		mounth.put("year", "2012");
+		mounth.put("count", "310");
+		items.put(mounth);
+		
+		mounth = new JSONObject();
+		mounth.put("month", "apr");
+		mounth.put("year", "2012");
+		mounth.put("count", "120");
+		items.put(mounth);
+		
+		mounth = new JSONObject();
+		mounth.put("month", "mag");
+		mounth.put("year", "2012");
+		mounth.put("count", "150");
+		items.put(mounth);
 		
 		response.setContentType(this.CONTENT_TYPE_JSON);
 		response.getWriter().write(json.toString());

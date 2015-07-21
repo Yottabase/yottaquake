@@ -3,6 +3,11 @@
 <div class="container">
 
 	Benvenuto in yottaquake
+	
+	
+	
+	<div id="events-by-month"></div>
+	
 
 </div>
 <!-- /.container -->
