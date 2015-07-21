@@ -2,8 +2,6 @@ package org.yottabase.yottaquake.db;
 
 import org.bson.Document;
 
-import com.mongodb.client.AggregateIterable;
-
 public abstract class AbstractDBFacade {
 		
 	/**
@@ -23,7 +21,19 @@ public abstract class AbstractDBFacade {
 	public abstract void convertDate();
 	
 	/**
-	 * 
+	 * raggruppa per anno e mese 
 	 */
 	public abstract Iterable<Document> countByYearMonth();
+	
+	
+	/**
+	 * i terremoti principali
+	 */
+	
+	public abstract Iterable<Document> bigEarthQuake(int magnitude);
+
+	public abstract Iterable<Document> countByYear();
+	
+	public abstract Iterable<Document> countByMonth();
+
 }

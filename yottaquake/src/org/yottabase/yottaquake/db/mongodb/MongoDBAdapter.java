@@ -2,6 +2,7 @@ package org.yottabase.yottaquake.db.mongodb;
 
 import static java.util.Arrays.asList;
 
+import java.util.ArrayList;
 
 import org.bson.Document;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
@@ -89,6 +90,48 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		AggregateIterable<Document> iterable = db.getCollection(COLLECTION).aggregate(asList(groupByYearMonth,project,sort));
 			
 
+		return iterable;
+	}
+	
+	@Override
+	public Iterable<Document> countByYear() {		
+		Document groupByYearMonth = new Document("$group", new Document("_id", new Document("year","$year")).append("count", new Document("$sum", 1)));
+		Document project = new Document("$project", new Document("_id",0).append("year", "$_id.year").append("count", 1));
+		Document sort = new Document("$sort", new Document("total",1));
+
+		AggregateIterable<Document> iterable = db.getCollection(COLLECTION).aggregate(asList(groupByYearMonth,project,sort));
+			
+		return iterable;
+	}
+	
+	
+	@Override
+	public Iterable<Document> countByMonth() {		
+		Document groupByYearMonth = new Document("$group", new Document("_id", new Document("month", "$month")).append("count", new Document("$sum", 1)));
+		Document project = new Document("$project", new Document("_id",0).append("month", "$_id.month").append("count", 1));
+		Document sort = new Document("$sort", new Document("total",1));
+
+		AggregateIterable<Document> iterable = db.getCollection(COLLECTION).aggregate(asList(groupByYearMonth,project,sort));
+			
+		return iterable;
+	}
+
+	@Override
+	public Iterable<Document> bigEarthQuake(int magnitude) {
+		Document project = new Document(new Document("_id",0).append("properties.mag",1).append("properties.lon",1).append("properties.lat",1));
+
+		Document query = new Document("properties.mag", new Document("$gt", magnitude));
+		FindIterable<Document> iterable = db.getCollection(COLLECTION).find(query).projection(project);
+
+		//christian
+//		iterable.forEach(new Block<Document>() {
+//			public void apply(final Document document) {
+//				Document documentOutput = (Document) document.get("properties");				
+//				
+//				System.out.println(documentOutput.get("mag") + "	latitudine = " + documentOutput.get("lat") + "	longitudine = " + documentOutput.get("lon"));
+//			}
+//		});	
+				
 		return iterable;
 	}
 	
