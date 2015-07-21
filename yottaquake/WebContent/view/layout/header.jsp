@@ -10,7 +10,7 @@
     <meta name="author" content="Yotabase">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Eureka Search Engine</title>
+    <title>Yottaquake</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.css" rel="stylesheet">
