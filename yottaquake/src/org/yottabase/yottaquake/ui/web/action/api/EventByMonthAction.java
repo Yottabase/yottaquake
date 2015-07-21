@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.yottabase.yottaquake.db.AbstractDBFacade;
 import org.yottabase.yottaquake.ui.web.core.AbstractAction;
 
 public class EventByMonthAction extends AbstractAction{
@@ -16,10 +17,16 @@ public class EventByMonthAction extends AbstractAction{
 	public void run(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
+		AbstractDBFacade facade = this.getFacade();
+		
+		long count = facade.countEvents();
+		
+		
 		JSONObject json = new JSONObject();
 		
 		JSONArray items = new JSONArray();
 		json.put("counts", items);
+		json.put("count", count);
 		
 		JSONObject mounth = new JSONObject();
 		mounth.put("month", "gen");
@@ -34,6 +41,8 @@ public class EventByMonthAction extends AbstractAction{
 		
 		response.setContentType(this.CONTENT_TYPE_JSON);
 		response.getWriter().write(json.toString());
+		
+		facade.close();
 	}
 
 }
