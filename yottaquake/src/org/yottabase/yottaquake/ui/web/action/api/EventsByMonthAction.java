@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
@@ -19,46 +20,22 @@ public class EventsByMonthAction extends AbstractAction{
 
 		AbstractDBFacade facade = this.getFacade();
 		
-		long count = facade.countEvents();
-		
-		
+		//count
 		JSONObject json = new JSONObject();
-		
-		JSONArray items = new JSONArray();
-		json.put("countByMonth", items);
+		long count = facade.countEvents();
 		json.put("count", count);
 		
-		JSONObject mounth;
+		//items
+		JSONArray items = new JSONArray();
+		json.put("countByMonth", items);
 		
-		mounth = new JSONObject();
-		mounth.put("month", "gen");
-		mounth.put("year", "2012");
-		mounth.put("count", "200");
-		items.put(mounth);
-		
-		mounth = new JSONObject();
-		mounth.put("month", "feb");
-		mounth.put("year", "2012");
-		mounth.put("count", "220");
-		items.put(mounth);
-		
-		mounth = new JSONObject();
-		mounth.put("month", "mar");
-		mounth.put("year", "2012");
-		mounth.put("count", "310");
-		items.put(mounth);
-		
-		mounth = new JSONObject();
-		mounth.put("month", "apr");
-		mounth.put("year", "2012");
-		mounth.put("count", "120");
-		items.put(mounth);
-		
-		mounth = new JSONObject();
-		mounth.put("month", "mag");
-		mounth.put("year", "2012");
-		mounth.put("count", "150");
-		items.put(mounth);
+		for(Document doc : facade.countByYearMonth()){
+			JSONObject mounth = new JSONObject();
+			mounth.put("month", doc.get("month"));
+			mounth.put("year", doc.get("year"));
+			mounth.put("count", doc.get("count"));
+			items.put(mounth);
+		}
 		
 		response.setContentType(this.CONTENT_TYPE_JSON);
 		response.getWriter().write(json.toString());
