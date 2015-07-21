@@ -28,6 +28,11 @@
     <script src="assets/js/lib/bootstrap.js"></script>
     <script src="assets/js/lib/d3.min.js"></script>
     <script src="assets/js/events-by-month.js"></script>
+    
+    <script type="text/javascript">
+    	//js config
+    	var wsUrl = "http://localhost:8080/yottaquake/";
+    </script>
   </head>
 
   <body>

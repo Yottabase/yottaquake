@@ -28,7 +28,7 @@ jQuery(document).ready(function ($) {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.json("http://localhost:8080/yottaquake/api-events-by-month.do", function (error, data) {
+    d3.json(wsUrl + "api-events-by-month.do", function (error, data) {
         if (error) throw error;
 
         data = data.countByMonth;
