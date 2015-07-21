@@ -1,5 +1,9 @@
 package org.yottabase.yottaquake.db;
 
+import org.bson.Document;
+
+import com.mongodb.client.AggregateIterable;
+
 public abstract class AbstractDBFacade {
 		
 	/**
@@ -11,5 +15,15 @@ public abstract class AbstractDBFacade {
 	 * Conta il numero di di eventi
 	 */
 	public abstract long countEvents();
+
 	
+	/**
+	 * converti le date da UTC
+	 */
+	public abstract void convertDate();
+	
+	/**
+	 * 
+	 */
+	public abstract AggregateIterable<Document> countByYearMonth();
 }

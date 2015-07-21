@@ -13,6 +13,7 @@ public class TestMain {
 		AbstractDBFacade facade = getFacade();
 		
 		System.out.println(facade.countEvents());
+		facade.convertDate();
 		
 	}
 	
