@@ -6,20 +6,19 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 
 public class MongoDBAdapter extends AbstractDBFacade {
-	private MongoClient mongoClient;
+	private MongoClient client;
 	private MongoDatabase db;
-
-	private final static String DATABASE = "earthquake";
-	private final static String COLLECTION_EVENTS = "events";
 	
-	public MongoDBAdapter(MongoClient client) {
-		this.mongoClient = client;
-		db = mongoClient.getDatabase(DATABASE);
+	private final static String COLLECTION_EVENTS = "earthquake";
+	
+	public MongoDBAdapter(MongoClient client, MongoDatabase db) {
+		this.client = client;
+		this.db = db;
 	}
 
 	@Override
 	public void close() {
-		this.mongoClient.close();
+		this.client.close();
 	}
 	
 	@Override

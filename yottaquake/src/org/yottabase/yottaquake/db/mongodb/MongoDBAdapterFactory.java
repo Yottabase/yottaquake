@@ -9,6 +9,7 @@ import org.yottabase.yottaquake.db.PropertyFile;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
+import com.mongodb.client.MongoDatabase;
 
 public class MongoDBAdapterFactory implements DBFacadeFactory {
 
@@ -19,14 +20,15 @@ public class MongoDBAdapterFactory implements DBFacadeFactory {
 		String host = properties.get("db.host");
 		String username = properties.get("db.username");
 		String password = properties.get("db.password");
+		String database = properties.get("db.database");
+		int port = Integer.parseInt(properties.get("db.port"));
 
-		MongoCredential credential = MongoCredential.createCredential(username,
-				"lastfm", password.toCharArray());
+		MongoCredential credential = MongoCredential.createCredential(username, database, password.toCharArray());
 
-		MongoClient mongoClient = new MongoClient(
-				new ServerAddress(host, 27017), Arrays.asList(credential));
+		MongoClient client = new MongoClient( new ServerAddress(host, port), Arrays.asList(credential)  );
+		MongoDatabase db = client.getDatabase(database);
 
-		driver = new MongoDBAdapter(mongoClient);
+		driver = new MongoDBAdapter(client, db);
 
 		return driver;
 	}
