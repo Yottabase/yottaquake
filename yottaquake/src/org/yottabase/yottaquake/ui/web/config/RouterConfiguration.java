@@ -12,7 +12,7 @@ public class RouterConfiguration {
 		List<Route> routes = new ArrayList<Route>();
 		
 		//api
-		routes.add(new Route("api-events-by-month", "org.yottabase.yottaquake.ui.web.action.api.EventByMonthAction"));
+		routes.add(new Route("api-events-by-month", "org.yottabase.yottaquake.ui.web.action.api.EventsByMonthAction"));
 		
 		
 		//pages

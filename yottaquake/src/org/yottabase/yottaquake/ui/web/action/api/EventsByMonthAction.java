@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 import org.yottabase.yottaquake.ui.web.core.AbstractAction;
 
-public class EventByMonthAction extends AbstractAction{
+public class EventsByMonthAction extends AbstractAction{
 
 	@Override
 	public void run(HttpServletRequest request, HttpServletResponse response)
