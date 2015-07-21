@@ -25,5 +25,5 @@ public abstract class AbstractDBFacade {
 	/**
 	 * 
 	 */
-	public abstract AggregateIterable<Document> countByYearMonth();
+	public abstract Iterable<Document> countByYearMonth();
 }
