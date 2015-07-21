@@ -1,0 +1,23 @@
+
+#events-by-month .bar {
+  fill: steelblue;
+}
+
+#events-by-month .bar:hover {
+  fill: brown;
+}
+
+#events-by-month .axis {
+  font: 10px sans-serif;
+}
+
+#events-by-month .axis path,
+#events-by-month .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+#events-by-month .x.axis path {
+  display: none;
+}
