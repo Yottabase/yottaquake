@@ -80,10 +80,14 @@ public class MongoDBAdapter extends AbstractDBFacade {
 
 	@Override
 	public Iterable<Document> countByYearMonth() {
-		//db.earthquake.aggregate( [ { $group: { _id: {"year": "$year","month": "$month"}, total: { $sum: 1 } } } ])
+		//db.earthquake.aggregate( [ { $group: { _id: {"year": "$year","month": "$month"}, count: { $sum: 1 } } },{ $project: { "_id":0, "year": "$_id.year", "month": "$_id.month", "count" : 1}} ])
 		
-		Document groupByYearMonth = new Document("$group", new Document("_id", new Document("year","$year").append("month", "$month")).append("total", new Document("$sum", 1)));
-		AggregateIterable<Document> iterable = db.getCollection(COLLECTION).aggregate(asList(groupByYearMonth));
+		Document groupByYearMonth = new Document("$group", new Document("_id", new Document("year","$year").append("month", "$month")).append("count", new Document("$sum", 1)));
+		Document project = new Document("$project", new Document("_id",0).append("year", "$_id.year").append("month", "$_id.month").append("count", 1));
+		Document sort = new Document("$sort", new Document("total",1));
+
+		AggregateIterable<Document> iterable = db.getCollection(COLLECTION).aggregate(asList(groupByYearMonth,project,sort));
+			
 
 		return iterable;
 	}
