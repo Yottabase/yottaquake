@@ -6,3 +6,12 @@ db.username=
 db.password=
 db.port=
 db.database=
+
+
+## Suggested config
+#db.factory=org.yottabase.yottaquake.db.mongodb.MongoDBAdapterFactory
+#db.host=ds039550.mongolab.com
+#db.username=yottabase
+#db.password=uniroma3
+#db.port=39550
+#db.database=yottaquake
