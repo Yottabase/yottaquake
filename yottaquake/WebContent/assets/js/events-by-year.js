@@ -25,6 +25,8 @@ jQuery(document).ready(function ($) {
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+    
+    
     d3.json(wsUrl + "api-events-by-year.do", function (error, data) {
         if (error) throw error;
 
@@ -63,14 +65,15 @@ jQuery(document).ready(function ($) {
             })
             .attr("height", function (d) {
                 return height - y(d.count);
+            })
+            .on("click", function(d){
+            	console.log(d.year);
+            	
+            	            	
             });
+		
     });
-
-    function type(d) {
-        d.count = +d.count;
-        return d;
-    }
-
+   
 });
 		
 	
