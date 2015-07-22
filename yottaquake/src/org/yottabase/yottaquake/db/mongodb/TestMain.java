@@ -19,7 +19,8 @@ public class TestMain {
 //		facade.distinctRegion();
 //		facade.countByMonth();
 //		facade.countByYear();
-		facade.countByYearMonth();
+//		facade.countByYearMonth();
+		facade.countByMonthInYear(2014);
 		
 	}
 	

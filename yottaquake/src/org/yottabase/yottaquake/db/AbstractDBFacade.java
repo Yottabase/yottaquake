@@ -39,6 +39,8 @@ public abstract class AbstractDBFacade {
 	
 	public abstract Iterable<Document> countByMonth();
 	
+	public abstract Iterable<Document> countByMonthInYear(int year);
+	
 	public abstract Iterable<Document> distinctRegion();
 
 

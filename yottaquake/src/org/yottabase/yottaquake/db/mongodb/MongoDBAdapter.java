@@ -106,12 +106,6 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		Document sort = new Document("$sort", new Document("year",1).append("month", 1));
 
 		AggregateIterable<Document> iterable = db.getCollection(COLLECTION).aggregate(asList(groupByYearMonth,project,sort));
-			
-		iterable.forEach(new Block<Document>() {
-			public void apply(final Document document) {
-				System.out.println(document.toJson());;
-			}
-		});
 				
 		return iterable;
 	}
@@ -138,6 +132,17 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		return iterable;
 	}
 
+	public Iterable<Document> countByMonthInYear(int year) {	
+		
+		Document match = new Document("$match", new Document("year", Integer.toString(year)));
+		Document groupByMonth = new Document("$group", new Document("_id", new Document("month", "$month")).append("count", new Document("$sum", 1)));
+		Document project = new Document("$project", new Document("_id",0).append("month", "$_id.month").append("count", 1));
+		Document sort = new Document("$sort", new Document("month",1));
+
+		AggregateIterable<Document> iterable = db.getCollection(COLLECTION).aggregate(asList(match,groupByMonth,project,sort));
+
+		return iterable;
+	}
 	@Override
 	public Iterable<Document> bigEarthQuake(int magnitude) {
 		Document project = new Document(new Document("_id",0).append("properties.mag",1).append("properties.lon",1).append("properties.lat",1));
