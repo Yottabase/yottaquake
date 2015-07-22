@@ -19,22 +19,17 @@ jQuery(document).ready(function ($) {
         .orient("left")
         .ticks(10);
 
-    var svg = d3.select("#chart-events-by-month").append("svg")
+    var svg = d3.select("#chart-events-by-year").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-    d3.json(wsUrl + "api-events-by-month.do", function (error, data) {
+    d3.json(wsUrl + "api-events-by-year.do", function (error, data) {
         if (error) throw error;
 
-        data = data.countByMonth;
-
-        console.log(data);
-
-
         x.domain(data.map(function (d) {
-            return d.month + " " + d.year;
+            return d.year;
         }));
         y.domain([0, d3.max(data, function (d) {
             return d.count;
@@ -60,7 +55,7 @@ jQuery(document).ready(function ($) {
             .enter().append("rect")
             .attr("class", "bar")
             .attr("x", function (d) {
-                return x(d.month + " " + d.year);
+                return x(d.year);
             })
             .attr("width", x.rangeBand())
             .attr("y", function (d) {
