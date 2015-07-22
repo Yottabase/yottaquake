@@ -28,11 +28,6 @@ jQuery(document).ready(function ($) {
     d3.json(wsUrl + "api-events-by-month.do", function (error, data) {
         if (error) throw error;
 
-        data = data.countByMonth;
-
-        console.log(data);
-
-
         x.domain(data.map(function (d) {
             return d.month + " " + d.year;
         }));
