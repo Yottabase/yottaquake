@@ -20,6 +20,9 @@ public abstract class AbstractDBFacade {
 	 */
 	public abstract void convertDate();
 	
+	
+	public abstract void trimRegion();
+	
 	/**
 	 * raggruppa per anno e mese 
 	 */
@@ -35,5 +38,8 @@ public abstract class AbstractDBFacade {
 	public abstract Iterable<Document> countByYear();
 	
 	public abstract Iterable<Document> countByMonth();
+	
+	public abstract Iterable<Document> distinctRegion();
+
 
 }
