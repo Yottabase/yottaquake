@@ -43,7 +43,7 @@
 
 
 		
-			<div id="events-by-month"></div>
+			<div id="chart-events-by-month"></div>
 		
 	
 

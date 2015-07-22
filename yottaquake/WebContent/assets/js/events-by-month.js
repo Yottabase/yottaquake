@@ -19,7 +19,7 @@ jQuery(document).ready(function ($) {
         .orient("left")
         .ticks(10);
 
-    var svg = d3.select("#events-by-month").append("svg")
+    var svg = d3.select("#chart-events-by-month").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
