@@ -1,0 +1,23 @@
+
+#chart-events-by-year .bar {
+  fill: #000080;
+}
+
+#chart-events-by-year .bar:hover {
+  fill: #7f7f7f;
+}
+
+#chart-events-by-year .axis {
+  font: 10px sans-serif;
+}
+
+#chart-events-by-year .axis path,
+#chart-events-by-year .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+#chart-events-by-year .x.axis path {
+  display: none;
+}

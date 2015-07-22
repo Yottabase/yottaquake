@@ -33,6 +33,9 @@
     <!-- app -->
 	<link href="assets/css/events-by-month.css" rel="stylesheet">
     <script src="assets/js/events-by-month.js"></script>
+    
+    <link href="assets/css/events-by-year.css" rel="stylesheet">
+    <script src="assets/js/events-by-year.js"></script>
   </head>
 
   <body>
