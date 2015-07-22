@@ -8,10 +8,19 @@ db.port=
 db.database=
 
 
-## Suggested config
+## Suggested config (remote)
 #db.factory=org.yottabase.yottaquake.db.mongodb.MongoDBAdapterFactory
 #db.host=ds039550.mongolab.com
 #db.username=yottabase
 #db.password=uniroma3
 #db.port=39550
+#db.database=yottaquake
+
+
+## Suggested config (local)
+#db.factory=org.yottabase.yottaquake.db.mongodb.MongoDBAdapterFactory
+#db.host=localhost
+#db.username=yottabase
+#db.password=uniroma3
+#db.port=27017
 #db.database=yottaquake
