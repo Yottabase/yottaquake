@@ -4,10 +4,6 @@
 
 	
 
-
-	<div class="row">
-
-		<div class="col-md-3">
 			
 			<h3>Filtri</h3>
 
@@ -44,13 +40,12 @@
 				
 				<button type="submit" class="btn btn-primary">Aggiorna</button>
 			</form>
-		</div>
 
-		<div class="col-md-6">
+
+		
 			<div id="events-by-month"></div>
-		</div>
-
-	</div>
+		
+	
 
 </div>
 <!-- /.container -->
