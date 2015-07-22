@@ -13,6 +13,7 @@ public class RouterConfiguration {
 		
 		//api
 		routes.add(new Route("api-events-by-month", "org.yottabase.yottaquake.ui.web.action.api.EventsByMonthAction"));
+		routes.add(new Route("api-events-by-year", "org.yottabase.yottaquake.ui.web.action.api.EventsByYearAction"));
 		
 		
 		//pages
