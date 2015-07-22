@@ -46,9 +46,11 @@
 			<div id="chart-events-by-month"></div>
 			
 			<div id="chart-events-by-year"></div>
+			
+			<div id="chart-events-map"></div>
 		
 	
-
+		<br/>
 </div>
 <!-- /.container -->
 

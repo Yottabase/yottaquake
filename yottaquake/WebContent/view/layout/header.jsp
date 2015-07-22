@@ -15,6 +15,7 @@
     <!-- Bootstrap core CSS -->
     <link href="assets/css/lib/bootstrap.css" rel="stylesheet">
     <link href="assets/css/lib/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="assets/css/lib/leaflet.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -24,6 +25,7 @@
     <script src="assets/js/lib/jquery-2.1.3.min.js"></script>
     <script src="assets/js/lib/bootstrap.js"></script>
     <script src="assets/js/lib/d3.min.js"></script>
+    <script src="assets/js/lib/leaflet.js"></script>
     
     <script type="text/javascript">
     	//js config
@@ -36,6 +38,9 @@
     
     <link href="assets/css/events-by-year.css" rel="stylesheet">
     <script src="assets/js/events-by-year.js"></script>
+    
+    <link href="assets/css/events-map.css" rel="stylesheet">
+    <script src="assets/js/events-map.js"></script>
   </head>
 
   <body>
