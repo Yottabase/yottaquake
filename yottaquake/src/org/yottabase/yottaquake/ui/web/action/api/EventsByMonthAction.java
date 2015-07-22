@@ -20,21 +20,27 @@ public class EventsByMonthAction extends AbstractAction{
 
 		AbstractDBFacade facade = this.getFacade();
 		
-		//count
-		JSONObject json = new JSONObject();
-		long count = facade.countEvents();
-		json.put("count", count);
+		Iterable<Document> result;
+		String year =  this.cleanParam(request.getParameter("year"));
 		
-		//items
-		JSONArray items = new JSONArray();
-		json.put("countByMonth", items);
+		if(year == null ){
+			result = facade.countByYearMonth();
+		}else{
+			result = facade.countByMonthInYear(Integer.parseInt(year));
+		}
 		
-		for(Document doc : facade.countByYearMonth()){
+		JSONArray json = new JSONArray();
+		
+		for(Document doc : result ){
 			JSONObject mounth = new JSONObject();
+			if(year == null ){
+				mounth.put("year", doc.get("year"));
+			}else{
+				mounth.put("year", year);
+			}
 			mounth.put("month", doc.get("month"));
-			mounth.put("year", doc.get("year"));
 			mounth.put("count", doc.get("count"));
-			items.put(mounth);
+			json.put(mounth);
 		}
 		
 		response.setContentType(this.CONTENT_TYPE_JSON);

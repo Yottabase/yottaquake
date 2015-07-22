@@ -23,4 +23,11 @@ public abstract class AbstractAction {
 		DBAdapterManager adapterManager = new DBAdapterManager(propertyFile);
 		return adapterManager.getAdapter();
 	}
+	
+	public String cleanParam(String param){
+		
+		if(param == null || param.length() == 0) return null;
+		return param.trim();
+		
+	}
 }
