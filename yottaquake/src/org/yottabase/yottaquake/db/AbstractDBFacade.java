@@ -36,6 +36,7 @@ public abstract class AbstractDBFacade {
 	public abstract Iterable<Document> distinctRegion();
 
 	public abstract void insertEvent(JSONObject event);
-
+	
+	public abstract void insertCountry(JSONObject event, String detail);
 
 }

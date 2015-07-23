@@ -20,7 +20,13 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	private MongoClient client;
 	private MongoDatabase db;
 
-	private final static String COLLECTION = "earthquake5";
+	private final static String COLLECTION = "earthquake";
+	
+	private final static String COLLECTIONLOW = "countryLow";
+	
+	private final static String COLLECTIONMEDIUM = "countryMedium";
+	
+	private final static String COLLECTIONHIGH = "countryHigh";
 	
 	public MongoDBAdapter(MongoClient client, MongoDatabase db) {
 		this.client = client;
@@ -32,6 +38,7 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		this.client.close();
 	}
 	
+
 	@Override
 	public long countEvents() {
 		return db.getCollection(COLLECTION).count();
@@ -132,5 +139,19 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		
 	}
 
+	public void insertCountry(JSONObject event, String detail) {
+		String collection = null;
+		
+		switch(detail) {
+		  case "country_high":  collection = COLLECTIONHIGH;  break;
+		  case "country_medium": collection = COLLECTIONMEDIUM; break;
+		  case "country_low": collection = COLLECTIONLOW; break;
 
+		}
+
+		Document doc = Document.parse(event.toString());
+		
+		db.getCollection(collection).insertOne(doc);
+		
+	}
 }
