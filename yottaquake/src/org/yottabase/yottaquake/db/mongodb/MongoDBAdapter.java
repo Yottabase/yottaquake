@@ -3,26 +3,30 @@ package org.yottabase.yottaquake.db.mongodb;
 import static java.util.Arrays.asList;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
+import org.json.JSONObject;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.util.JSON;
 
 public class MongoDBAdapter extends AbstractDBFacade {
 	private MongoClient client;
 	private MongoDatabase db;
-	
-	private final static String COLLECTION = "earthquake";
+
+	private final static String COLLECTION = "earthquake5";
 	
 	public MongoDBAdapter(MongoClient client, MongoDatabase db) {
 		this.client = client;
 		this.db = db;
 	}
-
+	
 	@Override
 	public void close() {
 		this.client.close();
@@ -33,70 +37,6 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		return db.getCollection(COLLECTION).count();
 	}
 	
-	public void convertDate() {
-		FindIterable<Document> iterable =db.getCollection(COLLECTION).find().projection(new Document("properties.time",1).append("_id", 1));;
-		
-		iterable.forEach(new Block<Document>() {
-			public void apply(final Document document) {
-				String dateUTC = document.get("properties").toString();
-								
-				String[] onlyDate = dateUTC.split("=");
-				
-				String[] split1 = onlyDate[1].split("-");
-				
-				String year = split1[0];
-				
-				String month = split1[1];
-				
-				String[] split2 = split1[2].split("T");
-				
-				String day = split2[0];
-				
-				String time = split2[1];
-						
-				String[] split3 = time.split(":");
-				
-				String hh = split3[0];
-				
-				String mm = split3[1];
-				
-//				String[] split4 = split3[2].split("\\.");
-//				
-//				String ss = split4[0];
-//				System.out.println("year = " +year + "month " + month + "day " + day + "hh " + hh + "mm " + mm + "ss " +ss );
-				
-				int minutes = Integer.parseInt(hh) * 60 + Integer.parseInt(mm);
-				String minutesTime = Integer.toString(minutes);
-								
-				db.getCollection(COLLECTION).updateOne(new BasicDBObject("_id", document.get("_id")),
-                        new BasicDBObject("$set", new BasicDBObject("year", year).append("month", month).append("day", day).append("time", minutesTime)));
-
-			}
-		});			
-	
-		
-	}
-
-	@Override
-	public void trimRegion() {
-		FindIterable<Document> iterable =db.getCollection(COLLECTION).find().projection(new Document("properties.flynn_region",1).append("_id", 1));;
-		
-		iterable.forEach(new Block<Document>() {
-			public void apply(final Document document) {
-				Object id = document.get("_id");
-				Document properties = (Document) document.get("properties");
-				Object region = properties.get("flynn_region");
-				
-				if(region != null){
-					String regionTrim = region.toString().trim();
-				//db.products.update({ _id: 100 },{ $set: { "details.make": "zzz" } })
-				db.getCollection(COLLECTION).updateOne(new Document("_id",id),new Document("$set",new Document("properties.flynn_region",regionTrim)));
-				}
-			}
-		});
-		
-	}
-
 	@Override
 	public Iterable<Document> countByYearMonth() {
 		//db.earthquake.aggregate( [ { $group: { _id: {"year": "$year","month": "$month"}, count: { $sum: 1 } } },{ $project: { "_id":0, "year": "$_id.year", "month": "$_id.month", "count" : 1}} ])
@@ -143,6 +83,7 @@ public class MongoDBAdapter extends AbstractDBFacade {
 
 		return iterable;
 	}
+	
 	@Override
 	public Iterable<Document> bigEarthQuake(int magnitude) {
 		Document project = new Document(new Document("_id",0).append("properties.mag",1).append("properties.lon",1).append("properties.lat",1));
@@ -163,7 +104,6 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		return iterable;
 	}
 
-	
 	@Override
 	public Iterable<Document> distinctRegion() {
 		Document groupByRegion = new Document("$group", new Document("_id","$properties.flynn_region"));
@@ -180,6 +120,16 @@ public class MongoDBAdapter extends AbstractDBFacade {
 			
 		return iterable;
 
+	}
+
+	
+	@Override
+	public void insertEvent(JSONObject event) {
+
+		Document doc = Document.parse(event.toString());
+		
+		db.getCollection(COLLECTION).insertOne(doc);
+		
 	}
 
 

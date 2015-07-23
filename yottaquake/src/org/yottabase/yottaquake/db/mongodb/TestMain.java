@@ -16,11 +16,11 @@ public class TestMain {
 //		facade.convertDate();
 //		facade.trimRegion();
 //		facade.bigEarthQuake(5);
-//		facade.distinctRegion();
+		facade.distinctRegion();
 //		facade.countByMonth();
 //		facade.countByYear();
 //		facade.countByYearMonth();
-		facade.countByMonthInYear(2014);
+//		facade.countByMonthInYear(2014);
 		
 	}
 	

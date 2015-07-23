@@ -1,6 +1,7 @@
 package org.yottabase.yottaquake.db;
 
 import org.bson.Document;
+import org.json.JSONObject;
 
 public abstract class AbstractDBFacade {
 		
@@ -13,15 +14,6 @@ public abstract class AbstractDBFacade {
 	 * Conta il numero di di eventi
 	 */
 	public abstract long countEvents();
-
-	
-	/**
-	 * converti le date da UTC
-	 */
-	public abstract void convertDate();
-	
-	
-	public abstract void trimRegion();
 	
 	/**
 	 * raggruppa per anno e mese 
@@ -42,6 +34,8 @@ public abstract class AbstractDBFacade {
 	public abstract Iterable<Document> countByMonthInYear(int year);
 	
 	public abstract Iterable<Document> distinctRegion();
+
+	public abstract void insertEvent(JSONObject event);
 
 
 }
