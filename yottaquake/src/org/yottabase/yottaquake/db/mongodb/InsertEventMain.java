@@ -11,7 +11,7 @@ import org.yottabase.yottaquake.db.AbstractDBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 import org.yottabase.yottaquake.db.PropertyFile;
 
-public class insertMain {
+public class InsertEventMain {
 
 	private static final String CONFIG_FILE_PATH = "db.properties";
 
