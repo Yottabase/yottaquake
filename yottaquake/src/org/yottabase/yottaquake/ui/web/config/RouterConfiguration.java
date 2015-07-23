@@ -15,6 +15,8 @@ public class RouterConfiguration {
 		routes.add(new Route("api-events-by-month", "org.yottabase.yottaquake.ui.web.action.api.EventsByMonthAction"));
 		routes.add(new Route("api-events-by-year", "org.yottabase.yottaquake.ui.web.action.api.EventsByYearAction"));
 		
+		routes.add(new Route("api-countries", "org.yottabase.yottaquake.ui.web.action.api.CountriesAction"));
+		
 		
 		//pages
 		routes.add(new Route("home", "org.yottabase.yottaquake.ui.web.action.page.HomeAction"));
