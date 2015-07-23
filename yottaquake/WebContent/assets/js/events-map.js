@@ -14,13 +14,13 @@ jQuery(document).ready(function ($) {
 	
 	$.getJSON(wsUrl + "api-countries.do?levelQuality=low", function(data){
 		
-		var data = 
+		var geoData = 
 			{
 				"type": "FeatureCollection",
 				"features": data 
 			};
 		
-		var geoLayer = L.geoJson(data, {
+		var geoLayer = L.geoJson(geoData, {
 			style: function (feature) {
 				return {
 			        fillColor: '#' + Math.random().toString(16).substring(2, 8),
