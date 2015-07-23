@@ -12,7 +12,7 @@ import org.yottabase.yottaquake.db.AbstractDBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 import org.yottabase.yottaquake.db.PropertyFile;
 
-public class InsertStatesMain {
+public class InsertCountryMain {
 
 	private static final String CONFIG_FILE_PATH = "db.properties";
 
