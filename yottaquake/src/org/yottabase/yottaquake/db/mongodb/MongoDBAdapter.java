@@ -159,7 +159,9 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		  case "low": collection = COLLECTIONLOW; break;
 
 		}
-		FindIterable<Document> iterable = db.getCollection(collection).find();
+		Document project = new Document(new Document("_id",1).append("geometry", 1).append("type", 1).append("properties.NAME",1).append("properties.NAME_LONG",1).append("properties.ISO_A3",1).append("properties.CONTINENT",1));
+		FindIterable<Document> iterable = db.getCollection(collection).find().projection(project);
+	
 		return iterable;
 	}
 }
