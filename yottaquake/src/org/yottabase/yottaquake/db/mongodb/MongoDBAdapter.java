@@ -149,4 +149,17 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		db.getCollection(collection).insertOne(doc);
 		
 	}
+
+	@Override
+	public Iterable<Document> getCountries(String levelQuality) {
+		String collection = null;
+		switch(levelQuality) {
+		  case "high":  collection = COLLECTIONHIGH;  break;
+		  case "medium": collection = COLLECTIONMEDIUM; break;
+		  case "low": collection = COLLECTIONLOW; break;
+
+		}
+		FindIterable<Document> iterable = db.getCollection(collection).find();
+		return iterable;
+	}
 }

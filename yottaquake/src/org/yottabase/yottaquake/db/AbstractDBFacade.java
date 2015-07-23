@@ -38,5 +38,7 @@ public abstract class AbstractDBFacade {
 	public abstract void insertEvent(JSONObject event);
 	
 	public abstract void insertCountry(JSONObject event, String detail);
+	
+	public abstract Iterable<Document> getCountries(String levelQuality);
 
 }
