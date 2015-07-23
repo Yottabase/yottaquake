@@ -21,8 +21,8 @@ public class TestMain {
 //		facade.countByYear();
 //		facade.countByYearMonth();
 //		facade.countByMonthInYear(2014);
-		facade.getCountries("high");
-
+//		facade.getCountries("high");
+		facade.getCountriesWithEventCount("high");
 		
 	}
 	

@@ -30,10 +30,64 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	}
 	
 	@Override
+	public void initializeSchema() {
+		db.drop();
+
+		System.out.println("crea schema");
+
+		/*
+		 * index options
+		 
+
+		IndexOptions uniqueCostraint = new IndexOptions();
+		uniqueCostraint.unique(true);
+
+		IndexOptions noUniqueCostraint = new IndexOptions();
+		noUniqueCostraint.unique(false);
+
+		db.getCollection(COLLECTIONARTISTS).createIndex(
+				(new Document("artistId", 1)), uniqueCostraint);
+
+		db.getCollection(COLLECTIONUSERS).createIndex(
+				(new Document("code", 1)), uniqueCostraint);
+
+		db.getCollection(COLLECTIONLISTENED).createIndex(
+				(new Document("code", 1)), noUniqueCostraint);
+
+		db.getCollection(COLLECTIONLISTENED).createIndex(
+				(new Document("trackId", 1)), noUniqueCostraint);
+		 
+		 */
+	}
+	
+	@Override
 	public void close() {
 		this.client.close();
 	}
 	
+	@Override
+	public void insertEvent(JSONObject event) {
+
+		Document doc = Document.parse(event.toString());
+		
+		db.getCollection(COLLECTION).insertOne(doc);
+		
+	}
+
+	public void insertCountry(JSONObject event, String detail) {
+		String collection = null;
+		
+		switch(detail) {
+		  case "country_high":  collection = COLLECTIONHIGH;  break;
+		  case "country_medium": collection = COLLECTIONMEDIUM; break;
+		  case "country_low": collection = COLLECTIONLOW; break;
+
+		}
+
+		Document doc = Document.parse(event.toString());
+		db.getCollection(collection).insertOne(doc);
+		
+	}
 
 	@Override
 	public long countEvents() {
@@ -125,31 +179,6 @@ public class MongoDBAdapter extends AbstractDBFacade {
 
 	}
 
-	
-	@Override
-	public void insertEvent(JSONObject event) {
-
-		Document doc = Document.parse(event.toString());
-		
-		db.getCollection(COLLECTION).insertOne(doc);
-		
-	}
-
-	public void insertCountry(JSONObject event, String detail) {
-		String collection = null;
-		
-		switch(detail) {
-		  case "country_high":  collection = COLLECTIONHIGH;  break;
-		  case "country_medium": collection = COLLECTIONMEDIUM; break;
-		  case "country_low": collection = COLLECTIONLOW; break;
-
-		}
-
-		Document doc = Document.parse(event.toString());
-		db.getCollection(collection).insertOne(doc);
-		
-	}
-
 	@Override
 	public Iterable<Document> getCountries(String levelQuality) {
 		String collection = null;
@@ -163,5 +192,37 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		FindIterable<Document> iterable = db.getCollection(collection).find().projection(project);
 	
 		return iterable;
+	}
+
+	@Override
+	public Iterable<Document> getCountriesWithEventCount(String levelQuality) {
+		String collection = null;
+		switch(levelQuality) {
+		  case "high":  collection = COLLECTIONHIGH;  break;
+		  case "medium": collection = COLLECTIONMEDIUM; break;
+		  case "low": collection = COLLECTIONLOW; break;
+
+		}
+		
+		Document groupByIsoA3 = new Document("$group", new Document("_id", new Document("iso_a3", "$geolocation.iso_a3")).append("count", new Document("$sum", 1)));
+		Document sort = new Document("$sort", new Document("count",1));
+
+		AggregateIterable<Document> eventsCount = db.getCollection(COLLECTION).aggregate(asList(groupByIsoA3,sort));
+		
+		FindIterable<Document> countries = null;
+		for (Document document : eventsCount) {
+			Document properties =(Document)document.get("_id");
+			
+			Document project = new Document(new Document("_id",1).append("geometry", 1).append("type", 1).append("properties.NAME",1).append("properties.NAME_LONG",1).append("properties.ISO_A3",1).append("properties.CONTINENT",1));
+			countries = db.getCollection(collection).find(new Document("properties.ISO_A3",properties.get("properties"))).projection(project);
+			
+			for (Document country : countries)
+				country.put("count",document.get("count"));
+			
+		}
+		return countries;
+		
+		
+		
 	}
 }
