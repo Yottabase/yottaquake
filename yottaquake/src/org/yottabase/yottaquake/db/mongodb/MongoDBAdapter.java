@@ -3,18 +3,14 @@ package org.yottabase.yottaquake.db.mongodb;
 import static java.util.Arrays.asList;
 
 import org.bson.Document;
-import org.bson.conversions.Bson;
 import org.json.JSONObject;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
-import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.util.JSON;
 
 public class MongoDBAdapter extends AbstractDBFacade {
 	private MongoClient client;
@@ -150,7 +146,6 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		}
 
 		Document doc = Document.parse(event.toString());
-		
 		db.getCollection(collection).insertOne(doc);
 		
 	}
