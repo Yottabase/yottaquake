@@ -1,5 +1,5 @@
 jQuery(document).ready(function ($) {
-   
+	
 	var map = L.map('chart-events-map').setView([51.505, -0.09], 4);
 
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
@@ -14,6 +14,10 @@ jQuery(document).ready(function ($) {
 	
 	$.getJSON(wsUrl + "api-countries.do?levelQuality=low", function(data){
 		
+		var mapColor = d3.scale.linear()
+    		.domain([0, 1])
+    		.range(['#fcbba1', '#99000d']);
+		
 		var geoData = 
 			{
 				"type": "FeatureCollection",
@@ -22,8 +26,9 @@ jQuery(document).ready(function ($) {
 		
 		var geoLayer = L.geoJson(geoData, {
 			style: function (feature) {
+				feature.color = mapColor(Math.random());
 				return {
-			        fillColor: '#' + Math.random().toString(16).substring(2, 8),
+			        fillColor: feature.color,
 			        weight: 1,
 			        opacity: 1,
 			        color: 'white',
@@ -35,7 +40,7 @@ jQuery(document).ready(function ($) {
 			    layer.on({
 			        click: function(e){
 			        	//map.fitBounds(e.target.getBounds());
-			        	console.log(feature.properties.name);
+			        	//console.log(feature.properties.name);
 			        	
 			        	geoLayer.eachLayer(function (_l) {
 			        		
@@ -44,7 +49,7 @@ jQuery(document).ready(function ($) {
 			        			//selezionato 
 			        			_l.setStyle({
 			        				weight: 3,
-			        				fillColor: '#' + Math.random().toString(16).substring(2, 8),
+			        				fillColor: feature.color,
 			        			});
 			        		}else{
 			        			//non selezionato 
