@@ -40,6 +40,8 @@ public class InsertCountryMain {
 					System.out.println(count);
 			}
 		}
+		
+		facade.close();
 
 	}
 	
