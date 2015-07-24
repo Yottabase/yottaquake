@@ -24,6 +24,8 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	
 	private final static String COLLECTIONHIGH = "countryHigh";
 	
+	private final static String COLLECTION_FLINN_REGION = "flinnRegion";
+	
 	public MongoDBAdapter(MongoClient client, MongoDatabase db) {
 		this.client = client;
 		this.db = db;
@@ -233,5 +235,17 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		
 		
 		
+	}
+
+	@Override
+	public void initializeCollectionFlinnRegions() {
+		System.out.println("initialize flinn regions");
+		db.getCollection(COLLECTION).drop();
+	}
+
+	@Override
+	public void insertFlinnRegion(JSONObject flinnRegion) {
+		Document doc = Document.parse(flinnRegion.toString());
+		db.getCollection(COLLECTION_FLINN_REGION).insertOne(doc);
 	}
 }
