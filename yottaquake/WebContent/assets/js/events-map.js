@@ -12,7 +12,10 @@ jQuery(document).ready(function ($) {
 	}).addTo(map);
 
 	
-	$.getJSON(wsUrl + "api-countries.do?levelQuality=low", function(data){
+	//var api = wsUrl + "api-countries.do?levelQuality=low";
+	var api = wsUrl + "api-flinn-regions.do";
+	
+	$.getJSON(api, function(data){
 		
 		var mapColor = d3.scale.linear()
     		.domain([0, 1])

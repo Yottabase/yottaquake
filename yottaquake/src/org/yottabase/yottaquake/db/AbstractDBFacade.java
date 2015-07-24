@@ -8,7 +8,9 @@ public abstract class AbstractDBFacade {
 	public abstract void initializeCollectionEarthquake();
 
 	public abstract void initializeCollectionCountries();
-
+	
+	public abstract void initializeCollectionFlinnRegions();
+	
 	/**
 	 * Chiude il database
 	 */
@@ -43,9 +45,15 @@ public abstract class AbstractDBFacade {
 	
 	public abstract void insertCountry(JSONObject event, String detail);
 	
+	public abstract void insertFlinnRegion(JSONObject event);
+	
 	public abstract Iterable<Document> getCountries(String levelQuality);
 	
 	public abstract Iterable<Document> getCountriesWithEventCount(String levelQuality);
+
+	public abstract Iterable<Document> getFlinnRegions();
+
+
 
 
 }

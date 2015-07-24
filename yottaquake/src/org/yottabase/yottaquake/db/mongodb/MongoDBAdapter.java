@@ -248,4 +248,13 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		Document doc = Document.parse(flinnRegion.toString());
 		db.getCollection(COLLECTION_FLINN_REGION).insertOne(doc);
 	}
+	
+	@Override
+	public Iterable<Document> getFlinnRegions() {
+		
+		Document groupByCountry = new Document("$group", new Document("_id", new Document("properties", "$properties" ).append("geometry", "$geometry").append("type", "$type")));
+		AggregateIterable<Document> iterable = db.getCollection("fli").aggregate(asList(groupByCountry));
+		
+		return iterable;
+	}
 }
