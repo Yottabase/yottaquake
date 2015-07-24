@@ -1,15 +1,20 @@
 package org.yottabase.yottaquake.db.mongodb;
 
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
+import org.bson.Document;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 import org.yottabase.yottaquake.db.PropertyFile;
+
+import diva.util.java2d.Polygon2D;
 
 public class InsertEventMain {
 
@@ -34,9 +39,11 @@ public class InsertEventMain {
 			
 			event = trimRegion(event);
 			
+			event = provideCountry(event, facade.getCountries("low"));
+			
 			facade.insertEvent(event);
 			
-			if(count % 10000 == 0)
+			if(count % 1000 == 0)
 				System.out.println(count);
 			
 		}
@@ -106,6 +113,85 @@ public class InsertEventMain {
 		return event;
 
 		
+	}
+	
+	@SuppressWarnings({ "unchecked" })
+	private static JSONObject provideCountry(JSONObject event, Iterable<Document> countries) {
+		JSONObject prop = (JSONObject) event.get("properties");
+		double lon = Double.parseDouble( prop.get("lon").toString() );
+		double lat = Double.parseDouble( prop.get("lat").toString() );
+		Point2D point = new Point2D.Double(lon, lat);
+		
+		for (Document country : countries) {
+			Document properties = (Document) country.get("properties");
+			Document geometry = (Document) country.get("geometry");
+			String geom_type = geometry.getString("type");
+			
+			if (geom_type.equals("Polygon")) {
+				ArrayList<ArrayList<String>> poly = ((ArrayList<ArrayList<ArrayList<String>>>) geometry.get("coordinates")).get(0);
+				
+				double[] flatten_coords = coordsList2FlattenArray(poly);
+				Polygon2D polygon = new Polygon2D.Double(flatten_coords);
+				
+				if (polygon.contains(point)) {
+					String country_name = properties.getString("name");
+					String country_code = properties.getString("iso_a3");
+					String continent = properties.getString("continent");
+					
+					JSONObject geolocation = new JSONObject();
+					geolocation.put("name", country_name);
+					geolocation.put("iso_a3", country_code);
+					geolocation.put("continent", continent);
+					
+					event.put("geolocation", geolocation);
+					return event;
+				}
+				
+			} 
+			else {	
+				ArrayList<ArrayList<ArrayList<ArrayList<String>>>> multiPoly = (ArrayList<ArrayList<ArrayList<ArrayList<String>>>>) geometry.get("coordinates");
+				for (int i = 0; i < multiPoly.size(); i++) {
+					ArrayList<ArrayList<ArrayList<String>>> c = multiPoly.get(i);
+					ArrayList<ArrayList<String>> poly = c.get(0);
+					
+					double[] flatten_coords = coordsList2FlattenArray(poly);
+					Polygon2D polygon = new Polygon2D.Double(flatten_coords);
+					
+					if (polygon.contains(point)) {
+						String country_name = properties.getString("name");
+						String country_code = properties.getString("iso_a3");
+						String continent = properties.getString("continent");
+						
+						JSONObject geolocation = new JSONObject();
+						geolocation.put("name", country_name);
+						geolocation.put("iso_a3", country_code);
+						geolocation.put("continent", continent);
+						
+						event.put("geolocation", geolocation);
+						return event;
+					}
+				}
+			}
+			
+		}
+		
+		return event;
+	}
+	
+	
+	private static double[] coordsList2FlattenArray(ArrayList<ArrayList<String>> coordsList) {
+		double[] flatten_array = new double[2 * coordsList.size()];
+		
+		for (int j = 0; j < coordsList.size(); j++) {				
+		    ArrayList<String> coords = coordsList.get(j);
+		    Object x = coords.get(0);
+		    Object y = coords.get(1);
+		    
+		    flatten_array[j*2] = Double.parseDouble(x.toString());
+		    flatten_array[(j*2)+1] = Double.parseDouble(y.toString());	
+		}
+		
+		return flatten_array;
 	}
 
 }
