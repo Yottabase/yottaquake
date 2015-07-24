@@ -12,18 +12,12 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
-import org.yottabase.yottaquake.db.PropertyFile;
-
 import diva.util.java2d.Polygon2D;
 
 public class InsertEventMain {
 
-	private static final String CONFIG_FILE_PATH = "db.properties";
-
-	
 	public static void main(String[] args) throws FileNotFoundException {
-		
-		AbstractDBFacade facade = getFacade();
+		AbstractDBFacade facade = DBAdapterManager.getFacade();
 		facade.initializeCollectionEarthquake();
 
 		String path = args[0];
@@ -49,12 +43,6 @@ public class InsertEventMain {
 		}
 		
 		
-	}
-	
-	public static AbstractDBFacade getFacade(){
-		PropertyFile propertyFile = new PropertyFile(DBAdapterManager.class.getClassLoader().getResourceAsStream(CONFIG_FILE_PATH));
-		DBAdapterManager adapterManager = new DBAdapterManager(propertyFile);
-		return adapterManager.getAdapter();
 	}
 	
 	

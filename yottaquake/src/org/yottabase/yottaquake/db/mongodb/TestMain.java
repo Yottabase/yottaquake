@@ -2,15 +2,12 @@ package org.yottabase.yottaquake.db.mongodb;
 
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
-import org.yottabase.yottaquake.db.PropertyFile;
 
 public class TestMain {
 
-	private static final String CONFIG_FILE_PATH = "db.properties";
-	
 	public static void main(String[] args) {
 		
-		AbstractDBFacade facade = getFacade();
+		AbstractDBFacade facade = DBAdapterManager.getFacade();
 		
 //		System.out.println(facade.countEvents());
 //		facade.bigEarthQuake(5);
@@ -20,14 +17,7 @@ public class TestMain {
 //		facade.countByYearMonth();
 //		facade.countByMonthInYear(2014);
 //		facade.getCountries("high");
-		facade.getCountriesWithEventCount("high");
-		
-	}
-	
-	public static AbstractDBFacade getFacade(){
-		PropertyFile propertyFile = new PropertyFile(DBAdapterManager.class.getClassLoader().getResourceAsStream(CONFIG_FILE_PATH));
-		DBAdapterManager adapterManager = new DBAdapterManager(propertyFile);
-		return adapterManager.getAdapter();
+		facade.getCountriesWithEventCount("high");	
 	}
 	
 }

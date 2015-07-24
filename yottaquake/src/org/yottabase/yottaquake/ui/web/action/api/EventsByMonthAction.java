@@ -10,6 +10,7 @@ import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
+import org.yottabase.yottaquake.db.DBAdapterManager;
 import org.yottabase.yottaquake.ui.web.core.AbstractAction;
 
 public class EventsByMonthAction extends AbstractAction{
@@ -18,7 +19,7 @@ public class EventsByMonthAction extends AbstractAction{
 	public void run(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		AbstractDBFacade facade = this.getFacade();
+		AbstractDBFacade facade = DBAdapterManager.getFacade();
 		
 		Iterable<Document> result;
 		String year =  this.cleanParam(request.getParameter("year"));
@@ -46,7 +47,7 @@ public class EventsByMonthAction extends AbstractAction{
 		response.setContentType(this.CONTENT_TYPE_JSON);
 		response.getWriter().write(json.toString());
 		
-		facade.close();
+//		facade.close();
 	}
 
 }

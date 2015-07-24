@@ -1,40 +1,28 @@
 package org.yottabase.yottaquake.db;
 
+import java.io.InputStream;
+
+import org.yottabase.yottaquake.db.mongodb.MongoDBAdapterFactory;
+
 public class DBAdapterManager {
 	
-	private PropertyFile properties;
+	private static final String CONFIG_FILE_PATH = "db.properties";
 	
-	public DBAdapterManager(PropertyFile properties) {
+	private static AbstractDBFacade instance = null;
+
+	private DBAdapterManager() {
 		super();
-		this.properties = properties;
-	}
-
-	public PropertyFile getProperties() {
-		return properties;
-	}
-
-	public void setProperties(PropertyFile properties) {
-		this.properties = properties;
 	}
 	
-	public AbstractDBFacade getAdapter(){
-		AbstractDBFacade adapter = null;
-		
-		String adapterFactoryKey =  "db.factory";
-
-		String factoryClassName = properties.get(adapterFactoryKey);
-
-		try {
-			DBFacadeFactory adapterFactory = (DBFacadeFactory) Class
-					.forName(factoryClassName).newInstance();
-			adapter = adapterFactory.createService(properties);
-
-		} catch (InstantiationException | IllegalAccessException
-				| ClassNotFoundException e) {
-			e.printStackTrace();
+	public static synchronized AbstractDBFacade getFacade() {
+		if (instance == null) {
+			InputStream is = DBAdapterManager.class.getClassLoader().getResourceAsStream(CONFIG_FILE_PATH);
+			PropertyFile properties = new PropertyFile(is);
+			
+			DBFacadeFactory adapterFactory = new MongoDBAdapterFactory();
+			instance = adapterFactory.createService(properties);
 		}
-		
-		return adapter;
+		return instance;
 	}
 
 }
