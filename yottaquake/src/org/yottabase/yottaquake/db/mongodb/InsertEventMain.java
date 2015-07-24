@@ -122,14 +122,31 @@ public class InsertEventMain {
 		double lat = Double.parseDouble( prop.get("lat").toString() );
 		Point2D point = new Point2D.Double(lon, lat);
 		
+		ArrayList<ArrayList<ArrayList<String>>> polygons = null;
+		
 		for (Document country : countries) {
 			Document properties = (Document) country.get("properties");
 			Document geometry = (Document) country.get("geometry");
 			String geom_type = geometry.getString("type");
 			
+			polygons = new ArrayList<ArrayList<ArrayList<String>>>();
+			
 			if (geom_type.equals("Polygon")) {
-				ArrayList<ArrayList<String>> poly = ((ArrayList<ArrayList<ArrayList<String>>>) geometry.get("coordinates")).get(0);
+				ArrayList<ArrayList<String>> poly = 
+						((ArrayList<ArrayList<ArrayList<String>>>) geometry.get("coordinates")).get(0);
+				polygons.add(poly);
+			} else {
+				ArrayList<ArrayList<ArrayList<ArrayList<String>>>> multiPoly = 
+						(ArrayList<ArrayList<ArrayList<ArrayList<String>>>>) geometry.get("coordinates");
 				
+				for (ArrayList<ArrayList<ArrayList<String>>> c : multiPoly) {
+					ArrayList<ArrayList<String>> poly = c.get(0);
+					
+					polygons.add(poly);
+				}
+			}
+			
+			for (ArrayList<ArrayList<String>> poly : polygons) {
 				double[] flatten_coords = coordsList2FlattenArray(poly);
 				Polygon2D polygon = new Polygon2D.Double(flatten_coords);
 				
@@ -146,35 +163,10 @@ public class InsertEventMain {
 					event.put("geolocation", geolocation);
 					return event;
 				}
-				
-			} 
-			else {	
-				ArrayList<ArrayList<ArrayList<ArrayList<String>>>> multiPoly = (ArrayList<ArrayList<ArrayList<ArrayList<String>>>>) geometry.get("coordinates");
-				for (int i = 0; i < multiPoly.size(); i++) {
-					ArrayList<ArrayList<ArrayList<String>>> c = multiPoly.get(i);
-					ArrayList<ArrayList<String>> poly = c.get(0);
-					
-					double[] flatten_coords = coordsList2FlattenArray(poly);
-					Polygon2D polygon = new Polygon2D.Double(flatten_coords);
-					
-					if (polygon.contains(point)) {
-						String country_name = properties.getString("name");
-						String country_code = properties.getString("iso_a3");
-						String continent = properties.getString("continent");
-						
-						JSONObject geolocation = new JSONObject();
-						geolocation.put("name", country_name);
-						geolocation.put("iso_a3", country_code);
-						geolocation.put("continent", continent);
-						
-						event.put("geolocation", geolocation);
-						return event;
-					}
-				}
 			}
-			
-		}
 		
+		}
+
 		return event;
 	}
 	
