@@ -17,7 +17,8 @@ public class InsertCountryMain {
 		AbstractDBFacade facade = DBAdapterManager.getFacade();
 		facade.initializeCollectionCountries();
 		
-		String [] dataset = {"country_low","country_medium","country_high"};
+//		String [] dataset = {"country_low","country_medium","country_high"};
+		String [] dataset = {"country_low"};
 		for (String fileName : dataset) {
 			System.out.println(fileName);
 			String path = args[0];

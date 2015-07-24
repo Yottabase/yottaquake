@@ -47,5 +47,12 @@ public abstract class AbstractDBFacade {
 	
 	public abstract Iterable<Document> getCountriesWithEventCount(String levelQuality);
 
+	public abstract Iterable<Document> getEventsInPolygon(Document geometry);
+
+	public abstract void initializeCollectionFlinnRegions();
+	
+	public abstract void insertFlinnRegion(JSONObject flinnRegion);
+	
+	public abstract boolean updateDocument(Document document, Document update);
 
 }
