@@ -13,8 +13,6 @@ public class TestMain {
 		AbstractDBFacade facade = getFacade();
 		
 //		System.out.println(facade.countEvents());
-//		facade.convertDate();
-//		facade.trimRegion();
 //		facade.bigEarthQuake(5);
 //		facade.distinctRegion();
 //		facade.countByMonth();

@@ -30,10 +30,11 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	}
 	
 	@Override
-	public void initializeSchema() {
-		db.drop();
+	public void initializeCollectionEarthquake() {
+		System.out.println("initialize earthquake");
+		db.getCollection(COLLECTION).drop();
 
-		System.out.println("crea schema");
+		
 
 		/*
 		 * index options
@@ -58,6 +59,14 @@ public class MongoDBAdapter extends AbstractDBFacade {
 				(new Document("trackId", 1)), noUniqueCostraint);
 		 
 		 */
+	}
+
+	public void initializeCollectionCountries() {
+		System.out.println("initialize countries");
+		db.getCollection(COLLECTIONLOW).drop();
+		db.getCollection(COLLECTIONMEDIUM).drop();
+		db.getCollection(COLLECTIONHIGH).drop();
+
 	}
 	
 	@Override

@@ -19,9 +19,8 @@ public class InsertEventMain {
 	public static void main(String[] args) throws FileNotFoundException {
 		
 		AbstractDBFacade facade = getFacade();
-		facade.initializeSchema();
+		facade.initializeCollectionEarthquake();
 
-		
 		String path = args[0];
 		InputStream inputStream = new FileInputStream(new File(path + "/dataset.json"));
 		JSONTokener json = new JSONTokener(inputStream);

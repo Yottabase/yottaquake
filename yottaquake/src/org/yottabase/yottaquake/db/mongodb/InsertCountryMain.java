@@ -19,6 +19,8 @@ public class InsertCountryMain {
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		AbstractDBFacade facade = getFacade();
+		facade.initializeCollectionCountries();
+		
 		String [] dataset = {"country_low","country_medium","country_high"};
 		for (String fileName : dataset) {
 			System.out.println(fileName);

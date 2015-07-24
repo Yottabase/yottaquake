@@ -4,8 +4,10 @@ import org.bson.Document;
 import org.json.JSONObject;
 
 public abstract class AbstractDBFacade {
-	
-	public abstract void initializeSchema();
+
+	public abstract void initializeCollectionEarthquake();
+
+	public abstract void initializeCollectionCountries();
 
 	/**
 	 * Chiude il database
