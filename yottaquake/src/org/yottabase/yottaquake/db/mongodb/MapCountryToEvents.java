@@ -12,16 +12,16 @@ public class MapCountryToEvents {
 		AbstractDBFacade facade = DBAdapterManager.getFacade();	
 		
 		int count = 0;
-		for (Document country : facade.getCountries("high")) {
+		for (Document country : facade.getCountries(CountryDetailLevel.HIGH)) {
 			Document properties = (Document) country.get("properties");
 			Document geometry = (Document) country.get("geometry");
 			Iterable<Document> events = DBAdapterManager.getFacade().getEventsInPolygon(geometry);
 			
 			for (Document event : events) {
 				count ++;
-				String country_name = properties.getString("NAME");
-				String country_code = properties.getString("ISO_A3");
-				String continent = properties.getString("CONTINENT");
+				String country_name = properties.getString("name");
+				String country_code = properties.getString("iso_a3");
+				String continent = properties.getString("continent");
 				
 				Document geo_values = new Document();
 				geo_values.append("name", country_name);
@@ -35,7 +35,6 @@ public class MapCountryToEvents {
 				
 				if( (count % 10000) == 0 )
 					 System.out.println(count);
-			
 			}
 			
 		}

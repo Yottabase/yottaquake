@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
+import org.yottabase.yottaquake.db.mongodb.CountryDetailLevel;
 import org.yottabase.yottaquake.ui.web.core.AbstractAction;
 
 public class CountriesAction extends AbstractAction{
@@ -19,8 +20,9 @@ public class CountriesAction extends AbstractAction{
 	public void run(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		String levelQuality =  this.cleanParam(request.getParameter("levelQuality"));
-		if(levelQuality == null){
+		String mapDetailParam =  this.cleanParam(request.getParameter("levelQuality"));
+		CountryDetailLevel mapDetailLevel = CountryDetailLevel.valueOf(mapDetailParam);
+		if(mapDetailLevel == null){
 			response.getWriter().write("Parametro levelQuality richiesto");
 			return;
 		}
@@ -29,7 +31,7 @@ public class CountriesAction extends AbstractAction{
 		
 		JSONArray items = new JSONArray();
 		
-		for(Document doc : facade.getCountries(levelQuality)){
+		for(Document doc : facade.getCountries(mapDetailLevel)){
 			
 			JSONObject obj = new JSONObject(doc.toJson());
 			items.put(obj);
