@@ -12,40 +12,42 @@
 
     <title>Yottaquake</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="assets/css/lib/bootstrap.css" rel="stylesheet">
-    <link href="assets/css/lib/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="assets/css/lib/leaflet.css" rel="stylesheet">
-    <link href="assets/css/lib/MarkerCluster.css" rel="stylesheet">
-    <link href="assets/css/lib/MarkerCluster.Default.css" rel="stylesheet">
-    <link href="assets/css/lib/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="assets/css/lib/bootstrap-slider.min.css" rel="stylesheet">
-    <link href="assets/css/lib/bootstrap-datepicker3.min.css" rel="stylesheet">
-    
-    <link href="assets/css/style.css" rel="stylesheet">
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script src="assets/js/lib/jquery-2.1.3.min.js"></script>
-    <script src="assets/js/lib/bootstrap.js"></script>
-    <script src="assets/js/lib/d3.min.js"></script>
-    <script src="assets/js/lib/leaflet.js"></script>
-    <script src="assets/js/lib/Leaflet.MakiMarkers.js"></script>
-    <script src="assets/js/lib/leaflet.markercluster.js"></script>
-    <script src="assets/js/lib/leaflet-heat.js"></script>
-    <script src="assets/js/lib/bootstrap-slider.min.js"></script>
-    <script src="assets/js/lib/bootstrap-datepicker.min.js"></script>
-    <script src="assets/js/global.js"></script>
+
+
+
+	<script src="assets/js/lib/jquery-2.1.3.min.js"></script>
     
+    <script src="assets/js/lib/d3.min.js"></script>
+    
+    <script src="assets/js/lib/bootstrap.js"></script>
+    <link href="assets/css/lib/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/lib/bootstrap-theme.min.css" rel="stylesheet">
+    
+    <script src="assets/js/lib/leaflet.js"></script>
+    <link href="assets/css/lib/leaflet.css" rel="stylesheet">
+    
+    <script src="assets/js/lib/Leaflet.MakiMarkers.js"></script>
+    <link href="assets/css/lib/MarkerCluster.css" rel="stylesheet">
+    
+    <script src="assets/js/lib/leaflet.markercluster.js"></script>
+    <link href="assets/css/lib/MarkerCluster.Default.css" rel="stylesheet">
+    
+    <script src="assets/js/lib/leaflet-heat.js"></script>
+    
+    <script src="assets/js/lib/bootstrap-slider.min.js"></script>
+    <link href="assets/css/lib/bootstrap-slider.min.css" rel="stylesheet">
+    
+    <script src="assets/js/lib/bootstrap-datepicker.min.js"></script>
+    <link href="assets/css/lib/bootstrap-datepicker3.min.css" rel="stylesheet">
     
     
     <!--  //TODO: remove this sample -->
     <script src="http://leaflet.github.io/Leaflet.markercluster/example/realworld.388.js"></script>
-    
-    
-    
     
     <script type="text/javascript">
     	//js config
@@ -53,6 +55,9 @@
     </script>
     
     <!-- app -->
+    <link href="assets/css/style.css" rel="stylesheet">
+    <script src="assets/js/global.js"></script>
+    
 	<link href="assets/css/events-by-month.css" rel="stylesheet">
     <script src="assets/js/events-by-month.js"></script>
     
