@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+
+import org.bson.Document;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
@@ -61,18 +63,16 @@ public class InsertEventMain {
 		
 		String mm = split3[1];
 		
-//		String[] split4 = split3[2].split("\\.");
-//				
-//		String ss = split4[0];
-//		System.out.println("year = " +year + "month " + month + "day " + day + "hh " + hh + "mm " + mm + "ss " +ss );
-		
 		int minutes = Integer.parseInt(hh) * 60 + Integer.parseInt(mm);
 		String minutesTime = Integer.toString(minutes);
 		
-		event.put("year",year);
-		event.put("month",month);
-		event.put("day",day);
-		event.put("time",minutesTime);
+		Document timeInformation = new Document();
+		timeInformation.append("year", year);
+		timeInformation.append("month", month);
+		timeInformation.append("day", day);
+		timeInformation.append("hour", minutesTime);
+			
+		event.put("time", timeInformation);
 	
 		return event;		
 	}
@@ -89,77 +89,5 @@ public class InsertEventMain {
 		
 		return event;
 	}
-	
-	
-//	@SuppressWarnings({ "unchecked" })
-//	private static JSONObject provideCountry(JSONObject event, Iterable<Document> countries) {
-//		JSONObject prop = (JSONObject) event.get("properties");
-//		double lon = Double.parseDouble( prop.get("lon").toString() );
-//		double lat = Double.parseDouble( prop.get("lat").toString() );
-//		Point2D point = new Point2D.Double(lon, lat);
-//		
-//		ArrayList<ArrayList<ArrayList<String>>> polygons = null;
-//		
-//		for (Document country : countries) {
-//			Document properties = (Document) country.get("properties");
-//			Document geometry = (Document) country.get("geometry");
-//			String geom_type = geometry.getString("type");
-//			
-//			polygons = new ArrayList<ArrayList<ArrayList<String>>>();
-//			
-//			if (geom_type.equals("Polygon")) {
-//				ArrayList<ArrayList<String>> poly = 
-//						((ArrayList<ArrayList<ArrayList<String>>>) geometry.get("coordinates")).get(0);
-//				polygons.add(poly);
-//			} else {
-//				ArrayList<ArrayList<ArrayList<ArrayList<String>>>> multiPoly = 
-//						(ArrayList<ArrayList<ArrayList<ArrayList<String>>>>) geometry.get("coordinates");
-//				
-//				for (ArrayList<ArrayList<ArrayList<String>>> c : multiPoly) {
-//					ArrayList<ArrayList<String>> poly = c.get(0);
-//					
-//					polygons.add(poly);
-//				}
-//			}
-//			
-//			for (ArrayList<ArrayList<String>> poly : polygons) {
-//				double[] flatten_coords = coordsList2FlattenArray(poly);
-//				Polygon2D polygon = new Polygon2D.Double(flatten_coords);
-//				
-//				if (polygon.contains(point)) {
-//					String country_name = properties.getString("name");
-//					String country_code = properties.getString("iso_a3");
-//					String continent = properties.getString("continent");
-//					
-//					JSONObject geolocation = new JSONObject();
-//					geolocation.put("name", country_name);
-//					geolocation.put("iso_a3", country_code);
-//					geolocation.put("continent", continent);
-//					
-//					event.put("geolocation", geolocation);
-//					return event;
-//				}
-//			}
-//		
-//		}
-//
-//		return event;
-//	}
-//	
-//	
-//	private static double[] coordsList2FlattenArray(ArrayList<ArrayList<String>> coordsList) {
-//		double[] flatten_array = new double[2 * coordsList.size()];
-//		
-//		for (int j = 0; j < coordsList.size(); j++) {				
-//		    ArrayList<String> coords = coordsList.get(j);
-//		    Object x = coords.get(0);
-//		    Object y = coords.get(1);
-//		    
-//		    flatten_array[j*2] = Double.parseDouble(x.toString());
-//		    flatten_array[(j*2)+1] = Double.parseDouble(y.toString());	
-//		}
-//		
-//		return flatten_array;
-//	}
 
 }

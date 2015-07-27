@@ -17,28 +17,25 @@ public class InsertCountryMain {
 		AbstractDBFacade facade = DBAdapterManager.getFacade();
 		facade.initializeCollectionCountries();
 		
-//		String [] dataset = {"country_low","country_medium","country_high"};
-		String [] dataset = {"country_low"};
-		for (String fileName : dataset) {
-			System.out.println(fileName);
-			String path = args[0];
-			InputStream inputStream = new FileInputStream(new File(path + "/" + fileName + ".json"));
-			JSONTokener json = new JSONTokener(inputStream);
-			JSONObject countries = (JSONObject) json.nextValue();
-			JSONArray country = (JSONArray) countries.get("features");
-				
-			int count = 0 ;
-			for (int i = 0; i < country.length(); i++) {
-				count++;
-				
-				facade.insertCountry((JSONObject)country.get(i), fileName);
+		String fileName = "country_high";
+		
+		System.out.println(fileName);
+		String path = args[0];
+		InputStream inputStream = new FileInputStream(new File(path + "/" + fileName + ".json"));
+		JSONTokener json = new JSONTokener(inputStream);
+		JSONObject countries = (JSONObject) json.nextValue();
+		JSONArray country = (JSONArray) countries.get("features");
 			
-				if(count % 100 == 0)
-					System.out.println(count);
-			}
+		int count = 0 ;
+		for (int i = 0; i < country.length(); i++) {
+			count++;
+			
+			facade.insertCountry((JSONObject)country.get(i), fileName);
+		
+			if(count % 100 == 0)
+				System.out.println(count);
 		}
 		
-		facade.close();
 	}
 
 }
