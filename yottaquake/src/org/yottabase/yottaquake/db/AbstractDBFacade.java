@@ -2,6 +2,7 @@ package org.yottabase.yottaquake.db;
 
 import org.bson.Document;
 import org.json.JSONObject;
+import org.yottabase.yottaquake.db.mongodb.CountryDetailLevel;
 
 public abstract class AbstractDBFacade {
 
@@ -43,11 +44,11 @@ public abstract class AbstractDBFacade {
 
 	public abstract void insertEvent(JSONObject event);
 	
-	public abstract void insertCountry(JSONObject event, String detail);
+	public abstract void insertCountry(JSONObject event, CountryDetailLevel level);
 		
-	public abstract Iterable<Document> getCountries(String levelQuality);
+	public abstract Iterable<Document> getCountries(CountryDetailLevel level);
 	
-	public abstract Iterable<Document> getCountriesWithEventCount(String levelQuality);
+	public abstract Iterable<Document> getCountriesWithEventCount(CountryDetailLevel level);
 
 	public abstract Iterable<Document> getFlinnRegions();
 

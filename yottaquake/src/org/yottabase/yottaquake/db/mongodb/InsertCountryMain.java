@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,30 +15,39 @@ import org.yottabase.yottaquake.db.DBAdapterManager;
 
 public class InsertCountryMain {
 	
+	private static final Map<CountryDetailLevel, String> detail2fileName;
+	
+	static {
+		detail2fileName = new HashMap<CountryDetailLevel, String>();
+			detail2fileName.put(CountryDetailLevel.HIGH, "country_high");
+			detail2fileName.put(CountryDetailLevel.MEDIUM, "country_medium");
+			detail2fileName.put(CountryDetailLevel.LOW, "country_low");
+	}
+	
 	public static void main(String[] args) throws FileNotFoundException {
 		AbstractDBFacade facade = DBAdapterManager.getFacade();
 		facade.initializeCollectionCountries();
 		
-		String fileName = "country_high";
-		System.out.println(fileName);
-		
-		String path = args[0];
-		InputStream inputStream = new FileInputStream(new File(path + "/" + fileName + ".json"));
-		
-		JSONTokener json = new JSONTokener(inputStream);
-		JSONObject countries = (JSONObject) json.nextValue();
-		JSONArray country = (JSONArray) countries.get("features");
+		for (CountryDetailLevel level : detail2fileName.keySet()) {
+			String filePath = args[0] + "/" + detail2fileName.get(level) + ".json";
+			InputStream inputStream = new FileInputStream(new File(filePath));
 			
-		int count = 0 ;
-		for (int i = 0; i < country.length(); i++) {
-			count++;
+			System.out.println(filePath);
 			
-			facade.insertCountry((JSONObject) country.get(i), fileName);
-		
-			if( (count % 100) == 0 )
-				System.out.println(count);
+			JSONTokener json = new JSONTokener(inputStream);
+			JSONObject countries = (JSONObject) json.nextValue();
+			JSONArray country = (JSONArray) countries.get("features");
+				
+			int count = 0 ;
+			for (int i = 0; i < country.length(); i++) {
+				count++;
+				
+				facade.insertCountry((JSONObject) country.get(i), level);
+			
+				if( (count % 100) == 0 )
+					System.out.println(count);
+			}
 		}
-		
 	}
 
 }

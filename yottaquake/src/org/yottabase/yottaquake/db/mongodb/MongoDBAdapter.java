@@ -10,6 +10,7 @@ import org.yottabase.yottaquake.db.AbstractDBFacade;
 import com.mongodb.MongoClient;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.UpdateResult;
 
@@ -30,6 +31,20 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	public MongoDBAdapter(MongoClient client, MongoDatabase db) {
 		this.client = client;
 		this.db = db;
+	}
+	
+	
+	private MongoCollection<Document> getCountriesCollection(CountryDetailLevel level) {
+		String collection = null;
+		switch(level) {
+		  case HIGH:  
+			  collection = COLL_COUNTRIES_HIGH; break;
+		  case MEDIUM: 
+			  collection = COLL_COUNTRIES_MEDIUM; break;
+		  default:
+			  collection = COLL_COUNTRIES_LOW; break;
+		}
+		return db.getCollection(collection);
 	}
 	
 	
@@ -73,19 +88,11 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	}
 
 	
-	public void insertCountry(JSONObject event, String detail) {
-		String collection = null;
-		switch(detail) {
-		  case "country_high":  
-			  collection = COLL_COUNTRIES_HIGH; break;
-		  case "country_medium": 
-			  collection = COLL_COUNTRIES_MEDIUM; break;
-		  case "country_low": 
-			  collection = COLL_COUNTRIES_LOW; break;
-		}
-
+	public void insertCountry(JSONObject event, CountryDetailLevel level) {
+		MongoCollection<Document> collection = getCountriesCollection(level);
 		Document doc = Document.parse(event.toString());
-		db.getCollection(collection).insertOne(doc);	
+		
+		collection.insertOne(doc);	
 	}
 	
 	
@@ -162,31 +169,17 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	
 
 	@Override
-	public Iterable<Document> getCountries(String levelQuality) {
-		String collection = null;
-		switch(levelQuality) {
-		  case "high":  
-			  collection = COLL_COUNTRIES_HIGH; break;
-		  case "medium": 
-			  collection = COLL_COUNTRIES_MEDIUM; break;
-		  case "low": 
-			  collection = COLL_COUNTRIES_LOW; break;
-		}
-		return db.getCollection(collection).find();
+	public Iterable<Document> getCountries(CountryDetailLevel level) {
+		MongoCollection<Document> collection = getCountriesCollection(level);
+		FindIterable<Document> contries = collection.find();
+		
+		return contries;
 	}
 	
 
 	@Override
-	public Iterable<Document> getCountriesWithEventCount(String levelQuality) {
-		String collection = null;
-		switch(levelQuality) {
-		  case "high":  
-			  collection = COLL_COUNTRIES_HIGH; break;
-		  case "medium": 
-			  collection = COLL_COUNTRIES_MEDIUM; break;
-		  case "low": 
-			  collection = COLL_COUNTRIES_LOW; break;
-		}
+	public Iterable<Document> getCountriesWithEventCount(CountryDetailLevel level) {
+		MongoCollection<Document> collection = getCountriesCollection(level);
 		
 		Document groupByIsoA3 = new Document("$group", new Document("_id", new Document("iso_a3", "$geolocation.iso_a3")).append("count", new Document("$sum", 1)));
 		Document sort = new Document("$sort", new Document("count", 1));
@@ -198,7 +191,7 @@ public class MongoDBAdapter extends AbstractDBFacade {
 			Document properties = (Document) document.get("_id");
 			
 			Document project = new Document(new Document("_id", 1).append("geometry", 1).append("type", 1).append("properties.NAME", 1).append("properties.NAME_LONG",1).append("properties.ISO_A3", 1).append("properties.CONTINENT", 1));
-			countries = db.getCollection(collection).find(new Document("properties.ISO_A3",properties.get("properties"))).projection(project);
+			countries = collection.find(new Document("properties.ISO_A3",properties.get("properties"))).projection(project);
 			
 			for (Document country : countries)
 				country.put("count",document.get("count"));

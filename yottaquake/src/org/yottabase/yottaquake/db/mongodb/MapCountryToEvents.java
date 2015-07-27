@@ -12,7 +12,7 @@ public class MapCountryToEvents {
 		AbstractDBFacade facade = DBAdapterManager.getFacade();	
 		
 		int count = 0;
-		for (Document country : facade.getCountries("high")) {
+		for (Document country : facade.getCountries(CountryDetailLevel.HIGH)) {
 			Document properties = (Document) country.get("properties");
 			Document geometry = (Document) country.get("geometry");
 			Iterable<Document> events = DBAdapterManager.getFacade().getEventsInPolygon(geometry);
