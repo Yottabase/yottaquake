@@ -1,5 +1,7 @@
 jQuery(document).ready(function ($) {
 	
+	L.Icon.Default.imagePath = 'assets/images/libs/leaflet';
+	
 	var map = L.map('chart-events-map').setView([51.505, -0.09], 4);
 
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
@@ -34,6 +36,22 @@ jQuery(document).ready(function ($) {
 	var markerIconL = L.MakiMarkers.icon({icon: "triangle", color: "#f00", size: "l"});
 	var marker1 = L.marker([51.5, -0.09], {icon: markerIconM}).addTo(map);
 	var marker2 = L.marker([40, -0.09], {icon: markerIconL}).addTo(map);
+	
+	
+	var markers = L.markerClusterGroup();
+	
+	for (var i = 0; i < addressPoints.length; i++) {
+		var a = addressPoints[i];
+		var title = a[2];
+		var marker = L.marker(new L.LatLng(a[0], a[1]), { title: title });
+		marker.bindPopup(title);
+		markers.addLayer(marker);
+		console.log(a);
+	}
+	console.log(markers);
+
+	map.addLayer(markers);
+
 	
 	/*
 	$.getJSON(api, function(data){
