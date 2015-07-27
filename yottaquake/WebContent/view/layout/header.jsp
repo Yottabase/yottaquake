@@ -26,6 +26,7 @@
     <script src="assets/js/lib/bootstrap.js"></script>
     <script src="assets/js/lib/d3.min.js"></script>
     <script src="assets/js/lib/leaflet.js"></script>
+    <script src="assets/js/lib/Leaflet.MakiMarkers.js"></script>
     
     <script type="text/javascript">
     	//js config

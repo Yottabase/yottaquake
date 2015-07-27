@@ -8,13 +8,34 @@ jQuery(document).ready(function ($) {
 			'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
 			'Imagery © <a href="http://mapbox.com">Mapbox</a>, ' +
 			'Dev by <strong>Yottabase</strong>',
-		id: 'mapbox.streets'
+		id: 'mapbox.outdoors'
 	}).addTo(map);
 
 	
 	//var api = wsUrl + "api-countries.do?levelQuality=low";
 	var api = wsUrl + "api-flinn-regions.do";
 	
+	map.on('moveend', function() { 
+		console.log(map.getBounds().getNorthWest()); 
+		console.log(map.getBounds().getSouthEast());
+		console.log(map.getBounds().toBBoxString());
+	     
+	});
+	
+	map.on('click', function(e){
+		console.log(e.latlng);
+		
+	});
+	
+	var bounds = [[53.912257, 27.581640], [53.902257, 27.561640]];
+	
+	
+	var markerIconM = L.MakiMarkers.icon({icon: "triangle", color: "#b0b", size: "m"});
+	var markerIconL = L.MakiMarkers.icon({icon: "triangle", color: "#f00", size: "l"});
+	var marker1 = L.marker([51.5, -0.09], {icon: markerIconM}).addTo(map);
+	var marker2 = L.marker([40, -0.09], {icon: markerIconL}).addTo(map);
+	
+	/*
 	$.getJSON(api, function(data){
 		
 		var mapColor = d3.scale.linear()
@@ -69,7 +90,7 @@ jQuery(document).ready(function ($) {
 			}
 		}).addTo(map);
 		
-	});
+	});*/
 	
 	
 });
