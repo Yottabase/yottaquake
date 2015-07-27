@@ -10,6 +10,7 @@ import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.yottabase.yottaquake.core.CountryDetailLevel;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 

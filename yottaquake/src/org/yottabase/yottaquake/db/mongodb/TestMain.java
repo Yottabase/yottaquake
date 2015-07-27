@@ -1,5 +1,6 @@
 package org.yottabase.yottaquake.db.mongodb;
 
+import org.yottabase.yottaquake.core.CountryDetailLevel;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 
@@ -17,7 +18,7 @@ public class TestMain {
 //		facade.countByYearMonth();
 //		facade.countByMonthInYear(2014);
 //		facade.getCountries("high");
-		facade.getCountriesWithEventCount(CountryDetailLevel.HIGH);	
+//		facade.getCountriesWithEventCount(CountryDetailLevel.HIGH);	
 	}
 	
 }

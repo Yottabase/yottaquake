@@ -1,8 +1,12 @@
 package org.yottabase.yottaquake.db;
 
+import java.util.Date;
+
 import org.bson.Document;
 import org.json.JSONObject;
-import org.yottabase.yottaquake.db.mongodb.CountryDetailLevel;
+import org.yottabase.yottaquake.core.BoundingBox;
+import org.yottabase.yottaquake.core.CountryDetailLevel;
+import org.yottabase.yottaquake.core.FlinnRegionDetailLevel;
 
 public abstract class AbstractDBFacade {
 
@@ -18,21 +22,17 @@ public abstract class AbstractDBFacade {
 	public abstract void close();
 	
 	/**
-	 * Conta il numero di di eventi
+	 * insert
 	 */
-	public abstract long countEvents();
+	
+	public abstract void insertEvent(JSONObject event);
+	
+	public abstract void insertCountry(JSONObject event, CountryDetailLevel level);
 	
 	/**
 	 * raggruppa per anno e mese 
 	 */
 	public abstract Iterable<Document> countByYearMonth();
-	
-	
-	/**
-	 * i terremoti principali
-	 */
-	
-	public abstract Iterable<Document> bigEarthQuake(int magnitude);
 
 	public abstract Iterable<Document> countByYear();
 	
@@ -40,22 +40,34 @@ public abstract class AbstractDBFacade {
 	
 	public abstract Iterable<Document> countByMonthInYear(int year);
 	
+	/*
+	 * nome delle flynn region
+	 */
 	public abstract Iterable<Document> distinctRegion();
-
-	public abstract void insertEvent(JSONObject event);
-	
-	public abstract void insertCountry(JSONObject event, CountryDetailLevel level);
 		
-	public abstract Iterable<Document> getCountries(CountryDetailLevel level);
+	public abstract Iterable<Document> getCountries(CountryDetailLevel level );
 	
-	public abstract Iterable<Document> getCountriesWithEventCount(CountryDetailLevel level);
-
-	public abstract Iterable<Document> getFlinnRegions();
-
 	public abstract Iterable<Document> getEventsInPolygon(Document geometry);
 	
 	public abstract void insertFlinnRegion(JSONObject flinnRegion);
 	
 	public abstract boolean updateDocument(Document document, Document update);
+	
+	
+	
+	//API 
+	
+	public abstract Iterable<Document> getCountriesWithEventsCount(CountryDetailLevel level, BoundingBox box);
+
+	public abstract Iterable<Document> getFlinnRegionsWithEventsCount(FlinnRegionDetailLevel level, BoundingBox box);
+	
+	public abstract Iterable<Document> getEvents(
+		BoundingBox box, 
+		Date from, Date to, 
+		Integer minMagnitude, Integer maxMagnitude, 
+		Integer minDepth, Integer maxDepth
+	);
+	
+	
 
 }

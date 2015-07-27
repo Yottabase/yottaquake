@@ -2,9 +2,14 @@ package org.yottabase.yottaquake.db.mongodb;
 
 import static java.util.Arrays.asList;
 
+import java.util.Date;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.json.JSONObject;
+import org.yottabase.yottaquake.core.BoundingBox;
+import org.yottabase.yottaquake.core.CountryDetailLevel;
+import org.yottabase.yottaquake.core.FlinnRegionDetailLevel;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 
 import com.mongodb.MongoClient;
@@ -100,12 +105,6 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	public void close() {
 		this.client.close();
 	}
-
-	
-	@Override
-	public long countEvents() {
-		return db.getCollection(COLL_EARTHQUAKES).count();
-	}
 	
 	
 	@Override
@@ -149,13 +148,13 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	}
 	
 	
-	@Override
-	public Iterable<Document> bigEarthQuake(int magnitude) {
-		Document project = new Document(new Document("_id", 0).append("properties.mag", 1).append("properties.lon", 1).append("properties.lat", 1));
-		Document query = new Document("properties.mag", new Document("$gt", magnitude));
-		
-		return db.getCollection(COLL_EARTHQUAKES).find(query).projection(project);
-	}
+//	@Override
+//	public Iterable<Document> bigEarthQuake(int magnitude) {
+//		Document project = new Document(new Document("_id", 0).append("properties.mag", 1).append("properties.lon", 1).append("properties.lat", 1));
+//		Document query = new Document("properties.mag", new Document("$gt", magnitude));
+//		
+//		return db.getCollection(COLL_EARTHQUAKES).find(query).projection(project);
+//	}
 
 	
 	@Override
@@ -177,28 +176,28 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	}
 	
 
-	@Override
-	public Iterable<Document> getCountriesWithEventCount(CountryDetailLevel level) {
-		MongoCollection<Document> collection = getCountriesCollection(level);
-		
-		Document groupByIsoA3 = new Document("$group", new Document("_id", new Document("iso_a3", "$geolocation.iso_a3")).append("count", new Document("$sum", 1)));
-		Document sort = new Document("$sort", new Document("count", 1));
-
-		AggregateIterable<Document> eventsCount = db.getCollection(COLL_EARTHQUAKES).aggregate(asList(groupByIsoA3, sort));
-		
-		FindIterable<Document> countries = null;
-		for (Document document : eventsCount) {
-			Document properties = (Document) document.get("_id");
-			
-			Document project = new Document(new Document("_id", 1).append("geometry", 1).append("type", 1).append("properties.NAME", 1).append("properties.NAME_LONG",1).append("properties.ISO_A3", 1).append("properties.CONTINENT", 1));
-			countries = collection.find(new Document("properties.ISO_A3",properties.get("properties"))).projection(project);
-			
-			for (Document country : countries)
-				country.put("count",document.get("count"));
-		}
-		
-		return countries;	
-	}
+//	@Override
+//	public Iterable<Document> getCountriesWithEventCount(CountryDetailLevel level) {
+//		MongoCollection<Document> collection = getCountriesCollection(level);
+//		
+//		Document groupByIsoA3 = new Document("$group", new Document("_id", new Document("iso_a3", "$geolocation.iso_a3")).append("count", new Document("$sum", 1)));
+//		Document sort = new Document("$sort", new Document("count", 1));
+//
+//		AggregateIterable<Document> eventsCount = db.getCollection(COLL_EARTHQUAKES).aggregate(asList(groupByIsoA3, sort));
+//		
+//		FindIterable<Document> countries = null;
+//		for (Document document : eventsCount) {
+//			Document properties = (Document) document.get("_id");
+//			
+//			Document project = new Document(new Document("_id", 1).append("geometry", 1).append("type", 1).append("properties.NAME", 1).append("properties.NAME_LONG",1).append("properties.ISO_A3", 1).append("properties.CONTINENT", 1));
+//			countries = collection.find(new Document("properties.ISO_A3",properties.get("properties"))).projection(project);
+//			
+//			for (Document country : countries)
+//				country.put("count",document.get("count"));
+//		}
+//		
+//		return countries;	
+//	}
 	
 	
 	@Override
@@ -219,7 +218,25 @@ public class MongoDBAdapter extends AbstractDBFacade {
 
 
 	@Override
-	public Iterable<Document> getFlinnRegions() {
+	public Iterable<Document> getEvents(BoundingBox box, Date from, Date to,
+			Integer minMagnitude, Integer maxMagnitude, Integer minDepth,
+			Integer maxDepth) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Iterable<Document> getCountriesWithEventsCount(
+			CountryDetailLevel level, BoundingBox box) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Iterable<Document> getFlinnRegionsWithEventsCount(
+			FlinnRegionDetailLevel level, BoundingBox box) {
 		// TODO Auto-generated method stub
 		return null;
 	}

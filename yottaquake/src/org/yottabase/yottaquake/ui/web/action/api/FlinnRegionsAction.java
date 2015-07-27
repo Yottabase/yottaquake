@@ -24,7 +24,7 @@ public class FlinnRegionsAction extends AbstractAction{
 		
 		JSONArray items = new JSONArray();
 		
-		for(Document doc : facade.getFlinnRegions()){
+		for(Document doc : facade.getFlinnRegionsWithEventsCount(null, null)){
 			
 			JSONObject obj = new JSONObject(((Document) doc.get("_id")).toJson()) ;
 			

@@ -3,6 +3,7 @@ package org.yottabase.yottaquake.db.mongodb;
 import java.io.FileNotFoundException;
 
 import org.bson.Document;
+import org.yottabase.yottaquake.core.CountryDetailLevel;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 

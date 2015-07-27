@@ -1,4 +1,4 @@
-package org.yottabase.yottaquake.db.mongodb;
+package org.yottabase.yottaquake.core;
 
 public enum CountryDetailLevel {
 	
