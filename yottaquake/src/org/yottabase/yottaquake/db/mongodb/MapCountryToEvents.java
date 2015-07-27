@@ -35,7 +35,6 @@ public class MapCountryToEvents {
 				
 				if( (count % 10000) == 0 )
 					 System.out.println(count);
-			
 			}
 			
 		}

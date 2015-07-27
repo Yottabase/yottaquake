@@ -18,10 +18,11 @@ public class InsertCountryMain {
 		facade.initializeCollectionCountries();
 		
 		String fileName = "country_high";
-		
 		System.out.println(fileName);
+		
 		String path = args[0];
 		InputStream inputStream = new FileInputStream(new File(path + "/" + fileName + ".json"));
+		
 		JSONTokener json = new JSONTokener(inputStream);
 		JSONObject countries = (JSONObject) json.nextValue();
 		JSONArray country = (JSONArray) countries.get("features");
@@ -30,9 +31,9 @@ public class InsertCountryMain {
 		for (int i = 0; i < country.length(); i++) {
 			count++;
 			
-			facade.insertCountry((JSONObject)country.get(i), fileName);
+			facade.insertCountry((JSONObject) country.get(i), fileName);
 		
-			if(count % 100 == 0)
+			if( (count % 100) == 0 )
 				System.out.println(count);
 		}
 		
