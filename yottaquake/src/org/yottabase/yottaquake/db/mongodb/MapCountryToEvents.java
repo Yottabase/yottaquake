@@ -1,0 +1,44 @@
+package org.yottabase.yottaquake.db.mongodb;
+
+import java.io.FileNotFoundException;
+
+import org.bson.Document;
+import org.yottabase.yottaquake.db.AbstractDBFacade;
+import org.yottabase.yottaquake.db.DBAdapterManager;
+
+public class MapCountryToEvents {
+	
+	public static void main(String[] args) throws FileNotFoundException {
+		AbstractDBFacade facade = DBAdapterManager.getFacade();	
+		
+		int count = 0;
+		for (Document country : facade.getCountries("high")) {
+			Document properties = (Document) country.get("properties");
+			Document geometry = (Document) country.get("geometry");
+			Iterable<Document> events = DBAdapterManager.getFacade().getEventsInPolygon(geometry);
+			
+			for (Document event : events) {
+				count ++;
+				String country_name = properties.getString("NAME");
+				String country_code = properties.getString("ISO_A3");
+				String continent = properties.getString("CONTINENT");
+				
+				Document geo_values = new Document();
+				geo_values.append("name", country_name);
+				geo_values.append("iso_a3", country_code);
+				geo_values.append("continent", continent);
+				
+				Document geolocation = new Document();
+				geolocation.append("geolocation", geo_values);
+				
+				facade.updateDocument(event, geolocation);
+				
+				if( (count % 10000) == 0 )
+					 System.out.println(count);
+			
+			}
+			
+		}
+	}
+	
+}
