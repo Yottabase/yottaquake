@@ -19,9 +19,9 @@ public class MapCountryToEvents {
 			
 			for (Document event : events) {
 				count ++;
-				String country_name = properties.getString("NAME");
-				String country_code = properties.getString("ISO_A3");
-				String continent = properties.getString("CONTINENT");
+				String country_name = properties.getString("name");
+				String country_code = properties.getString("iso_a3");
+				String continent = properties.getString("continent");
 				
 				Document geo_values = new Document();
 				geo_values.append("name", country_name);
