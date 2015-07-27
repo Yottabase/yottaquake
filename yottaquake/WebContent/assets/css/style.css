@@ -45,6 +45,19 @@ body strong{
 	width: 100%;
 }
 
+#filters  .slider{
+	width: 100%;
+}
+
+#filters  .slider-selection{
+	background: #d7d7d7;
+}
+
+#filters  .slider-track-low,
+#filters  .slider-track-high{
+	background: #9d9d9d;
+}
+
 #graph{
 	height: 100vh;
 }

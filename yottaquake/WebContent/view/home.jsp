@@ -11,25 +11,8 @@
 					<label for="exampleInputPassword1">Magnitudo</label>
 
 					<div class="row">
-						<div class="col-md-6">
-							<select class="form-control">
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-								<option>6</option>
-							</select>
-						</div>
-						<div class="col-md-6">
-							<select class="form-control">
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-								<option>6</option>
-							</select>
+						<div class="col-md-12">
+							<input type="text" class="magnitude" />
 						</div>
 					</div>
 				</div>
@@ -52,25 +35,8 @@
 					<label for="exampleInputPassword1">Profondita</label>
 
 					<div class="row">
-						<div class="col-md-6">
-							<select class="form-control">
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-								<option>6</option>
-							</select>
-						</div>
-						<div class="col-md-6">
-							<select class="form-control">
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-								<option>6</option>
-							</select>
+						<div class="col-md-12">
+							<input type="text" class="depth" />
 						</div>
 					</div>
 				</div>
