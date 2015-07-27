@@ -16,6 +16,8 @@
     <link href="assets/css/lib/bootstrap.css" rel="stylesheet">
     <link href="assets/css/lib/bootstrap-theme.min.css" rel="stylesheet">
     <link href="assets/css/lib/leaflet.css" rel="stylesheet">
+    <link href="assets/css/lib/MarkerCluster.css" rel="stylesheet">
+    <link href="assets/css/lib/MarkerCluster.Default.css" rel="stylesheet">
     <link href="assets/css/style.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -27,6 +29,16 @@
     <script src="assets/js/lib/d3.min.js"></script>
     <script src="assets/js/lib/leaflet.js"></script>
     <script src="assets/js/lib/Leaflet.MakiMarkers.js"></script>
+    <script src="assets/js/lib/leaflet.markercluster.js"></script>
+    
+    
+    
+    
+    <!--  //TODO: remove this sample -->
+    <script src="http://leaflet.github.io/Leaflet.markercluster/example/realworld.388.js"></script>
+    
+    
+    
     
     <script type="text/javascript">
     	//js config
