@@ -1,6 +1,7 @@
 package org.yottabase.yottaquake.db;
 
 import java.util.Date;
+import java.util.Set;
 
 import org.bson.Document;
 import org.json.JSONObject;
@@ -53,8 +54,6 @@ public abstract class AbstractDBFacade {
 	
 	public abstract boolean updateDocument(Document document, Document update);
 	
-	
-	
 	//API 
 	
 	public abstract Iterable<Document> getCountriesWithEventsCount(CountryDetailLevel level, BoundingBox box);
@@ -68,6 +67,10 @@ public abstract class AbstractDBFacade {
 		Integer minDepth, Integer maxDepth
 	);
 	
+	public abstract Set<String> getDistinctMacroRegions(); 
+	
+	public abstract Iterable<Document> getRegionsByMacroRegion(String macroRegions); 
+
 	
 
 }

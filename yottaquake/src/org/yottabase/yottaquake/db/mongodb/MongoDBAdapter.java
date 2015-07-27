@@ -3,6 +3,9 @@ package org.yottabase.yottaquake.db.mongodb;
 import static java.util.Arrays.asList;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -13,7 +16,6 @@ import org.yottabase.yottaquake.core.FlinnRegionDetailLevel;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 
 import com.mongodb.MongoClient;
-import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -30,7 +32,7 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	private final static String COLL_COUNTRIES_MEDIUM = "countryMedium";
 	private final static String COLL_COUNTRIES_HIGH = "countryHigh";
 	
-	private final static String COLL_FLINNREGION = "flinnRegion";
+	private final static String COLL_FLINNREGION = "flinnRegions";
 	
 	
 	public MongoDBAdapter(MongoClient client, MongoDatabase db) {
@@ -240,5 +242,28 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+	@Override
+	public Set<String> getDistinctMacroRegions() {
+		FindIterable<Document> regions = db.getCollection(COLL_FLINNREGION).find();
+		Set<String> distinctMacroRegions = new HashSet<String>();
+		
+		for (Document region : regions) {
+			Document properties = (Document) region.get("properties");
+			String name_h = properties.getString("name_h");
+			distinctMacroRegions.add(name_h.split(";")[0]);
+		}
+		
+		return distinctMacroRegions;
+	}
+
+
+	@Override
+	public Iterable<Document> getRegionsByMacroRegion(String macroRegion) {
+		Pattern prefix = Pattern.compile("^"+macroRegion+";");
+		return db.getCollection(COLL_FLINNREGION).find(new Document("properties.name_h", prefix));
+	}
+
 	
 }
