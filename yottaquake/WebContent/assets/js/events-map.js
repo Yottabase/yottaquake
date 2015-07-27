@@ -46,12 +46,22 @@ jQuery(document).ready(function ($) {
 		var marker = L.marker(new L.LatLng(a[0], a[1]), { title: title });
 		marker.bindPopup(title);
 		markers.addLayer(marker);
-		console.log(a);
+		//console.log(a);
 	}
 	console.log(markers);
 
 	map.addLayer(markers);
 
+	
+	//heat map
+	var heat = L.heatLayer([], {radius : 50, blur: 30, gradient : {'0.4': 'blue', '0.65': 'lime', '1': 'red'}}).addTo(map);
+	for (var i = 0; i < addressPoints.length; i++) {
+		var a = addressPoints[i];
+		heat.addLatLng(new L.LatLng(a[0], a[1]));
+	}
+	
+    
+	
 	
 	/*
 	$.getJSON(api, function(data){

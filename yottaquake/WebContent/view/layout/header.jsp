@@ -30,7 +30,7 @@
     <script src="assets/js/lib/leaflet.js"></script>
     <script src="assets/js/lib/Leaflet.MakiMarkers.js"></script>
     <script src="assets/js/lib/leaflet.markercluster.js"></script>
-    
+    <script src="assets/js/lib/leaflet-heat.js"></script>
     
     
     
