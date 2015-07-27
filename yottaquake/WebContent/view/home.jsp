@@ -22,11 +22,11 @@
 
 					<div class="row">
 						<div class="col-md-6">
-							Dal <input class="text" class="form-control">
+							Dal <input type="text" class="form-control input-block from">
 
 						</div>
 						<div class="col-md-6">
-							Al <input class="text" class="form-control input-block">
+							Al <input type="text" class="form-control input-block to">
 						</div>
 					</div>
 				</div>

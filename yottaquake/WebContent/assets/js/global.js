@@ -12,6 +12,12 @@ jQuery(document).ready(function ($) {
 		range: true
 	});
 	
+	var fromDatepicker = $('#filters input.from').datepicker({
+	});
+	
+	var toDatepicker = $('#filters input.to').datepicker({
+	});
+	
 	
 });
 		

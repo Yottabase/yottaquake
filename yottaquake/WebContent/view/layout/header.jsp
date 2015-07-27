@@ -20,6 +20,7 @@
     <link href="assets/css/lib/MarkerCluster.Default.css" rel="stylesheet">
     <link href="assets/css/lib/bootstrap-theme.min.css" rel="stylesheet">
     <link href="assets/css/lib/bootstrap-slider.min.css" rel="stylesheet">
+    <link href="assets/css/lib/bootstrap-datepicker3.min.css" rel="stylesheet">
     
     <link href="assets/css/style.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -35,6 +36,7 @@
     <script src="assets/js/lib/leaflet.markercluster.js"></script>
     <script src="assets/js/lib/leaflet-heat.js"></script>
     <script src="assets/js/lib/bootstrap-slider.min.js"></script>
+    <script src="assets/js/lib/bootstrap-datepicker.min.js"></script>
     <script src="assets/js/global.js"></script>
     
     
