@@ -3,6 +3,7 @@ package org.yottabase.yottaquake.db.mongodb;
 import static java.util.Arrays.asList;
 
 import org.bson.Document;
+import org.bson.conversions.Bson;
 import org.json.JSONObject;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 
@@ -11,99 +12,84 @@ import com.mongodb.MongoClient;
 import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.result.UpdateResult;
 
 public class MongoDBAdapter extends AbstractDBFacade {
-	private MongoClient client;
+	
 	private MongoDatabase db;
+	private MongoClient client;
 
-	private final static String COLLECTION = "earthquake";
+	private final static String COLL_EARTHQUAKES = "earthquake";
 	
-	private final static String COLLECTIONLOW = "countryLow";
+	private final static String COLL_COUNTRIES_LOW = "countryLow";
+	private final static String COLL_COUNTRIES_MEDIUM = "countryMedium";
+	private final static String COLL_COUNTRIES_HIGH = "countryHigh";
 	
-	private final static String COLLECTIONMEDIUM = "countryMedium";
+	private final static String COLL_FLINNREGION = "flinnRegion";
 	
-	private final static String COLLECTIONHIGH = "countryHigh";
-	
-	private final static String COLLECTION_FLINN_REGION = "flinnRegion";
 	
 	public MongoDBAdapter(MongoClient client, MongoDatabase db) {
 		this.client = client;
 		this.db = db;
 	}
 	
+	
 	@Override
 	public void initializeCollectionEarthquake() {
 		System.out.println("initialize earthquake");
-		db.getCollection(COLLECTION).drop();
-
-		
+		db.getCollection(COLL_EARTHQUAKES).drop();
+		db.getCollection(COLL_EARTHQUAKES).dropIndex("geometry_2dsphere");
 
 		/*
 		 * index options
-		 
-
-		IndexOptions uniqueCostraint = new IndexOptions();
-		uniqueCostraint.unique(true);
-
-		IndexOptions noUniqueCostraint = new IndexOptions();
-		noUniqueCostraint.unique(false);
-
-		db.getCollection(COLLECTIONARTISTS).createIndex(
-				(new Document("artistId", 1)), uniqueCostraint);
-
-		db.getCollection(COLLECTIONUSERS).createIndex(
-				(new Document("code", 1)), uniqueCostraint);
-
-		db.getCollection(COLLECTIONLISTENED).createIndex(
-				(new Document("code", 1)), noUniqueCostraint);
-
-		db.getCollection(COLLECTIONLISTENED).createIndex(
-				(new Document("trackId", 1)), noUniqueCostraint);
-		 
 		 */
+		
+		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("geometry","2dsphere"));
 	}
+	
 
 	public void initializeCollectionCountries() {
 		System.out.println("initialize countries");
-		db.getCollection(COLLECTIONLOW).drop();
-		db.getCollection(COLLECTIONMEDIUM).drop();
-		db.getCollection(COLLECTIONHIGH).drop();
+		db.getCollection(COLL_COUNTRIES_LOW).drop();
+		db.getCollection(COLL_COUNTRIES_MEDIUM).drop();
+		db.getCollection(COLL_COUNTRIES_HIGH).drop();
 
 	}
+	
 	
 	@Override
 	public void close() {
 		this.client.close();
 	}
 	
+	
 	@Override
 	public void insertEvent(JSONObject event) {
-
 		Document doc = Document.parse(event.toString());
-		
-		db.getCollection(COLLECTION).insertOne(doc);
-		
+		db.getCollection(COLL_EARTHQUAKES).insertOne(doc);
 	}
 
+	
 	public void insertCountry(JSONObject event, String detail) {
 		String collection = null;
 		
 		switch(detail) {
-		  case "country_high":  collection = COLLECTIONHIGH;  break;
-		  case "country_medium": collection = COLLECTIONMEDIUM; break;
-		  case "country_low": collection = COLLECTIONLOW; break;
+		  case "country_high":  collection = COLL_COUNTRIES_HIGH;  break;
+		  case "country_medium": collection = COLL_COUNTRIES_MEDIUM; break;
+		  case "country_low": collection = COLL_COUNTRIES_LOW; break;
 
 		}
 
 		Document doc = Document.parse(event.toString());
-		db.getCollection(collection).insertOne(doc);
-		
+		db.getCollection(collection).insertOne(doc);	
 	}
 
+	
 	@Override
 	public long countEvents() {
-		return db.getCollection(COLLECTION).count();
+		return db.getCollection(COLL_EARTHQUAKES).count();
 	}
+	
 	
 	@Override
 	public Iterable<Document> countByYearMonth() {
@@ -113,10 +99,11 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		Document project = new Document("$project", new Document("_id",0).append("year", "$_id.year").append("month", "$_id.month").append("count", 1));
 		Document sort = new Document("$sort", new Document("year",1).append("month", 1));
 
-		AggregateIterable<Document> iterable = db.getCollection(COLLECTION).aggregate(asList(groupByYearMonth,project,sort));
+		AggregateIterable<Document> iterable = db.getCollection(COLL_EARTHQUAKES).aggregate(asList(groupByYearMonth,project,sort));
 				
 		return iterable;
 	}
+	
 	
 	@Override
 	public Iterable<Document> countByYear() {		
@@ -124,10 +111,11 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		Document project = new Document("$project", new Document("_id",0).append("year", "$_id.year").append("count", 1));
 		Document sort = new Document("$sort", new Document("year",1));
 
-		AggregateIterable<Document> iterable = db.getCollection(COLLECTION).aggregate(asList(groupByYearMonth,project,sort));
+		AggregateIterable<Document> iterable = db.getCollection(COLL_EARTHQUAKES).aggregate(asList(groupByYearMonth,project,sort));
 			
 		return iterable;
 	}
+	
 	
 	@Override
 	public Iterable<Document> countByMonth() {		
@@ -135,50 +123,42 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		Document project = new Document("$project", new Document("_id",0).append("month", "$_id.month").append("count", 1));
 		Document sort = new Document("$sort", new Document("month",1));
 
-		AggregateIterable<Document> iterable = db.getCollection(COLLECTION).aggregate(asList(groupByYearMonth,project,sort));
+		AggregateIterable<Document> iterable = db.getCollection(COLL_EARTHQUAKES).aggregate(asList(groupByYearMonth,project,sort));
 			
 		return iterable;
 	}
 
-	public Iterable<Document> countByMonthInYear(int year) {	
-		
+	
+	public Iterable<Document> countByMonthInYear(int year) {
 		Document match = new Document("$match", new Document("year", Integer.toString(year)));
 		Document groupByMonth = new Document("$group", new Document("_id", new Document("month", "$month")).append("count", new Document("$sum", 1)));
 		Document project = new Document("$project", new Document("_id",0).append("month", "$_id.month").append("count", 1));
 		Document sort = new Document("$sort", new Document("month",1));
 
-		AggregateIterable<Document> iterable = db.getCollection(COLLECTION).aggregate(asList(match,groupByMonth,project,sort));
+		AggregateIterable<Document> iterable = db.getCollection(COLL_EARTHQUAKES).aggregate(asList(match,groupByMonth,project,sort));
 
 		return iterable;
 	}
+	
 	
 	@Override
 	public Iterable<Document> bigEarthQuake(int magnitude) {
 		Document project = new Document(new Document("_id",0).append("properties.mag",1).append("properties.lon",1).append("properties.lat",1));
 
 		Document query = new Document("properties.mag", new Document("$gt", magnitude));
-		FindIterable<Document> iterable = db.getCollection(COLLECTION).find(query).projection(project);
-
-		//christian
-		iterable.forEach(new Block<Document>() {
-			public void apply(final Document document) {
-				System.out.println(document.toJson());
-//				Document documentOutput = (Document) document.get("properties");				
-				
-//				System.out.println(documentOutput.get("mag") + "	latitudine = " + documentOutput.get("lat") + "	longitudine = " + documentOutput.get("lon"));
-			}
-		});	
-				
+		FindIterable<Document> iterable = db.getCollection(COLL_EARTHQUAKES).find(query).projection(project);
+		
 		return iterable;
 	}
 
+	
 	@Override
 	public Iterable<Document> distinctRegion() {
 		Document groupByRegion = new Document("$group", new Document("_id","$properties.flynn_region"));
 //		Document project = new Document("$project", new Document("_id",0).append("year", "$_id.year").append("count", 1));
 //		Document sort = new Document("$sort", new Document("total",1));
 
-		AggregateIterable<Document> iterable = db.getCollection(COLLECTION).aggregate(asList(groupByRegion));
+		AggregateIterable<Document> iterable = db.getCollection(COLL_EARTHQUAKES).aggregate(asList(groupByRegion));
 		
 		iterable.forEach(new Block<Document>() {
 			public void apply(final Document document) {
@@ -187,16 +167,16 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		});
 			
 		return iterable;
-
 	}
+	
 
 	@Override
 	public Iterable<Document> getCountries(String levelQuality) {
 		String collection = null;
 		switch(levelQuality) {
-		  case "high":  collection = COLLECTIONHIGH;  break;
-		  case "medium": collection = COLLECTIONMEDIUM; break;
-		  case "low": collection = COLLECTIONLOW; break;
+		  case "high":  collection = COLL_COUNTRIES_HIGH;  break;
+		  case "medium": collection = COLL_COUNTRIES_MEDIUM; break;
+		  case "low": collection = COLL_COUNTRIES_LOW; break;
 
 		}
 		
@@ -204,21 +184,22 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	
 		return iterable;
 	}
+	
 
 	@Override
 	public Iterable<Document> getCountriesWithEventCount(String levelQuality) {
 		String collection = null;
 		switch(levelQuality) {
-		  case "high":  collection = COLLECTIONHIGH;  break;
-		  case "medium": collection = COLLECTIONMEDIUM; break;
-		  case "low": collection = COLLECTIONLOW; break;
+		  case "high":  collection = COLL_COUNTRIES_HIGH;  break;
+		  case "medium": collection = COLL_COUNTRIES_MEDIUM; break;
+		  case "low": collection = COLL_COUNTRIES_LOW; break;
 
 		}
 		
 		Document groupByIsoA3 = new Document("$group", new Document("_id", new Document("iso_a3", "$geolocation.iso_a3")).append("count", new Document("$sum", 1)));
 		Document sort = new Document("$sort", new Document("count",1));
 
-		AggregateIterable<Document> eventsCount = db.getCollection(COLLECTION).aggregate(asList(groupByIsoA3,sort));
+		AggregateIterable<Document> eventsCount = db.getCollection(COLL_EARTHQUAKES).aggregate(asList(groupByIsoA3,sort));
 		
 		FindIterable<Document> countries = null;
 		for (Document document : eventsCount) {
@@ -229,32 +210,48 @@ public class MongoDBAdapter extends AbstractDBFacade {
 			
 			for (Document country : countries)
 				country.put("count",document.get("count"));
-			
 		}
-		return countries;
 		
-		
-		
+		return countries;	
+	}
+	
+	
+	@Override
+	public Iterable<Document> getEventsInPolygon(Document geometry) {
+		//db.earthquake.find({geometry: {$geoWithin: {$geometry: {type : "Polygon", coordinates: [ [ [ 3, 50 ], [ 17, 50 ], [ 19, 36 ], [ 2, 39 ], [3, 50] ] ]}}}}).pretty()
+		return db.getCollection(COLL_EARTHQUAKES).find(new Document("geometry", new Document("$geoWithin", new Document("$geometry", geometry))));
 	}
 
+	
 	@Override
 	public void initializeCollectionFlinnRegions() {
 		System.out.println("initialize flinn regions");
-		db.getCollection(COLLECTION).drop();
+		db.getCollection(COLL_EARTHQUAKES).drop();
 	}
 
+	
 	@Override
 	public void insertFlinnRegion(JSONObject flinnRegion) {
 		Document doc = Document.parse(flinnRegion.toString());
-		db.getCollection(COLLECTION_FLINN_REGION).insertOne(doc);
+		db.getCollection(COLL_FLINNREGION).insertOne(doc);
 	}
-	
+
+
+	@Override
+	public boolean updateDocument(Document document ,Document update) {
+		Bson sq = new Document("_id",document.get("_id"));
+		Bson updateQuery = new Document("$set", update);
+		
+		UpdateResult result = db.getCollection(COLL_EARTHQUAKES).updateOne(sq, updateQuery);
+
+		return result.wasAcknowledged();
+	}
+
+
 	@Override
 	public Iterable<Document> getFlinnRegions() {
-		
-		Document groupByCountry = new Document("$group", new Document("_id", new Document("properties", "$properties" ).append("geometry", "$geometry").append("type", "$type")));
-		AggregateIterable<Document> iterable = db.getCollection("fli").aggregate(asList(groupByCountry));
-		
-		return iterable;
+		// TODO Auto-generated method stub
+		return null;
 	}
+	
 }

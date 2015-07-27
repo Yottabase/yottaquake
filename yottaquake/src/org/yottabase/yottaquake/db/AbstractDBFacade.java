@@ -44,16 +44,17 @@ public abstract class AbstractDBFacade {
 	public abstract void insertEvent(JSONObject event);
 	
 	public abstract void insertCountry(JSONObject event, String detail);
-	
-	public abstract void insertFlinnRegion(JSONObject event);
-	
+		
 	public abstract Iterable<Document> getCountries(String levelQuality);
 	
 	public abstract Iterable<Document> getCountriesWithEventCount(String levelQuality);
 
 	public abstract Iterable<Document> getFlinnRegions();
 
-
-
+	public abstract Iterable<Document> getEventsInPolygon(Document geometry);
+	
+	public abstract void insertFlinnRegion(JSONObject flinnRegion);
+	
+	public abstract boolean updateDocument(Document document, Document update);
 
 }
