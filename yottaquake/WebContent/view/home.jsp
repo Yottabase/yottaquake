@@ -55,6 +55,9 @@
 					<div class="checkbox">
 						<label><input type="checkbox" class="events">Eventi</label>
 					</div>
+					<div class="checkbox">
+						<label><input type="checkbox" class="heatMap">Heat map</label>
+					</div>
 				</div>
 
 				<button type="submit" class="btn btn-primary pull-right">Aggiorna</button>

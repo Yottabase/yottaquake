@@ -66,6 +66,11 @@ jQuery(document).ready(function ($) {
 		$(document).trigger(eventTrigger, filters);
     });
 	
+	$('#filters input.heatMap').change(function() {
+		filters.showHeatMap = $(this).is(":checked");
+		$(document).trigger(eventTrigger, filters);
+    });
+	
 });
 		
 	

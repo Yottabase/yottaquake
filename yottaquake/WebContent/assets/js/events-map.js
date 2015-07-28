@@ -44,6 +44,28 @@ jQuery(document).ready(function ($) {
 		}
 	});
 	
+	//heatmap
+	var heat = L.heatLayer([], {
+		radius : 50, 
+		blur: 30, 
+		gradient : {'0.4': 'blue', '0.65': 'lime', '1': 'red'}}
+	).addTo(map);
+	
+	$(document).on('yottaquake.filters_update', function(e, filters){
+		heat.setLatLngs([]);
+		if(filters.showHeatMap){
+			$.getJSON(wsUrl + "api-events.do", filters, function(data){
+				
+				var coords = [];
+				for (var i = 0; i < data.items.length; i++) {
+					var event = data.items[i];
+					coords.push(new L.LatLng(event.properties.lat, event.properties.lon));
+				}
+				heat.setLatLngs(coords);
+				
+			});
+		}
+	});
 	
 	
 	map.on('click', function(e){
@@ -63,12 +85,6 @@ jQuery(document).ready(function ($) {
 	
 	
 	
-	//heat map
-	var heat = L.heatLayer([], {radius : 50, blur: 30, gradient : {'0.4': 'blue', '0.65': 'lime', '1': 'red'}}).addTo(map);
-	for (var i = 0; i < addressPoints.length; i++) {
-		var a = addressPoints[i];
-		heat.addLatLng(new L.LatLng(a[0], a[1]));
-	}
 	
     
 	
