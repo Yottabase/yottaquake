@@ -239,7 +239,7 @@ public class MongoDBAdapter implements DBFacade {
 		ArrayList<Document> queries = new ArrayList<Document>();
 		Document query = null;
 		if(box!=null){
-			queries.add(new Document("geometry", new Document("$geoWithin", new Document("$box",box.getCoordinate()))));
+			queries.add(new Document("geometry", new Document("$geoWithin", new Document("$box",box.getCoordinatesPair()))));
 			query = new Document("$and",queries);
 		}
 		if(minMagnitude != null)
@@ -270,7 +270,8 @@ public class MongoDBAdapter implements DBFacade {
 	@Override
 	public Iterable<Document> getCountriesWithEventsCount(CountryDetailLevel level, BoundingBox box) {
 		//db.countryHigh.find({geometry: {$geoIntersects: {$geometry: {type: "Polygon" ,coordinates: [[ [ 0, 0 ], [ 100, 0 ], [ 100, 89 ], [ 0,89 ], [0,0] ]]}}}})
-		Document boxDoc = new Document("$geometry",new Document("type","Polygon").append("coordinates", box.getPolygon()));
+		System.out.println(box.toPolygon());
+		Document boxDoc = new Document("$geometry",new Document("type","Polygon").append("coordinates", box.toPolygon()));
 		
 		MongoCollection<Document> collection = getCountriesCollection(level);
 		return collection.find(new Document("geometry", new Document("$geoIntersects", boxDoc)));
@@ -279,7 +280,7 @@ public class MongoDBAdapter implements DBFacade {
 
 	@Override
 	public Iterable<Document> getFlinnRegionsWithEventsCount(FlinnRegionDetailLevel level, BoundingBox box) {
-		Document boxDoc = new Document("$geometry",new Document("type","Polygon").append("coordinates", box.getPolygon()));
+		Document boxDoc = new Document("$geometry",new Document("type","Polygon").append("coordinates", box.toPolygon()));
 		
 		MongoCollection<Document> collection = getFlinnRegionsCollection(level);
 		return collection.find(new Document("geometry", new Document("$geoIntersects", boxDoc)));
