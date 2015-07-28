@@ -244,12 +244,11 @@ public class MongoDBAdapter extends AbstractDBFacade {
 			queries.add(new Document("properties.depth", new Document("$lte", maxDepth)));
 		
 		if(from != null)
-			queries.add(new Document("properties.lastupdate", new Document("$gte", from)));
+			queries.add(new Document("time.millisecond", new Document("$gte", from.getTime())));
 		
 		if(to != null)
-			queries.add(new Document("properties.lastupdate", new Document("$lte", to)));
+			queries.add(new Document("time.millisecond", new Document("$lte", to.getTime())));
 				
-		System.out.println(queries);
 		return db.getCollection(COLL_EARTHQUAKES).find(query);
 	}
 

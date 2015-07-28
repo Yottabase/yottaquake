@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.bson.Document;
 import org.json.JSONObject;
@@ -13,7 +17,7 @@ import org.yottabase.yottaquake.db.DBAdapterManager;
 
 public class InsertEventMain {
 
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) throws FileNotFoundException, ParseException {
 		AbstractDBFacade facade = DBAdapterManager.getFacade();
 		facade.initializeCollectionEarthquake();
 
@@ -40,7 +44,7 @@ public class InsertEventMain {
 	}
 	
 	
-	public static JSONObject convertDate(JSONObject event) {
+	public static JSONObject convertDate(JSONObject event) throws ParseException {
 		JSONObject properties = (JSONObject) event.get("properties");
 		
 		String dateUTC = (String) properties.get("time");
@@ -71,6 +75,11 @@ public class InsertEventMain {
 		timeInformation.append("month", month);
 		timeInformation.append("day", day);
 		timeInformation.append("hour", minutesTime);
+		
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+		Date from = format.parse(dateUTC);
+		
+		timeInformation.append("milliseconds", from.getTime());
 			
 		event.put("time", timeInformation);
 	
