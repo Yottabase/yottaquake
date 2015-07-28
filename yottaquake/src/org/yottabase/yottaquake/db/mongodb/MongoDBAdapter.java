@@ -291,6 +291,42 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		Pattern prefix = Pattern.compile("^"+macroRegion+";");
 		return db.getCollection(COLL_FLINN_MICRO).find(new Document("properties.name_h", prefix));
 	}
-
 	
+	
+	public Set<String> getDistinctRegionsAggregates() {
+		FindIterable<Document> regionsNames = db.getCollection(COLL_FLINN_MICRO).find()
+				.projection(new Document("properties.name_h", 1))
+				.sort(new Document("properties.name_h", 1));
+		
+		Set<String> regionsAggregates = new HashSet<String>();
+		for (Document doc : regionsNames) {
+			Document properties = (Document) doc.get("properties");
+			String name = properties.getString("name_h");
+			String[] nameSplit = name.split(";");
+			
+			if (nameSplit.length == 3) {
+				String aggregate = nameSplit[1];
+				
+				if (!aggregate.contains("["))
+					regionsAggregates.add(aggregate);
+			}	
+		}
+
+		for (String a : regionsAggregates) {
+			System.out.println(a);
+			Iterable<Document> subregions = getRegionsByAggregate(a);
+			for (Document microRegion : subregions)
+				System.out.println(microRegion.toJson());
+			
+			System.out.println();
+		}
+		return regionsAggregates;
+	}
+	
+	
+	public Iterable<Document> getRegionsByAggregate(String aggregate) {
+		Pattern prefix = Pattern.compile(".*;" + aggregate);
+		return db.getCollection(COLL_FLINN_MICRO).find(new Document("properties.name_h", prefix));
+	}
+
 }
