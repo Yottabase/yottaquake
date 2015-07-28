@@ -9,16 +9,15 @@ import org.bson.Document;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 
-public class Micro2MacroFlinnRegion {
+public class Micro2AggregatedFlinnRegion {
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		AbstractDBFacade facade = DBAdapterManager.getFacade();
-		Set<String> regionsAggregates = facade.getDistinctRegionsAggregates();;
+		Set<String> macroRegions = facade.getDistinctMacroRegions();
 		
-		for (String ra : regionsAggregates) {
-			System.out.println(ra);
-			Iterable<Document> innerRegions = facade.getRegionsByAggregate(ra);
+		for (String mr : macroRegions) {
+			Iterable<Document> innerRegions = facade.getRegionsByMacroRegion(mr);
 			
 			List<Point2D> points = new LinkedList<Point2D>();
 			for (Document ir : innerRegions) {
@@ -70,7 +69,7 @@ public class Micro2MacroFlinnRegion {
 			
 			// create JSON 
 			Document mr_properties = new Document();
-			mr_properties.put("name", ra);
+			mr_properties.put("name", mr);
 			
 			Document mr_geometry = new Document();
 			mr_geometry.put("type", "Polygon");

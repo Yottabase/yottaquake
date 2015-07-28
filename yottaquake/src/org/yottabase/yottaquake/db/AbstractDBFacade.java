@@ -71,6 +71,8 @@ public abstract class AbstractDBFacade {
 	
 	public abstract Iterable<Document> getRegionsByMacroRegion(String macroRegions); 
 
+	public abstract Set<String> getDistinctRegionsAggregates();
 	
+	public abstract Iterable<Document> getRegionsByAggregate(String aggregate);
 
 }
