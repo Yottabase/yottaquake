@@ -71,7 +71,7 @@
     <script src="assets/js/events-map.js"></script>
     
     <link href="assets/css/style.css" rel="stylesheet">
-    <script src="assets/js/global.js"></script>
+    <script src="assets/js/filters.js"></script>
   </head>
 
   <body>
