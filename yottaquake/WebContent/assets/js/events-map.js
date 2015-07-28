@@ -26,9 +26,12 @@ jQuery(document).ready(function ($) {
 	
 	//markers
 	var markers = L.markerClusterGroup();
+	
+	var markersReq = null;
 	$(document).on('yottaquake.filters_update', function(e, filters){
+		if(markersReq != null) markersReq.abort();
 		if(filters.showEvents){
-			$.getJSON(wsUrl + "api-events.do", filters, function(data){
+			markersReq = $.getJSON(wsUrl + "api-events.do", filters, function(data){
 				var coords = [];
 				
 				for (var i = 0; i < data.items.length; i++) {
@@ -53,9 +56,12 @@ jQuery(document).ready(function ($) {
 		gradient : {'0.4': 'blue', '0.65': 'lime', '1': 'red'}}
 	).addTo(map);
 	
+	var heatReq = null;
+	
 	$(document).on('yottaquake.filters_update', function(e, filters){
+		if(heatReq != null) heatReq.abort();
 		if(filters.showHeatMap){
-			$.getJSON(wsUrl + "api-events.do", filters, function(data){
+			heatReq = $.getJSON(wsUrl + "api-events.do", filters, function(data){
 				
 				var coords = [];
 				for (var i = 0; i < data.items.length; i++) {
@@ -65,6 +71,7 @@ jQuery(document).ready(function ($) {
 				heat.setLatLngs(coords);
 				
 			});
+			console.log(heatReq);
 		}else{
 			heat.setLatLngs([]);
 		}
