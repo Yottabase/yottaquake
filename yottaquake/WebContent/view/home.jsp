@@ -56,9 +56,7 @@
 					<div class="checkbox">
 						<label><input type="checkbox" data-layer-filter="showHeatMap">Heat map</label>
 					</div>
-				</div>
-
-				<button type="submit" class="btn btn-primary pull-right">Aggiorna</button>
+				</div>				
 			</form>
 		</div>
 
