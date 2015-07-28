@@ -76,20 +76,40 @@ jQuery(document).ready(function ($) {
 		}
 	});
 	
+	//markers
+	var pointersReq = null;
+	var pointers = [];
+	var pointerIcon = L.MakiMarkers.icon({icon: "triangle", color: "#f00", size: "s"});
 	
-	map.on('click', function(e){
-		console.log(e.latlng);
+	$(document).on('yottaquake.filters_update', function(e, filters){
+		if(pointersReq != null) pointersReq.abort();
+		if(filters.showEvents){
+			pointersReq = $.getJSON(wsUrl + "api-events.do", filters, function(data){
+				
+				pointers.forEach(function(p) {
+				    map.removeLayer(p);
+				    delete p;
+				});
+				
+				var coords = [];
+				for (var i = 0; i < data.items.length; i++) {
+					var event = data.items[i];
+					var mapPointer = L.marker([event.properties.lat, event.properties.lon], {icon: pointerIcon}).addTo(map);
+					pointers.push(mapPointer);
+				}
+			});
+		}else{
+			pointers.forEach(function(p) {
+			    map.removeLayer(p);
+			    delete p;
+			});
+		}
 	});
 	
 	
 	
-	var bounds = [[53.912257, 27.581640], [53.902257, 27.561640]];
 	
 	
-	var markerIconM = L.MakiMarkers.icon({icon: "triangle", color: "#b0b", size: "m"});
-	var markerIconL = L.MakiMarkers.icon({icon: "triangle", color: "#f00", size: "l"});
-	var marker1 = L.marker([51.5, -0.09], {icon: markerIconM}).addTo(map);
-	var marker2 = L.marker([40, -0.09], {icon: markerIconL}).addTo(map);
 	
 	
 	

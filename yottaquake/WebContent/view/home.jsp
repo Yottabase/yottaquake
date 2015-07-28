@@ -56,6 +56,9 @@
 					<div class="checkbox">
 						<label><input type="checkbox" data-layer-filter="showHeatMap">Heat map</label>
 					</div>
+					<div class="checkbox">
+						<label><input type="checkbox" data-layer-filter="showEvents">Eventi clusterizzati</label>
+					</div>
 				</div>				
 			</form>
 		</div>
