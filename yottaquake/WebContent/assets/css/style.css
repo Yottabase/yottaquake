@@ -33,3 +33,33 @@ body strong{
 	font-family: 'roboto_condensedbold', Arial, sans-serif;
 	font-weight: normal;
 }
+
+#filters{
+	
+	height: 100vh;
+	background-color: #f8f8f8;
+    border-right: solid 1px #e7e7e7;
+}
+
+#filters input{
+	width: 100%;
+}
+
+#filters  .slider{
+	width: 100%;
+}
+
+#filters  .slider-selection{
+	background: #d7d7d7;
+}
+
+#filters  .slider-track-low,
+#filters  .slider-track-high{
+	background: #9d9d9d;
+}
+
+#graph{
+	height: 100vh;
+}
+
+

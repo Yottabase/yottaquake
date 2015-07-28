@@ -1,6 +1,6 @@
 jQuery(document).ready(function ($) {
 	
-	L.Icon.Default.imagePath = 'assets/images/libs/leaflet';
+	L.Icon.Default.imagePath = 'assets/images/lib/leaflet';
 	
 	var map = L.map('chart-events-map').setView([51.505, -0.09], 4);
 
