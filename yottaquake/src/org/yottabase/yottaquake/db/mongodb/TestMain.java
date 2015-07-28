@@ -30,20 +30,25 @@ public class TestMain {
 //		Set<String> regions = facade.getDistinctMacroRegions();
 		
 		BoundingBox box = new BoundingBox(new LatLng(0, 0),new LatLng(10, 10));
-//		DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
-//		String dateInString = "1892-03-27T18:04:43.5Z";
-//		Date from = format.parse(dateInString);
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
+		String dateInString = "1999-03-27T18:04:43.5Z";
+		Date from = format.parse(dateInString);
+		System.out.println(from.getTime());
 //		Date from = null;
-//		
-//		Date to = null;
+//		dateInString = "2092-03-27T18:04:43.5Z";
+//		Date to = format.parse(dateInString);
+		Date to = null;
 //		Integer minMagnitude = new Integer(1);
 //		Integer maxMagnitude = new Integer(5);
 //		Integer minDepth = new Integer(10);
-//		Integer maxDepth = null;
+		Integer minMagnitude = null;
+		Integer maxMagnitude = null;
+		Integer minDepth = null;
+		Integer maxDepth = null;
 		
-		Iterable<Document> regions = facade.getCountriesWithEventsCount(CountryDetailLevel.HIGH, box);
+//		Iterable<Document> regions = facade.getCountriesWithEventsCount(CountryDetailLevel.HIGH, box);
 //		Iterable<Document> regions = facade.getFlinnRegionsWithEventsCount(null, box);
-//		Iterable<Document> regions = facade.getEvents(box, from, to, minMagnitude, maxMagnitude, minDepth, maxDepth);
+		Iterable<Document> regions = facade.getEvents(box, from, to, minMagnitude, maxMagnitude, minDepth, maxDepth);
 		
 		for (Document document : regions) {
 			System.out.println(document.toJson());
