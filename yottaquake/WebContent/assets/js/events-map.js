@@ -48,8 +48,8 @@ jQuery(document).ready(function ($) {
 	
 	//heatmap
 	var heat = L.heatLayer([], {
-		radius : 50, 
-		blur: 30, 
+		//radius : 50, 
+		//blur: 30, 
 		gradient : {'0.4': 'blue', '0.65': 'lime', '1': 'red'}}
 	).addTo(map);
 	
