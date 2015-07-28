@@ -56,7 +56,7 @@
     	var mapDefault = {
    			lat : 41.90278, 
    			lng : 12.49636,
-   			zoom : 4
+   			zoom : 10
     	};
     </script>
     

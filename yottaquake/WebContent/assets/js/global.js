@@ -5,9 +5,12 @@ jQuery(document).ready(function ($) {
 	
 	$(document).on('yottaquake.bounding_box_update', function(e, newBB){
 		
+		console.log(newBB);
 		filters.zoom = newBB.zoom;
-		filters.topLeft = newBB.topLeft;
-		filters.bottomRight = newBB.bottomRight;
+		filters.topLeftLat = newBB.topLeft.lat;
+		filters.topLeftLng = newBB.topLeft.lng;
+		filters.bottomRightLat = newBB.bottomRight.lat;
+		filters.bottomRightLng = newBB.bottomRight.lng;
 		
 		$(document).trigger(eventTrigger, filters);
 	});

@@ -33,12 +33,12 @@ public class BoundingBox {
 	public ArrayList<ArrayList<Double>> getCoordinate(){
 		ArrayList<ArrayList<Double> > boxArray = new ArrayList<ArrayList<Double> >();
 		ArrayList<Double> bottomRight = new ArrayList<Double>();
-		bottomRight.add(this.getBottomRight().getLat());
 		bottomRight.add(this.getBottomRight().getLng());
+		bottomRight.add(this.getBottomRight().getLat());
 		
 		ArrayList<Double> topLeft = new ArrayList<Double>();
-		topLeft.add(this.getTopLeft().getLat());
 		topLeft.add(this.getTopLeft().getLng());
+		topLeft.add(this.getTopLeft().getLat());
 		
 		boxArray.add(bottomRight);
 		boxArray.add(topLeft);
