@@ -1,5 +1,7 @@
 package org.yottabase.yottaquake.core;
 
+import java.util.ArrayList;
+
 public class BoundingBox {
 	
 	public LatLng topLeft;
@@ -26,5 +28,20 @@ public class BoundingBox {
 
 	public void setBottomRight(LatLng bottomRight) {
 		this.bottomRight = bottomRight;
+	}
+	
+	public ArrayList<ArrayList<Double>> getCoordinate(){
+		ArrayList<ArrayList<Double> > boxArray = new ArrayList<ArrayList<Double> >();
+		ArrayList<Double> bottomRight = new ArrayList<Double>();
+		bottomRight.add(this.getBottomRight().getLat());
+		bottomRight.add(this.getBottomRight().getLng());
+		
+		ArrayList<Double> topLeft = new ArrayList<Double>();
+		topLeft.add(this.getTopLeft().getLat());
+		topLeft.add(this.getTopLeft().getLng());
+		
+		boxArray.add(bottomRight);
+		boxArray.add(topLeft);
+		return boxArray;
 	}
 }
