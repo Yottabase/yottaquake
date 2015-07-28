@@ -11,7 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
-import org.yottabase.yottaquake.db.AbstractDBFacade;
+import org.yottabase.yottaquake.db.DBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 
 public class InsertCountryMain {
@@ -26,7 +26,7 @@ public class InsertCountryMain {
 	}
 	
 	public static void main(String[] args) throws FileNotFoundException {
-		AbstractDBFacade facade = DBAdapterManager.getFacade();
+		DBFacade facade = DBAdapterManager.getFacade();
 		facade.initializeCollectionCountries();
 		
 		for (CountryDetailLevel level : detail2fileName.keySet()) {

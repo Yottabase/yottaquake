@@ -2,7 +2,7 @@ package org.yottabase.yottaquake.db.mongodb;
 
 import java.util.Arrays;
 
-import org.yottabase.yottaquake.db.AbstractDBFacade;
+import org.yottabase.yottaquake.db.DBFacade;
 import org.yottabase.yottaquake.db.DBFacadeFactory;
 import org.yottabase.yottaquake.db.PropertyFile;
 
@@ -14,8 +14,8 @@ import com.mongodb.client.MongoDatabase;
 public class MongoDBAdapterFactory implements DBFacadeFactory {
 
 	@Override
-	public AbstractDBFacade createService(PropertyFile properties) {
-		AbstractDBFacade driver = null;
+	public DBFacade createService(PropertyFile properties) {
+		DBFacade driver = null;
 
 		String host = properties.get("db.host");
 		String username = properties.get("db.username");

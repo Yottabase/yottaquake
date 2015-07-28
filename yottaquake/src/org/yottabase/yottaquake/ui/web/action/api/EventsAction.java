@@ -15,7 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.yottabase.yottaquake.core.BoundingBox;
 import org.yottabase.yottaquake.core.LatLng;
-import org.yottabase.yottaquake.db.AbstractDBFacade;
+import org.yottabase.yottaquake.db.DBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 import org.yottabase.yottaquake.ui.web.core.AbstractAction;
 
@@ -25,7 +25,7 @@ public class EventsAction extends AbstractAction{
 	public void run(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		AbstractDBFacade facade = DBAdapterManager.getFacade();
+		DBFacade facade = DBAdapterManager.getFacade();
 		
 		
 		// init bbox

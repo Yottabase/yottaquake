@@ -9,7 +9,7 @@ import org.yottabase.yottaquake.core.BoundingBox;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
 import org.yottabase.yottaquake.core.FlinnRegionDetailLevel;
 
-public interface AbstractDBFacade {
+public interface DBFacade {
 
 	public void initializeCollectionEarthquake();
 

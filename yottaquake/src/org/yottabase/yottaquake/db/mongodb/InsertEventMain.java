@@ -12,13 +12,13 @@ import java.util.Date;
 import org.bson.Document;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.yottabase.yottaquake.db.AbstractDBFacade;
+import org.yottabase.yottaquake.db.DBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 
 public class InsertEventMain {
 
 	public static void main(String[] args) throws FileNotFoundException, ParseException {
-		AbstractDBFacade facade = DBAdapterManager.getFacade();
+		DBFacade facade = DBAdapterManager.getFacade();
 		facade.initializeCollectionEarthquake();
 
 		String path = args[0];

@@ -10,7 +10,7 @@ import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
-import org.yottabase.yottaquake.db.AbstractDBFacade;
+import org.yottabase.yottaquake.db.DBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 import org.yottabase.yottaquake.ui.web.core.AbstractAction;
 
@@ -27,7 +27,7 @@ public class CountriesAction extends AbstractAction{
 			return;
 		}
 		
-		AbstractDBFacade facade = DBAdapterManager.getFacade();
+		DBFacade facade = DBAdapterManager.getFacade();
 		
 		JSONArray items = new JSONArray();
 		

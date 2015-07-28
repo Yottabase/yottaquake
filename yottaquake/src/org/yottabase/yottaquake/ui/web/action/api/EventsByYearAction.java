@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.yottabase.yottaquake.db.AbstractDBFacade;
+import org.yottabase.yottaquake.db.DBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 import org.yottabase.yottaquake.ui.web.core.AbstractAction;
 
@@ -19,7 +19,7 @@ public class EventsByYearAction extends AbstractAction{
 	public void run(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 
-		AbstractDBFacade facade = DBAdapterManager.getFacade();
+		DBFacade facade = DBAdapterManager.getFacade();
 		
 		JSONArray items = new JSONArray();
 		

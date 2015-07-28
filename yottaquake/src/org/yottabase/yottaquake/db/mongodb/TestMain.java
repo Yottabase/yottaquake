@@ -10,14 +10,14 @@ import org.yottabase.yottaquake.core.BoundingBox;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
 import org.yottabase.yottaquake.core.FlinnRegionDetailLevel;
 import org.yottabase.yottaquake.core.LatLng;
-import org.yottabase.yottaquake.db.AbstractDBFacade;
+import org.yottabase.yottaquake.db.DBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 
 public class TestMain {
 
 	public static void main(String[] args) throws ParseException {
 		
-		AbstractDBFacade facade = DBAdapterManager.getFacade();
+		DBFacade facade = DBAdapterManager.getFacade();
 		
 //		System.out.println(facade.countEvents());
 //		facade.bigEarthQuake(5);

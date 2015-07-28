@@ -4,13 +4,13 @@ import java.io.FileNotFoundException;
 
 import org.bson.Document;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
-import org.yottabase.yottaquake.db.AbstractDBFacade;
+import org.yottabase.yottaquake.db.DBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 
 public class MapCountryToEvents {
 	
 	public static void main(String[] args) throws FileNotFoundException {
-		AbstractDBFacade facade = DBAdapterManager.getFacade();	
+		DBFacade facade = DBAdapterManager.getFacade();	
 		
 		int count = 0;
 		for (Document country : facade.getCountries(CountryDetailLevel.HIGH)) {

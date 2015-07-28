@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import org.yottabase.yottaquake.core.BoundingBox;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
 import org.yottabase.yottaquake.core.FlinnRegionDetailLevel;
-import org.yottabase.yottaquake.db.AbstractDBFacade;
+import org.yottabase.yottaquake.db.DBFacade;
 
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
@@ -22,7 +22,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.UpdateResult;
 
-public class MongoDBAdapter implements AbstractDBFacade {
+public class MongoDBAdapter implements DBFacade {
 	
 	private MongoDatabase db;
 	private MongoClient client;

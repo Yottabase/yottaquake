@@ -7,14 +7,14 @@ import java.util.Set;
 
 import org.bson.Document;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
-import org.yottabase.yottaquake.db.AbstractDBFacade;
+import org.yottabase.yottaquake.db.DBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 
 public class Country2Continent {
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
-		AbstractDBFacade facade = DBAdapterManager.getFacade();
+		DBFacade facade = DBAdapterManager.getFacade();
 		Set<String> continents = facade.getDistinctContinents();
 		
 		for (String c : continents) {

@@ -6,14 +6,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.bson.Document;
-import org.yottabase.yottaquake.db.AbstractDBFacade;
+import org.yottabase.yottaquake.db.DBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 
 public class Micro2AggregatedFlinnRegion {
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
-		AbstractDBFacade facade = DBAdapterManager.getFacade();
+		DBFacade facade = DBAdapterManager.getFacade();
 		Set<String> macroRegions = facade.getDistinctMacroRegions();
 		
 		for (String mr : macroRegions) {
