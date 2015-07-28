@@ -1,9 +1,18 @@
 jQuery(document).ready(function ($) {
 	
-	L.Icon.Default.imagePath = 'assets/images/lib/leaflet';
+	//init map
+	var map = L.map('chart-events-map')
+	.on('moveend load', function() {
+		$(document).trigger('yottaquake.bounding_box_update', 
+			{
+				'topLeft' :  this.getBounds().getNorthWest(),
+				'bottomRight' : this.getBounds().getSouthEast(),
+				'zoom'	: this.getZoom()
+			}
+		);
+	})
+	.setView([mapDefault.lat, mapDefault.lng], mapDefault.zoom);
 	
-	var map = L.map('chart-events-map').setView([51.505, -0.09], 4);
-
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
 		maxZoom: 18,
 		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
@@ -12,22 +21,23 @@ jQuery(document).ready(function ($) {
 			'Dev by <strong>Yottabase</strong>',
 		id: 'mapbox.outdoors'
 	}).addTo(map);
-
 	
-	//var api = wsUrl + "api-countries.do?levelQuality=low";
-	var api = wsUrl + "api-flinn-regions.do";
 	
-	map.on('moveend', function() { 
-		console.log(map.getBounds().getNorthWest()); 
-		console.log(map.getBounds().getSouthEast());
-		console.log(map.getBounds().toBBoxString());
-	     
+	
+	//test
+	$(document).on('yottaquake.filters_update', function(e, filters){
+		console.log("Filtro aggiornato");
+		console.log(filters);
 	});
 	
+	
+	/*
 	map.on('click', function(e){
 		console.log(e.latlng);
 		
 	});
+	
+	
 	
 	var bounds = [[53.912257, 27.581640], [53.902257, 27.561640]];
 	
@@ -62,7 +72,8 @@ jQuery(document).ready(function ($) {
 	
     
 	
-	
+	//var api = wsUrl + "api-countries.do?levelQuality=low";
+	var api = wsUrl + "api-flinn-regions.do";
 	/*
 	$.getJSON(api, function(data){
 		
@@ -118,7 +129,9 @@ jQuery(document).ready(function ($) {
 			}
 		}).addTo(map);
 		
-	});*/
+	});
+		*/
+	
 	
 	
 });

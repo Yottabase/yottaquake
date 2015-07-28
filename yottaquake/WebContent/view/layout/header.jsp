@@ -52,12 +52,15 @@
     <script type="text/javascript">
     	//js config
     	var wsUrl = "http://localhost:8080/yottaquake/";
+    	L.Icon.Default.imagePath = 'assets/images/lib/leaflet';
+    	var mapDefault = {
+   			lat : 41.90278, 
+   			lng : 12.49636,
+   			zoom : 4
+    	};
     </script>
     
     <!-- app -->
-    <link href="assets/css/style.css" rel="stylesheet">
-    <script src="assets/js/global.js"></script>
-    
 	<link href="assets/css/events-by-month.css" rel="stylesheet">
     <script src="assets/js/events-by-month.js"></script>
     
@@ -66,6 +69,9 @@
     
     <link href="assets/css/events-map.css" rel="stylesheet">
     <script src="assets/js/events-map.js"></script>
+    
+    <link href="assets/css/style.css" rel="stylesheet">
+    <script src="assets/js/global.js"></script>
   </head>
 
   <body>
