@@ -30,8 +30,8 @@ public class LatLng {
 	
 	public ArrayList<Double> asArray() {
 		ArrayList<Double> arrayPoint = new ArrayList<Double>();
-		arrayPoint.add(lat);
 		arrayPoint.add(lng);
+		arrayPoint.add(lat);
 		
 		return arrayPoint;
 	}
