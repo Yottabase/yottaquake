@@ -26,53 +26,57 @@ public interface AbstractDBFacade {
 	 * insert
 	 */
 	
-	public abstract void insertEvent(JSONObject event);
+	public void insertEvent(JSONObject event);
 	
-	public abstract void insertCountry(JSONObject event, CountryDetailLevel level);
+	public void insertCountry(JSONObject event, CountryDetailLevel level);
 	
 	/**
 	 * raggruppa per anno e mese 
 	 */
-	public abstract Iterable<Document> countByYearMonth();
+	public Iterable<Document> countByYearMonth();
 
-	public abstract Iterable<Document> countByYear();
+	public Iterable<Document> countByYear();
 	
-	public abstract Iterable<Document> countByMonth();
+	public Iterable<Document> countByMonth();
 	
-	public abstract Iterable<Document> countByMonthInYear(int year);
+	public Iterable<Document> countByMonthInYear(int year);
 	
 	/*
 	 * nome delle flynn region
 	 */
-	public abstract Iterable<Document> distinctRegion();
+	public Iterable<Document> distinctRegion();
 		
-	public abstract Iterable<Document> getCountries(CountryDetailLevel level );
+	public Iterable<Document> getCountries(CountryDetailLevel level );
 	
-	public abstract Iterable<Document> getEventsInPolygon(Document geometry);
+	public Iterable<Document> getEventsInPolygon(Document geometry);
 	
-	public abstract void insertFlinnRegion(JSONObject flinnRegion);
+	public void insertFlinnRegion(JSONObject flinnRegion);
 	
-	public abstract boolean updateDocument(Document document, Document update);
+	public boolean updateDocument(Document document, Document update);
 	
 	//API 
 	
-	public abstract Iterable<Document> getCountriesWithEventsCount(CountryDetailLevel level, BoundingBox box);
+	public Iterable<Document> getCountriesWithEventsCount(CountryDetailLevel level, BoundingBox box);
 
-	public abstract Iterable<Document> getFlinnRegionsWithEventsCount(FlinnRegionDetailLevel level, BoundingBox box);
+	public Iterable<Document> getFlinnRegionsWithEventsCount(FlinnRegionDetailLevel level, BoundingBox box);
 	
-	public abstract Iterable<Document> getEvents(
+	public Iterable<Document> getEvents(
 		BoundingBox box, 
 		Date from, Date to, 
 		Integer minMagnitude, Integer maxMagnitude, 
 		Integer minDepth, Integer maxDepth
 	);
 	
-	public abstract Set<String> getDistinctMacroRegions(); 
+	public Set<String> getDistinctMacroRegions(); 
 	
-	public abstract Iterable<Document> getRegionsByMacroRegion(String macroRegions); 
+	public Iterable<Document> getRegionsByMacroRegion(String macroRegions); 
 
-	public  Set<String> getDistinctRegionsAggregates();
+	public Set<String> getDistinctRegionsAggregates();
 	
-	public  Iterable<Document> getRegionsByAggregate(String aggregate);
+	public Iterable<Document> getRegionsByAggregate(String aggregate);
+	
+	public Set<String> getDistinctContinents();
+	
+	public Iterable<Document> getCountriesByContinet(String continent, CountryDetailLevel level);
 
 }

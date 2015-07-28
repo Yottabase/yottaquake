@@ -30,7 +30,7 @@ public class TestMain {
 //		facade.getCountriesWithEventCount(CountryDetailLevel.HIGH);	
 //		Set<String> regions = facade.getDistinctMacroRegions();
 		
-		BoundingBox box = new BoundingBox(new LatLng(0, 150),new LatLng(89, 0));
+//		BoundingBox box = new BoundingBox(new LatLng(0, 150),new LatLng(89, 0));
 //		DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
 //		String dateInString = "1999-03-27T18:04:43.5Z";
 //		Date from = format.parse(dateInString);
@@ -41,22 +41,23 @@ public class TestMain {
 //		Integer minMagnitude = new Integer(1);
 //		Integer maxMagnitude = new Integer(5);
 //		Integer minDepth = new Integer(10);
-		Date from = null;
-		Date to = null;
-		Integer minMagnitude = null;
-		Integer maxMagnitude = null;
-		Integer minDepth = null;
-		Integer maxDepth = null;
+//		Date from = null;
+//		Date to = null;
+//		Integer minMagnitude = null;
+//		Integer maxMagnitude = null;
+//		Integer minDepth = null;
+//		Integer maxDepth = null;
 		
 //		Iterable<Document> regions = facade.getCountriesWithEventsCount(CountryDetailLevel.HIGH, box);
 //		Iterable<Document> regions = facade.getFlinnRegionsWithEventsCount(FlinnRegionDetailLevel.MICRO, box);
-		Iterable<Document> regions = facade.getEvents(box, from, to, minMagnitude, maxMagnitude, minDepth, maxDepth);
+//		Iterable<Document> regions = facade.getEvents(box, from, to, minMagnitude, maxMagnitude, minDepth, maxDepth);
+//		
+//		for (Document document : regions) {
+//			System.out.println(document.toJson());
+//		}
 		
-		for (Document document : regions) {
-			System.out.println(document.toJson());
-		}
+		facade.getDistinctContinents();
 		
-
 	}
 	
 }

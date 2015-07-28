@@ -32,9 +32,13 @@ public class MongoDBAdapter implements AbstractDBFacade {
 	private final static String COLL_COUNTRIES_LOW = "countryLow";
 	private final static String COLL_COUNTRIES_MEDIUM = "countryMedium";
 	private final static String COLL_COUNTRIES_HIGH = "countryHigh";
+	private final static String COLL_CONTINENTS = "continents";
 	
 	private final static String COLL_FLINN_MICRO = "flinn_micro";
+	private final static String COLL_FLINN_AGRGT = "flinn_agrgt";
 	private final static String COLL_FLINN_MACRO = "flinn_macro";
+	
+	private final static String COLL_TECT_PLATES = "tectonic_plates";
 	
 	
 	public MongoDBAdapter(MongoClient client, MongoDatabase db) {
@@ -55,6 +59,7 @@ public class MongoDBAdapter implements AbstractDBFacade {
 		}
 		return db.getCollection(collection);
 	}
+	
 	
 	private MongoCollection<Document> getFlinnRegionsCollection(FlinnRegionDetailLevel level) {
 		String collection = null;
@@ -78,7 +83,8 @@ public class MongoDBAdapter implements AbstractDBFacade {
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("geometry","2dsphere"));
 	}
 	
-
+	
+	@Override
 	public void initializeCollectionCountries() {
 		System.out.println("initialize countries");
 		db.getCollection(COLL_COUNTRIES_LOW).drop();
@@ -108,6 +114,7 @@ public class MongoDBAdapter implements AbstractDBFacade {
 	}
 
 	
+	@Override
 	public void insertCountry(JSONObject event, CountryDetailLevel level) {
 		MongoCollection<Document> collection = getCountriesCollection(level);
 		Document doc = Document.parse(event.toString());
@@ -120,6 +127,7 @@ public class MongoDBAdapter implements AbstractDBFacade {
 	public void close() {
 		this.client.close();
 	}
+	
 	
 	
 	@Override
@@ -153,6 +161,7 @@ public class MongoDBAdapter implements AbstractDBFacade {
 	}
 
 	
+	@Override
 	public Iterable<Document> countByMonthInYear(int year) {
 		Document match = new Document("$match", new Document("year", Integer.toString(year)));
 		Document groupByMonth = new Document("$group", new Document("_id", new Document("month", "$month")).append("count", new Document("$sum", 1)));
@@ -182,7 +191,7 @@ public class MongoDBAdapter implements AbstractDBFacade {
 	}
 	
 
-//	@Override
+//	
 //	public Iterable<Document> getCountriesWithEventCount(CountryDetailLevel level) {
 //		MongoCollection<Document> collection = getCountriesCollection(level);
 //		
@@ -257,6 +266,7 @@ public class MongoDBAdapter implements AbstractDBFacade {
 		return db.getCollection(COLL_EARTHQUAKES).find(query).projection(projection);
 	}
 
+	
 	@Override
 	public Iterable<Document> getCountriesWithEventsCount(CountryDetailLevel level, BoundingBox box) {
 		//db.countryHigh.find({geometry: {$geoIntersects: {$geometry: {type: "Polygon" ,coordinates: [[ [ 0, 0 ], [ 100, 0 ], [ 100, 89 ], [ 0,89 ], [0,0] ]]}}}})
@@ -298,6 +308,7 @@ public class MongoDBAdapter implements AbstractDBFacade {
 	}
 	
 	
+	@Override
 	public Set<String> getDistinctRegionsAggregates() {
 		FindIterable<Document> regionsNames = db.getCollection(COLL_FLINN_MICRO).find()
 				.projection(new Document("properties.name_h", 1))
@@ -317,20 +328,36 @@ public class MongoDBAdapter implements AbstractDBFacade {
 			}	
 		}
 
-		for (String a : regionsAggregates) {
-			System.out.println(a);
-			Iterable<Document> subregions = getRegionsByAggregate(a);
-			for (Document microRegion : subregions)
-				System.out.println(microRegion.toJson());
-			
-			System.out.println();
-		}
 		return regionsAggregates;
 	}
 	
+	
+	@Override
 	public Iterable<Document> getRegionsByAggregate(String aggregate) {
 		Pattern prefix = Pattern.compile(".*;" + aggregate);
 		return db.getCollection(COLL_FLINN_MICRO).find(new Document("properties.name_h", prefix));
+	}
+	
+	
+	@Override
+	public Set<String> getDistinctContinents() {
+		FindIterable<Document> countries = db.getCollection(COLL_COUNTRIES_HIGH).find();
+		Set<String> distinctContinents = new HashSet<String>();
+		
+		for (Document country : countries) {
+			Document properties = (Document) country.get("properties");
+			String continent = properties.getString("continent");
+			distinctContinents.add(continent);
+		}
+		
+		return distinctContinents;
+	}
+
+
+	@Override
+	public Iterable<Document> getCountriesByContinet(String continent, CountryDetailLevel level) {
+		MongoCollection<Document> collection = getCountriesCollection(level);
+		return collection.find(new Document("properties.continent", continent));
 	}
 
 }
