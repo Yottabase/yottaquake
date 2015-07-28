@@ -146,7 +146,14 @@ jQuery(document).ready(function ($) {
 		if(filters.showCountries){
 			
 			var customFilters = filters;
-			customFilters['levelQuality'] = 'HIGH';
+			
+			if(filters.zoom <= 3){
+				customFilters['levelQuality'] = 'LOW';	
+			}else if(filters.zoom <= 5){
+				customFilters['levelQuality'] = 'MEDIUM';
+			}else{
+				customFilters['levelQuality'] = 'HIGH';
+			}
 			
 			countriesReq = $.getJSON(wsUrl + "api-countries.do", customFilters, function(data){
 				var mapColor = d3.scale.linear()
