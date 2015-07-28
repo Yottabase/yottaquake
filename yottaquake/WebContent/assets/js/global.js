@@ -37,7 +37,7 @@ jQuery(document).ready(function ($) {
 		$(document).trigger(eventTrigger, filters);
 	});
 	
-	$('#filters input.from').datepicker({
+	var date = $('#filters input.from').datepicker({
 		startDate: '01-01-2000',
         endDate: new Date()
 	}).on('change', function(e){
@@ -50,7 +50,7 @@ jQuery(document).ready(function ($) {
 		}
 		
 		$(document).trigger(eventTrigger, filters);
-	});
+	}).datepicker('setDate', null);
 	
 	$('#filters input.to').datepicker({
 		startDate: '01-01-2000',
@@ -65,7 +65,7 @@ jQuery(document).ready(function ($) {
 		}
 		
 		$(document).trigger(eventTrigger, filters);
-	});
+	}).datepicker('setDate', null);
 	
 	$('#filters .layers input[type=checkbox]')
 		.attr('checked', false)
