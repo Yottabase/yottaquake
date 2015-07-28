@@ -45,7 +45,7 @@
 					<label for="exampleInputPassword1">Layer di visualizzazione</label>
 
 					<div class="checkbox">
-						<label><input type="checkbox" data-layer-filter="showPolitical">Mappa politica</label>
+						<label><input type="checkbox" data-layer-filter="showCountries">Mappa politica</label>
 					</div>
 					<div class="checkbox">
 						<label><input type="checkbox" data-layer-filter="showFlinnRegions">Regioni di Flinn</label>

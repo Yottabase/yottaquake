@@ -106,8 +106,78 @@ jQuery(document).ready(function ($) {
 		}
 	});
 	
+	//markers
+	var pointersReq = null;
+	var pointers = [];
+	var pointerIcon = L.MakiMarkers.icon({icon: "triangle", color: "#f00", size: "s"});
+	
+	$(document).on('yottaquake.filters_update', function(e, filters){
+		if(pointersReq != null) pointersReq.abort();
+		if(filters.showEvents){
+			pointersReq = $.getJSON(wsUrl + "api-events.do", filters, function(data){
+				
+				pointers.forEach(function(p) {
+				    map.removeLayer(p);
+				    delete p;
+				});
+				
+				var coords = [];
+				for (var i = 0; i < data.items.length; i++) {
+					var event = data.items[i];
+					var mapPointer = L.marker([event.properties.lat, event.properties.lon], {icon: pointerIcon}).addTo(map);
+					pointers.push(mapPointer);
+				}
+			});
+		}else{
+			pointers.forEach(function(p) {
+			    map.removeLayer(p);
+			    delete p;
+			});
+		}
+	});
 	
 	
+	//countries
+	var countriesReq = null;
+	var countriesLayer = null;
+	$(document).on('yottaquake.filters_update', function(e, filters){
+		if(countriesReq != null) countriesReq.abort();
+		
+		if(filters.showCountries){
+			
+			var customFilters = filters;
+			customFilters['levelQuality'] = 'HIGH';
+			
+			countriesReq = $.getJSON(wsUrl + "api-countries.do", customFilters, function(data){
+				var mapColor = d3.scale.linear()
+	    			.domain([0, 1])
+	    			.range(['#fcbba1', '#99000d']);
+				
+				var geoData = 
+					{
+						"type": "FeatureCollection",
+						"features": data 
+					};
+				
+				if(countriesLayer !== null) map.removeLayer(countriesLayer);
+				 countriesLayer = L.geoJson(geoData, {
+					style: function (feature) {
+						feature.color = mapColor(Math.random());
+						return {
+					        fillColor: feature.color,
+					        weight: 1,
+					        opacity: 1,
+					        color: 'white',
+					        dashArray: '3',
+					        fillOpacity: 0.7
+					    };
+					}
+				}).addTo(map);
+			});
+		}else{
+			if(countriesLayer !== null) map.removeLayer(countriesLayer);
+		}
+	});
 	
 	
 	
