@@ -51,6 +51,21 @@ jQuery(document).ready(function ($) {
 		$(document).trigger(eventTrigger, filters);
 	});
 	
+	$('#filters input.political').change(function() {
+		filters.showPolitical = $(this).is(":checked");
+		$(document).trigger(eventTrigger, filters);
+    });
+	
+	$('#filters input.flinnRegions').change(function() {
+		filters.showFlinnRegions = $(this).is(":checked");
+		$(document).trigger(eventTrigger, filters);
+    });
+	
+	$('#filters input.events').change(function() {
+		filters.showEvents = $(this).is(":checked");
+		$(document).trigger(eventTrigger, filters);
+    });
+	
 });
 		
 	

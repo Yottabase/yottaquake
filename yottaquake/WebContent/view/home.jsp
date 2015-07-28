@@ -45,15 +45,15 @@
 					<label for="exampleInputPassword1">Layer di visualizzazione</label>
 
 					<div class="checkbox">
-						<label><input type="checkbox" value="">Mappa
+						<label><input type="checkbox" class="political">Mappa
 							politica</label>
 					</div>
 					<div class="checkbox">
-						<label><input type="checkbox" value="">Regioni di
+						<label><input type="checkbox" class="flinnRegions">Regioni di
 							Flinn</label>
 					</div>
 					<div class="checkbox">
-						<label><input type="checkbox" value="">Eventi</label>
+						<label><input type="checkbox" class="events">Eventi</label>
 					</div>
 				</div>
 

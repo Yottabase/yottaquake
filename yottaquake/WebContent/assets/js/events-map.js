@@ -28,18 +28,20 @@ jQuery(document).ready(function ($) {
 	var markers = L.markerClusterGroup();
 	$(document).on('yottaquake.filters_update', function(e, filters){
 		markers.clearLayers();
-		$.getJSON(wsUrl + "api-events.do", filters, function(data){
-			var coords = [];
-			
-			for (var i = 0; i < data.items.length; i++) {
-				var event = data.items[i];
-				var marker = L.marker(new L.LatLng(event.properties.lat, event.properties.lon));
-				coords.push(marker);
-			}
-
-			markers.addLayers(coords);
-			map.addLayer(markers);
-		});
+		if(filters.showEvents){
+			$.getJSON(wsUrl + "api-events.do", filters, function(data){
+				var coords = [];
+				
+				for (var i = 0; i < data.items.length; i++) {
+					var event = data.items[i];
+					var marker = L.marker(new L.LatLng(event.properties.lat, event.properties.lon));
+					coords.push(marker);
+				}
+		
+				markers.addLayers(coords);
+				map.addLayer(markers);
+			});
+		}
 	});
 	
 	
