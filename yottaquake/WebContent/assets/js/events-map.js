@@ -71,7 +71,6 @@ jQuery(document).ready(function ($) {
 				heat.setLatLngs(coords);
 				
 			});
-			console.log(heatReq);
 		}else{
 			heat.setLatLngs([]);
 		}
