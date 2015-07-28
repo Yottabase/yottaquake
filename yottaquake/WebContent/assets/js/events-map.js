@@ -24,17 +24,62 @@ jQuery(document).ready(function ($) {
 	
 	
 	
-	//test
+	//markers
+	var markers = L.markerClusterGroup();
+	
+	var markersReq = null;
 	$(document).on('yottaquake.filters_update', function(e, filters){
-		console.log("Filtro aggiornato");
-		console.log(filters);
+		if(markersReq != null) markersReq.abort();
+		if(filters.showEvents){
+			markersReq = $.getJSON(wsUrl + "api-events.do", filters, function(data){
+				var coords = [];
+				
+				for (var i = 0; i < data.items.length; i++) {
+					var event = data.items[i];
+					var marker = L.marker(new L.LatLng(event.properties.lat, event.properties.lon));
+					coords.push(marker);
+				}
+		
+				markers.clearLayers();
+				markers.addLayers(coords);
+				map.addLayer(markers);
+			});
+		}else{
+			markers.clearLayers();
+		}
+	});
+	
+	//heatmap
+	var heat = L.heatLayer([], {
+		//radius : 50, 
+		//blur: 30, 
+		gradient : {'0.4': 'blue', '0.65': 'lime', '1': 'red'}}
+	).addTo(map);
+	
+	var heatReq = null;
+	
+	$(document).on('yottaquake.filters_update', function(e, filters){
+		if(heatReq != null) heatReq.abort();
+		if(filters.showHeatMap){
+			heatReq = $.getJSON(wsUrl + "api-events.do", filters, function(data){
+				
+				var coords = [];
+				for (var i = 0; i < data.items.length; i++) {
+					var event = data.items[i];
+					coords.push(new L.LatLng(event.properties.lat, event.properties.lon));
+				}
+				heat.setLatLngs(coords);
+				
+			});
+			console.log(heatReq);
+		}else{
+			heat.setLatLngs([]);
+		}
 	});
 	
 	
-	/*
 	map.on('click', function(e){
 		console.log(e.latlng);
-		
 	});
 	
 	
@@ -48,27 +93,8 @@ jQuery(document).ready(function ($) {
 	var marker2 = L.marker([40, -0.09], {icon: markerIconL}).addTo(map);
 	
 	
-	var markers = L.markerClusterGroup();
 	
-	for (var i = 0; i < addressPoints.length; i++) {
-		var a = addressPoints[i];
-		var title = a[2];
-		var marker = L.marker(new L.LatLng(a[0], a[1]), { title: title });
-		marker.bindPopup(title);
-		markers.addLayer(marker);
-		//console.log(a);
-	}
-	console.log(markers);
-
-	map.addLayer(markers);
-
 	
-	//heat map
-	var heat = L.heatLayer([], {radius : 50, blur: 30, gradient : {'0.4': 'blue', '0.65': 'lime', '1': 'red'}}).addTo(map);
-	for (var i = 0; i < addressPoints.length; i++) {
-		var a = addressPoints[i];
-		heat.addLatLng(new L.LatLng(a[0], a[1]));
-	}
 	
     
 	

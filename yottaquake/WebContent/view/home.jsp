@@ -41,19 +41,20 @@
 					</div>
 				</div>
 
-				<div class="form-group">
+				<div class="form-group layers">
 					<label for="exampleInputPassword1">Layer di visualizzazione</label>
 
 					<div class="checkbox">
-						<label><input type="checkbox" value="">Mappa
-							politica</label>
+						<label><input type="checkbox" data-layer-filter="showPolitical">Mappa politica</label>
 					</div>
 					<div class="checkbox">
-						<label><input type="checkbox" value="">Regioni di
-							Flinn</label>
+						<label><input type="checkbox" data-layer-filter="showFlinnRegions">Regioni di Flinn</label>
 					</div>
 					<div class="checkbox">
-						<label><input type="checkbox" value="">Eventi</label>
+						<label><input type="checkbox" data-layer-filter="showEvents">Eventi</label>
+					</div>
+					<div class="checkbox">
+						<label><input type="checkbox" data-layer-filter="showHeatMap">Heat map</label>
 					</div>
 				</div>
 
