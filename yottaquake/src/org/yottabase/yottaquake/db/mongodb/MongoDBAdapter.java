@@ -161,15 +161,6 @@ public class MongoDBAdapter implements AbstractDBFacade {
 		
 		return db.getCollection(COLL_EARTHQUAKES).aggregate(asList(match,groupByMonth,project,sort));
 	}
-	
-	
-//	@Override
-//	public Iterable<Document> bigEarthQuake(int magnitude) {
-//		Document project = new Document(new Document("_id", 0).append("properties.mag", 1).append("properties.lon", 1).append("properties.lat", 1));
-//		Document query = new Document("properties.mag", new Document("$gt", magnitude));
-//		
-//		return db.getCollection(COLL_EARTHQUAKES).find(query).projection(project);
-//	}
 
 	
 	@Override
@@ -260,9 +251,11 @@ public class MongoDBAdapter implements AbstractDBFacade {
 		if(to != null)
 			queries.add(new Document("time.millisecond", new Document("$lte", to.getTime())));
 				
-		return db.getCollection(COLL_EARTHQUAKES).find(query);
-	}
+//		Document projection = new Document("_id",0).append("properties.lon", 1).append("properties.lat", 1).append("properties.depth", 1).append("properties.mag", 1);
+		Document projection = new Document("_id",0).append("properties.lon", 1).append("properties.lat", 1);
 
+		return db.getCollection(COLL_EARTHQUAKES).find(query).projection(projection);
+	}
 
 	@Override
 	public Iterable<Document> getCountriesWithEventsCount(CountryDetailLevel level, BoundingBox box) {
@@ -334,7 +327,6 @@ public class MongoDBAdapter implements AbstractDBFacade {
 		}
 		return regionsAggregates;
 	}
-	
 	
 	public Iterable<Document> getRegionsByAggregate(String aggregate) {
 		Pattern prefix = Pattern.compile(".*;" + aggregate);
