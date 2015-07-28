@@ -40,8 +40,36 @@ public class BoundingBox {
 		topLeft.add(this.getTopLeft().getLng());
 		topLeft.add(this.getTopLeft().getLat());
 		
-		boxArray.add(bottomRight);
 		boxArray.add(topLeft);
+		boxArray.add(bottomRight);
 		return boxArray;
+	}
+	
+	public ArrayList<ArrayList<ArrayList<Double>>> getPolygon(){
+
+		ArrayList<Double> topLeftPoint = getCoordinate().get(1);
+		ArrayList<Double> bottomRighttPoint = getCoordinate().get(0);
+
+		ArrayList<Double> topRight = new ArrayList<Double>();
+		LatLng p2= new LatLng(topLeftPoint.get(1), bottomRighttPoint.get(0));
+		topRight.add(p2.getLng());
+		topRight.add(p2.getLat());
+
+		ArrayList<Double> bottomeLeft = new ArrayList<Double>();
+		LatLng p4= new LatLng(topLeftPoint.get(0), bottomRighttPoint.get(1));
+		bottomeLeft.add(p4.getLng());
+		bottomeLeft.add(p4.getLat());
+		
+		ArrayList<ArrayList<Double> > boxArray = new ArrayList<ArrayList<Double>>();
+		boxArray.add(bottomRighttPoint);
+		boxArray.add(topRight);
+		boxArray.add(topLeftPoint);
+		boxArray.add(bottomeLeft);
+		boxArray.add(bottomRighttPoint);
+		
+		ArrayList<ArrayList<ArrayList<Double>>> polygonArray = new ArrayList<ArrayList<ArrayList<Double>>>();
+		polygonArray.add(boxArray);	
+		
+		return polygonArray;
 	}
 }

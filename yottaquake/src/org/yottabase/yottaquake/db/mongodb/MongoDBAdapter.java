@@ -56,6 +56,17 @@ public class MongoDBAdapter extends AbstractDBFacade {
 		return db.getCollection(collection);
 	}
 	
+	private MongoCollection<Document> getFlinnRegionsCollection(FlinnRegionDetailLevel level) {
+		String collection = null;
+		switch(level) {
+		  case MACRO:  
+			  collection = COLL_FLINN_MACRO; break;
+		  default:
+			  collection = COLL_FLINN_MICRO; break;
+		}
+		return db.getCollection(collection);
+	}
+	
 	
 	@Override
 	public void initializeCollectionEarthquake() {
@@ -254,20 +265,21 @@ public class MongoDBAdapter extends AbstractDBFacade {
 
 
 	@Override
-	public Iterable<Document> getCountriesWithEventsCount(
-			CountryDetailLevel level, BoundingBox box) {
-		//db.earthquake.find( {geometry: { $geoWithin: { $box:  [ [ 0, 0 ],[ 100, 100 ] ] } }} ).pretty()
+	public Iterable<Document> getCountriesWithEventsCount(CountryDetailLevel level, BoundingBox box) {
+		//db.countryHigh.find({geometry: {$geoIntersects: {$geometry: {type: "Polygon" ,coordinates: [[ [ 0, 0 ], [ 100, 0 ], [ 100, 89 ], [ 0,89 ], [0,0] ]]}}}})
+		Document boxDoc = new Document("$geometry",new Document("type","Polygon").append("coordinates", box.getPolygon()));
 		
-		return db.getCollection(COLL_EARTHQUAKES).find(new Document("geometry", new Document("$geoWithin", new Document("$box",box.getCoordinate()))));
+		MongoCollection<Document> collection = getCountriesCollection(level);
+		return collection.find(new Document("geometry", new Document("$geoIntersects", boxDoc)));
 	}
 
 
 	@Override
-	public Iterable<Document> getFlinnRegionsWithEventsCount(
-			FlinnRegionDetailLevel level, BoundingBox box) {
-		//db.flinnRegions.find( {geometry: { $geoWithin: { $box:  [ [ 0, 0 ],[ 100, 100 ] ] } }} ).pretty()
+	public Iterable<Document> getFlinnRegionsWithEventsCount(FlinnRegionDetailLevel level, BoundingBox box) {
+		Document boxDoc = new Document("$geometry",new Document("type","Polygon").append("coordinates", box.getPolygon()));
 		
-		return db.getCollection(COLL_FLINN_MICRO).find(new Document("geometry", new Document("$geoWithin", new Document("$box", box.getCoordinate()))));
+		MongoCollection<Document> collection = getFlinnRegionsCollection(level);
+		return collection.find(new Document("geometry", new Document("$geoIntersects", boxDoc)));
 	}
 
 
