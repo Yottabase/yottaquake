@@ -18,6 +18,9 @@ jQuery(document).ready(function ($) {
 	var toDatepicker = $('#filters input.to').datepicker({
 	});
 	
+	$(document).on('yottaquake.bounding_box_update', function(e, newBB){
+		console.log(newBB);
+	});
 	
 });
 		
