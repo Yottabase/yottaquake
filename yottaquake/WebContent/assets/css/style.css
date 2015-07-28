@@ -26,6 +26,7 @@
 body{
 	background-color: #fff;
 	font-family: 'roboto', Arial, sans-serif;
+	position: relative;
 }
 
 body b,
@@ -62,4 +63,23 @@ body strong{
 	height: 100vh;
 }
 
+#label-loading{
+	position: absolute;
+	font-weight: normal;
+	font-size: 16px;
+	display: none;
+	right: 0;
+	top: 0;
+	z-index: 10000;
+	background-color: rgba(0, 147, 250, 0.7);
+	background: rgba(0, 147, 250, 0.7);
+	color: #000;
+	padding: 5px 20px;
+	width: 300px;
+	border-bottom-left-radius: 3px; 
+}
+
+body.loading #label-loading{
+	display: block;
+}
 

@@ -72,6 +72,8 @@
     
     <link href="assets/css/style.css" rel="stylesheet">
     <script src="assets/js/filters.js"></script>
+    <script src="assets/js/common.js"></script>
   </head>
 
   <body>
+   	<div id="label-loading">Aggiornamento dati in corso...</div>
