@@ -51,7 +51,7 @@ jQuery(document).ready(function ($) {
 		$(document).trigger(eventTrigger, filters);
 	});
 	
-	$('#filters .layers input[type=checkbox]').change(function() {
+	$('#filters .layers input[type=checkbox]').on('change', function() {
 		var filterName = $(this).attr('data-layer-filter');
 		var status = $(this).is(":checked");
 		filters[filterName] = status; 
