@@ -1,9 +1,18 @@
 jQuery(document).ready(function ($) {
 	
-	L.Icon.Default.imagePath = 'assets/images/lib/leaflet';
+	//init map
+	var map = L.map('chart-events-map')
+	.on('moveend load', function() {
+		$(document).trigger('yottaquake.bounding_box_update', 
+			{
+				'topLeft' :  this.getBounds().getNorthWest(),
+				'bottomRight' : this.getBounds().getSouthEast(),
+				'zoom'	: this.getZoom()
+			}
+		);
+	})
+	.setView([mapDefault.lat, mapDefault.lng], mapDefault.zoom);
 	
-	var map = L.map('chart-events-map').setView([41.90278, 12.49636], 4);
-
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ', {
 		maxZoom: 18,
 		attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
@@ -13,17 +22,13 @@ jQuery(document).ready(function ($) {
 		id: 'mapbox.outdoors'
 	}).addTo(map);
 	
-	map.on('moveend', function() {
-		$(document).trigger('yottaquake.bounding_box_update', 
-			{
-				'topLeft' :  map.getBounds().getNorthWest(),
-				'bottomRight' : map.getBounds().getSouthEast(),
-				'zoom'	: map.getZoom()
-			}
-		);
+	
+	
+	//test
+	$(document).on('yottaquake.filters_update', function(e, filters){
+		console.log("Filtro aggiornato");
+		console.log(filters);
 	});
-	
-	
 	
 	
 	/*
@@ -125,7 +130,8 @@ jQuery(document).ready(function ($) {
 		}).addTo(map);
 		
 	});
-	*/
+		*/
+	
 	
 	
 });
