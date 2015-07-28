@@ -56,8 +56,10 @@ public class TestMain {
 //			System.out.println(document.toJson());
 //		}
 		
-		facade.getDistinctContinents();
+//		facade.getDistinctContinents();
 		
+//		facade.getMagnitude();
+		facade.getDepth();
 	}
 	
 }

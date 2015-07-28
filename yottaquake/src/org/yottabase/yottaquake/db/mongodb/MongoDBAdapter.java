@@ -359,5 +359,21 @@ public class MongoDBAdapter implements DBFacade {
 		MongoCollection<Document> collection = getCountriesCollection(level);
 		return collection.find(new Document("properties.continent", continent));
 	}
+	
+	public void getMagnitude(){
+		FindIterable<Document> a = db.getCollection(COLL_EARTHQUAKES).find(new Document("properties.mag", new Document("$gte", 7))).sort(new Document("properties.mag",-1));
+		for (Document document : a) {
+			System.out.println(document.toJson());	
+		}
+		
+	}
+	
+	public void getDepth(){
+		FindIterable<Document> a = db.getCollection(COLL_EARTHQUAKES).find(new Document("properties.depth", new Document("$gte", 50))).sort(new Document("properties.depth",-1));
+		for (Document document : a) {
+			System.out.println(document.toJson());	
+		}
+		
+	}
 
 }

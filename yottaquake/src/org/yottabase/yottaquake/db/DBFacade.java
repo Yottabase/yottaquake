@@ -79,4 +79,7 @@ public interface DBFacade {
 	
 	public Iterable<Document> getCountriesByContinet(String continent, CountryDetailLevel level);
 
+	public void getMagnitude();
+	
+	public void getDepth();
 }
