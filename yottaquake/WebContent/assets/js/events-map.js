@@ -27,7 +27,6 @@ jQuery(document).ready(function ($) {
 	//markers
 	var markers = L.markerClusterGroup();
 	$(document).on('yottaquake.filters_update', function(e, filters){
-		markers.clearLayers();
 		if(filters.showEvents){
 			$.getJSON(wsUrl + "api-events.do", filters, function(data){
 				var coords = [];
@@ -38,9 +37,12 @@ jQuery(document).ready(function ($) {
 					coords.push(marker);
 				}
 		
+				markers.clearLayers();
 				markers.addLayers(coords);
 				map.addLayer(markers);
 			});
+		}else{
+			markers.clearLayers();
 		}
 	});
 	
@@ -52,7 +54,6 @@ jQuery(document).ready(function ($) {
 	).addTo(map);
 	
 	$(document).on('yottaquake.filters_update', function(e, filters){
-		heat.setLatLngs([]);
 		if(filters.showHeatMap){
 			$.getJSON(wsUrl + "api-events.do", filters, function(data){
 				
@@ -64,6 +65,8 @@ jQuery(document).ready(function ($) {
 				heat.setLatLngs(coords);
 				
 			});
+		}else{
+			heat.setLatLngs([]);
 		}
 	});
 	
