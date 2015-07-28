@@ -51,7 +51,7 @@
 						<label><input type="checkbox" data-layer-filter="showFlinnRegions">Regioni di Flinn</label>
 					</div>
 					<div class="checkbox">
-						<label><input type="checkbox" data-layer-filter="showEvents">Eventi</label>
+						<label><input type="checkbox" data-layer-filter="showClusteredEvents">Eventi clusterizzati</label>
 					</div>
 					<div class="checkbox">
 						<label><input type="checkbox" data-layer-filter="showHeatMap">Heat map</label>

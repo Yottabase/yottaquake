@@ -30,7 +30,7 @@ jQuery(document).ready(function ($) {
 	var markersReq = null;
 	$(document).on('yottaquake.filters_update', function(e, filters){
 		if(markersReq != null) markersReq.abort();
-		if(filters.showEvents){
+		if(filters.showClusteredEvents){
 			markersReq = $.getJSON(wsUrl + "api-events.do", filters, function(data){
 				var coords = [];
 				
