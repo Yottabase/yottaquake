@@ -51,25 +51,13 @@ jQuery(document).ready(function ($) {
 		$(document).trigger(eventTrigger, filters);
 	});
 	
-	$('#filters input.political').change(function() {
-		filters.showPolitical = $(this).is(":checked");
+	$('#filters .layers input[type=checkbox]').change(function() {
+		var filterName = $(this).attr('data-layer-filter');
+		var status = $(this).is(":checked");
+		filters[filterName] = status; 
 		$(document).trigger(eventTrigger, filters);
     });
 	
-	$('#filters input.flinnRegions').change(function() {
-		filters.showFlinnRegions = $(this).is(":checked");
-		$(document).trigger(eventTrigger, filters);
-    });
-	
-	$('#filters input.events').change(function() {
-		filters.showEvents = $(this).is(":checked");
-		$(document).trigger(eventTrigger, filters);
-    });
-	
-	$('#filters input.heatMap').change(function() {
-		filters.showHeatMap = $(this).is(":checked");
-		$(document).trigger(eventTrigger, filters);
-    });
 	
 });
 		
