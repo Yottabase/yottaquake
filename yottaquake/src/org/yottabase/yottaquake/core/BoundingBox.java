@@ -55,13 +55,9 @@ public class BoundingBox {
 		
 		points = new ArrayList<ArrayList<Double>>();
 		points.add(bottomRight);
-		System.out.println("bottomRight: " + bottomRight);
 		points.add(topRight);
-		System.out.println("topRight: " + topRight);
 		points.add(topLeft);
-		System.out.println("topLeft: " + topLeft);
 		points.add(bottomLeft);
-		System.out.println("bottomLeft: " + bottomLeft);
 		points.add(bottomRight);
 
 		polygon = new ArrayList<ArrayList<ArrayList<Double>>>();
