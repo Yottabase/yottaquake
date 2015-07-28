@@ -18,7 +18,7 @@ public class InsertEventMain {
 		facade.initializeCollectionEarthquake();
 
 		String path = args[0];
-		InputStream inputStream = new FileInputStream(new File(path + "/dataset.json"));
+		InputStream inputStream = new FileInputStream(new File(path + "/earthquakes.json"));
 		JSONTokener json = new JSONTokener(inputStream);
 		
 		int count = 0 ;
