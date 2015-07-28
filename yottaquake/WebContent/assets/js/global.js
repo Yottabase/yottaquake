@@ -22,8 +22,6 @@ jQuery(document).ready(function ($) {
 	}).on('change', function(e){
 		filters.minMagnitude = e.value.newValue[0];
 		filters.maxMagnitude = e.value.newValue[1];
-		console.log(filters);
-		console.log(e);
 		$(document).trigger(eventTrigger, filters);
 	});
 	
