@@ -8,6 +8,7 @@ import java.util.Date;
 import org.bson.Document;
 import org.yottabase.yottaquake.core.BoundingBox;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
+import org.yottabase.yottaquake.core.FlinnRegionDetailLevel;
 import org.yottabase.yottaquake.core.LatLng;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
@@ -46,8 +47,8 @@ public class TestMain {
 //		Integer minDepth = null;
 //		Integer maxDepth = null;
 		
-		Iterable<Document> regions = facade.getCountriesWithEventsCount(CountryDetailLevel.HIGH, box);
-//		Iterable<Document> regions = facade.getFlinnRegionsWithEventsCount(null, box);
+//		Iterable<Document> regions = facade.getCountriesWithEventsCount(CountryDetailLevel.HIGH, box);
+		Iterable<Document> regions = facade.getFlinnRegionsWithEventsCount(FlinnRegionDetailLevel.MICRO, box);
 //		Iterable<Document> regions = facade.getEvents(box, from, to, minMagnitude, maxMagnitude, minDepth, maxDepth);
 		
 		for (Document document : regions) {
