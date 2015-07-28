@@ -1,15 +1,20 @@
 package org.yottabase.yottaquake.db.mongodb;
 
-import java.util.Set;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.bson.Document;
+import org.yottabase.yottaquake.core.BoundingBox;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
+import org.yottabase.yottaquake.core.LatLng;
 import org.yottabase.yottaquake.db.AbstractDBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 
 public class TestMain {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 		
 		AbstractDBFacade facade = DBAdapterManager.getFacade();
 		
@@ -23,7 +28,23 @@ public class TestMain {
 //		facade.getCountries("high");
 //		facade.getCountriesWithEventCount(CountryDetailLevel.HIGH);	
 //		Set<String> regions = facade.getDistinctMacroRegions();
-		Iterable<Document> regions = facade.getRegionsByMacroRegion("CENTRAL AMERICA");
+		
+		BoundingBox box = new BoundingBox(new LatLng(0, 0),new LatLng(10, 10));
+//		DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
+//		String dateInString = "1892-03-27T18:04:43.5Z";
+//		Date from = format.parse(dateInString);
+//		Date from = null;
+//		
+//		Date to = null;
+//		Integer minMagnitude = new Integer(1);
+//		Integer maxMagnitude = new Integer(5);
+//		Integer minDepth = new Integer(10);
+//		Integer maxDepth = null;
+		
+		Iterable<Document> regions = facade.getCountriesWithEventsCount(CountryDetailLevel.HIGH, box);
+//		Iterable<Document> regions = facade.getFlinnRegionsWithEventsCount(null, box);
+//		Iterable<Document> regions = facade.getEvents(box, from, to, minMagnitude, maxMagnitude, minDepth, maxDepth);
+		
 		for (Document document : regions) {
 			System.out.println(document.toJson());
 		}

@@ -2,6 +2,7 @@ package org.yottabase.yottaquake.db.mongodb;
 
 import static java.util.Arrays.asList;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -32,7 +33,8 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	private final static String COLL_COUNTRIES_MEDIUM = "countryMedium";
 	private final static String COLL_COUNTRIES_HIGH = "countryHigh";
 	
-	private final static String COLL_FLINNREGION = "flinnRegions";
+	private final static String COLL_FLINN_MICRO = "flinn_micro";
+	private final static String COLL_FLINN_MACRO = "flinn_macro";
 	
 	
 	public MongoDBAdapter(MongoClient client, MongoDatabase db) {
@@ -84,7 +86,7 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	@Override
 	public void insertFlinnRegion(JSONObject flinnRegion) {
 		Document doc = Document.parse(flinnRegion.toString());
-		db.getCollection(COLL_FLINNREGION).insertOne(doc);
+		db.getCollection(COLL_FLINN_MICRO).insertOne(doc);
 	}
 	
 	
@@ -172,9 +174,9 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	@Override
 	public Iterable<Document> getCountries(CountryDetailLevel level) {
 		MongoCollection<Document> collection = getCountriesCollection(level);
-		FindIterable<Document> contries = collection.find();
+		FindIterable<Document> countries = collection.find();
 		
-		return contries;
+		return countries;
 	}
 	
 
@@ -210,7 +212,7 @@ public class MongoDBAdapter extends AbstractDBFacade {
 
 
 	@Override
-	public boolean updateDocument(Document document ,Document update) {
+	public boolean updateDocument(Document document, Document update) {
 		Bson sq = new Document("_id",document.get("_id"));
 		Bson updateQuery = new Document("$set", update);
 		UpdateResult result = db.getCollection(COLL_EARTHQUAKES).updateOne(sq, updateQuery);
@@ -223,30 +225,56 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	public Iterable<Document> getEvents(BoundingBox box, Date from, Date to,
 			Integer minMagnitude, Integer maxMagnitude, Integer minDepth,
 			Integer maxDepth) {
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Document> queries = new ArrayList<Document>();
+		Document query = null;
+		if(box!=null){
+			queries.add(new Document("geometry", new Document("$geoWithin", new Document("$box",box.getCoordinate()))));
+			query = new Document("$and",queries);
+		}
+		if(minMagnitude != null)
+			queries.add(new Document("properties.mag", new Document("$gte", minMagnitude)));
+		
+		if(minMagnitude != null)
+			queries.add(new Document("properties.mag", new Document("$lte", maxMagnitude)));
+		
+		if(minDepth != null)
+			queries.add(new Document("properties.depth", new Document("$gte", minDepth)));
+		
+		if(maxDepth != null)
+			queries.add(new Document("properties.depth", new Document("$lte", maxDepth)));
+		
+		if(from != null)
+			queries.add(new Document("properties.lastupdate", new Document("$gte", from)));
+		
+		if(to != null)
+			queries.add(new Document("properties.lastupdate", new Document("$lte", to)));
+				
+		System.out.println(queries);
+		return db.getCollection(COLL_EARTHQUAKES).find(query);
 	}
 
 
 	@Override
 	public Iterable<Document> getCountriesWithEventsCount(
 			CountryDetailLevel level, BoundingBox box) {
-		// TODO Auto-generated method stub
-		return null;
+		//db.earthquake.find( {geometry: { $geoWithin: { $box:  [ [ 0, 0 ],[ 100, 100 ] ] } }} ).pretty()
+		
+		return db.getCollection(COLL_EARTHQUAKES).find(new Document("geometry", new Document("$geoWithin", new Document("$box",box.getCoordinate()))));
 	}
 
 
 	@Override
 	public Iterable<Document> getFlinnRegionsWithEventsCount(
 			FlinnRegionDetailLevel level, BoundingBox box) {
-		// TODO Auto-generated method stub
-		return null;
+		//db.flinnRegions.find( {geometry: { $geoWithin: { $box:  [ [ 0, 0 ],[ 100, 100 ] ] } }} ).pretty()
+		
+		return db.getCollection(COLL_FLINN_MICRO).find(new Document("geometry", new Document("$geoWithin", new Document("$box", box.getCoordinate()))));
 	}
 
 
 	@Override
 	public Set<String> getDistinctMacroRegions() {
-		FindIterable<Document> regions = db.getCollection(COLL_FLINNREGION).find();
+		FindIterable<Document> regions = db.getCollection(COLL_FLINN_MICRO).find();
 		Set<String> distinctMacroRegions = new HashSet<String>();
 		
 		for (Document region : regions) {
@@ -262,7 +290,7 @@ public class MongoDBAdapter extends AbstractDBFacade {
 	@Override
 	public Iterable<Document> getRegionsByMacroRegion(String macroRegion) {
 		Pattern prefix = Pattern.compile("^"+macroRegion+";");
-		return db.getCollection(COLL_FLINNREGION).find(new Document("properties.name_h", prefix));
+		return db.getCollection(COLL_FLINN_MICRO).find(new Document("properties.name_h", prefix));
 	}
 
 	
