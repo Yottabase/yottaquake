@@ -22,7 +22,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.UpdateResult;
 
-public class MongoDBAdapter extends AbstractDBFacade {
+public class MongoDBAdapter implements AbstractDBFacade {
 	
 	private MongoDatabase db;
 	private MongoClient client;

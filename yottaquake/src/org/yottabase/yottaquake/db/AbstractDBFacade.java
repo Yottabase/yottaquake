@@ -9,18 +9,18 @@ import org.yottabase.yottaquake.core.BoundingBox;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
 import org.yottabase.yottaquake.core.FlinnRegionDetailLevel;
 
-public abstract class AbstractDBFacade {
+public interface AbstractDBFacade {
 
-	public abstract void initializeCollectionEarthquake();
+	public void initializeCollectionEarthquake();
 
-	public abstract void initializeCollectionCountries();
+	public void initializeCollectionCountries();
 	
-	public abstract void initializeCollectionFlinnRegions();
+	public void initializeCollectionFlinnRegions();
 	
 	/**
 	 * Chiude il database
 	 */
-	public abstract void close();
+	public void close();
 	
 	/**
 	 * insert
@@ -71,8 +71,8 @@ public abstract class AbstractDBFacade {
 	
 	public abstract Iterable<Document> getRegionsByMacroRegion(String macroRegions); 
 
-	public abstract Set<String> getDistinctRegionsAggregates();
+	public  Set<String> getDistinctRegionsAggregates();
 	
-	public abstract Iterable<Document> getRegionsByAggregate(String aggregate);
+	public  Iterable<Document> getRegionsByAggregate(String aggregate);
 
 }
