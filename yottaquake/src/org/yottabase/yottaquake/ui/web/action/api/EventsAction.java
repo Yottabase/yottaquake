@@ -70,8 +70,8 @@ public class EventsAction extends AbstractAction{
 		String paramMaxMagnitude  =  this.cleanParam(request.getParameter("maxMagnitude"));
 		
 		if(paramMinMagnitude != null && paramMaxMagnitude != null){
-			minMagnitude = Integer.getInteger(paramMinMagnitude);
-			maxMagnitude = Integer.getInteger(paramMaxMagnitude);
+			minMagnitude = Integer.valueOf(paramMinMagnitude);
+			maxMagnitude = Integer.valueOf(paramMaxMagnitude);
 		}
 		
 		//init depth
@@ -82,10 +82,11 @@ public class EventsAction extends AbstractAction{
 		String paramMaxDepth  =  this.cleanParam(request.getParameter("maxDepth"));
 		
 		if(paramMinDepth != null && paramMaxDepth != null){
-			minDepth = Integer.getInteger(paramMinDepth);
-			maxDepth = Integer.getInteger(paramMaxDepth);
+			minDepth = Integer.valueOf(paramMinDepth);
+			maxDepth = Integer.valueOf(paramMaxDepth);
 		}
 		
+
 		//init iterable
 		Iterable<Document> events = facade.getEvents(box, from, to, minMagnitude, maxMagnitude, minDepth, maxDepth);
 		
