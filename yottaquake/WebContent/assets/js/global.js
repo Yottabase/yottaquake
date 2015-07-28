@@ -18,18 +18,18 @@ jQuery(document).ready(function ($) {
 	$("#filters input.magnitude").slider({
 		min: 0, 
 		max: 7, 
+		value: [0, 7],
 		range: true
 	}).on('change', function(e){
 		filters.minMagnitude = e.value.newValue[0];
 		filters.maxMagnitude = e.value.newValue[1];
-		console.log(filters);
-		console.log(e);
 		$(document).trigger(eventTrigger, filters);
 	});
 	
 	var depthSlider = $("#filters input.depth").slider({
 		min: 0, 
-		max: 100, 
+		max: 10, 
+		value: [0, 10],
 		range: true
 	}).on('change', function(e){
 		filters.minDepth = e.value.newValue[0];
@@ -41,8 +41,14 @@ jQuery(document).ready(function ($) {
 		startDate: '01-01-2000',
         endDate: new Date()
 	}).on('change', function(e){
-		var date = new Date(e.timeStamp);
-		filters.fromDate = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay();
+		
+		if( $(this).val() == '' ) {
+			filters.fromDate = null;
+		}else{
+			var date = new Date(e.timeStamp);
+			filters.fromDate = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay();
+		}
+		
 		$(document).trigger(eventTrigger, filters);
 	});
 	
@@ -50,17 +56,25 @@ jQuery(document).ready(function ($) {
 		startDate: '01-01-2000',
         endDate: new Date()
 	}).on('change', function(e){
-		var date = new Date(e.timeStamp);
-		filters.toDate = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay();
+		
+		if( $(this).val() == '' ) {
+			filters.toDate = null;
+		}else{
+			var date = new Date(e.timeStamp);
+			filters.toDate = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay();
+		}
+		
 		$(document).trigger(eventTrigger, filters);
 	});
 	
-	$('#filters .layers input[type=checkbox]').on('change', function() {
-		var filterName = $(this).attr('data-layer-filter');
-		var status = $(this).is(":checked");
-		filters[filterName] = status; 
-		$(document).trigger(eventTrigger, filters);
-    });
+	$('#filters .layers input[type=checkbox]')
+		.attr('checked', false)
+		.on('change', function() {
+			var filterName = $(this).attr('data-layer-filter');
+			var status = $(this).is(":checked");
+			filters[filterName] = status; 
+			$(document).trigger(eventTrigger, filters);
+	    });
 	
 	
 });
