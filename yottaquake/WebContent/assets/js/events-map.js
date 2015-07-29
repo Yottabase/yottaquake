@@ -47,7 +47,7 @@ jQuery(document).ready(function ($) {
 			markersReq = $.getJSON(wsUrl + "api-events.do", filters, function(data){
 				var coords = [];
 				
-				if(data.items.length > 50000){
+				if(data.items.length > visualizationLimit.cluster){
 					$(document).trigger('yottaquake.growl', "Impossibile visualizzare cluster di " + data.items.length + " punti");
 					return;
 				}
@@ -82,7 +82,7 @@ jQuery(document).ready(function ($) {
 		if(filters.showHeatMap){
 			heatReq = $.getJSON(wsUrl + "api-events.do", filters, function(data){
 				
-				if(data.items.length > 100000){
+				if(data.items.length > visualizationLimit.heatMap){
 					$(document).trigger('yottaquake.growl', "Impossibile visualizzare heatmap di " + data.items.length + " punti");
 					return;
 				}
@@ -116,7 +116,7 @@ jQuery(document).ready(function ($) {
 				    delete p;
 				});
 				
-				if(data.items.length > 20000){
+				if(data.items.length > visualizationLimit.markers){
 					$(document).trigger('yottaquake.growl', "Impossibile visualizzare più di " + data.items.length + " punti");
 					return;
 				}
