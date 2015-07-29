@@ -287,15 +287,16 @@ public class MongoDBAdapter implements DBFacade {
 		Document matchCountry;
 		ArrayList<Document> queries = this.getEventsFiltersQuery(eventFilter);
 		
-		if(!queries.isEmpty())
-			matchCountry = new Document("$match", new Document("geolocation.name", name)).append("$and", queries);
+		if(queries.isEmpty())
+			matchCountry = new Document("$match", new Document("geolocation.name", name));
+		else
+			matchCountry = new Document("$match", new Document("geolocation.name", name).append("$and", queries));
 		
-		matchCountry = new Document("$match", new Document("geolocation.name", name));
 		Document groupByCountry = new Document("$group", new Document("_id", "$geolocation.name").append("total", new Document("$sum", 1)));
-		AggregateIterable<Document> countryCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchCountry,groupByCountry));
+		AggregateIterable<Document> countryCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchCountry, groupByCountry));
 		
-		Integer counts =0;
-		if(countryCounts.first() != null)
+		int counts = 0;
+		if (countryCounts.first() != null)
 			counts = Integer.valueOf( countryCounts.first().get("total").toString());
 		
 		return counts;
