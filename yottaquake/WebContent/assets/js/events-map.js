@@ -145,6 +145,7 @@ jQuery(document).ready(function ($) {
 	//countries
 	var countriesReq = null;
 	var countriesLayer = null;
+	var popup = L.popup();
 	$(document).on('yottaquake.filters_update', function(e, filters){
 		if(countriesReq != null) countriesReq.abort();
 		
@@ -183,6 +184,16 @@ jQuery(document).ready(function ($) {
 					        dashArray: '3',
 					        fillOpacity: 0.7
 					    };
+					},
+					onEachFeature: function (feature, layer) {
+					    layer.on({
+					        click: function(e){
+				        	    popup
+				        	        .setLatLng(e.latlng)
+				        	        .setContent(feature.properties.name + ":" + "<strong>" + feature.count + "</strong>" + "earthquakes")
+				        	        .openOn(map);
+					        }
+					    });
 					}
 				}).addTo(map);
 			});
