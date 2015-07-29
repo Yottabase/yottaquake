@@ -54,7 +54,7 @@ public class TestMain {
 //		Iterable<Document> regions = facade.getFlinnRegionsWithEventsCount(FlinnRegionDetailLevel.MICRO, box);
 //		Iterable<Document> regions = facade.getEvents(box, from, to, minMagnitude, maxMagnitude, minDepth, maxDepth);
 //		
-		System.out.println(facade.getCountryEventsCount("Italy",from, to, minMagnitude, maxMagnitude, minDepth, maxDepth));
+//		System.out.println(facade.getCountryEventsCount("Italy",from, to, minMagnitude, maxMagnitude, minDepth, maxDepth));
 //		for (Document document : regions) {
 //			System.out.println(document.toJson());
 //		}

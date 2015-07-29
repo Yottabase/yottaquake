@@ -12,10 +12,4 @@ public abstract class AbstractAction {
 	
 	public abstract void run(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException;
 	
-	public String cleanParam(String param){
-		
-		if(param == null || param.length() == 0) return null;
-		return param.trim();
-		
-	}
 }

@@ -37,7 +37,7 @@ public class InsertEventMain {
 			
 			facade.insertEvent(event);
 			
-			if(count % 1000 == 0)
+			if(count % 10000 == 0)
 				System.out.println(count);
 			
 		}

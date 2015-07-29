@@ -7,6 +7,7 @@ import org.bson.Document;
 import org.json.JSONObject;
 import org.yottabase.yottaquake.core.BoundingBox;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
+import org.yottabase.yottaquake.core.EventFilter;
 import org.yottabase.yottaquake.core.FlinnRegionDetailLevel;
 
 public interface DBFacade {
@@ -58,12 +59,7 @@ public interface DBFacade {
 	
 	public Iterable<Document> getFlinnRegionsWithEventsCount(FlinnRegionDetailLevel level, BoundingBox box);
 	
-	public Iterable<Document> getEvents(
-		BoundingBox box, 
-		Date from, Date to, 
-		Integer minMagnitude, Integer maxMagnitude, 
-		Integer minDepth, Integer maxDepth
-	);
+	public Iterable<Document> getEvents(BoundingBox box, EventFilter eventFilter);
 	
 	public Set<String> getDistinctMacroRegions(); 
 	
@@ -81,7 +77,5 @@ public interface DBFacade {
 	
 	public void getDepth();
 
-	Integer getCountryEventsCount(String name, Date from, Date to,
-			Integer minMagnitude, Integer maxMagnitude, Integer minDepth,
-			Integer maxDepth);
+	public Integer getCountryEventsCount(String name, EventFilter eventFilter);
 }

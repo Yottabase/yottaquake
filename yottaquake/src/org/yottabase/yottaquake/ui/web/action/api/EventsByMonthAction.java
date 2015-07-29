@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import org.yottabase.yottaquake.db.DBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 import org.yottabase.yottaquake.ui.web.core.AbstractAction;
+import org.yottabase.yottaquake.ui.web.utils.ParamsUtils;
 
 public class EventsByMonthAction extends AbstractAction{
 
@@ -22,7 +23,7 @@ public class EventsByMonthAction extends AbstractAction{
 		DBFacade facade = DBAdapterManager.getFacade();
 		
 		Iterable<Document> result;
-		String year =  this.cleanParam(request.getParameter("year"));
+		String year =  ParamsUtils.cleanParam(request.getParameter("year"));
 		
 		if(year == null ){
 			result = facade.countByYearMonth();

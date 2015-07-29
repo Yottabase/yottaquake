@@ -14,6 +14,7 @@ import org.bson.conversions.Bson;
 import org.json.JSONObject;
 import org.yottabase.yottaquake.core.BoundingBox;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
+import org.yottabase.yottaquake.core.EventFilter;
 import org.yottabase.yottaquake.core.FlinnRegionDetailLevel;
 import org.yottabase.yottaquake.db.DBFacade;
 
@@ -155,8 +156,7 @@ public class MongoDBAdapter implements DBFacade {
 	public void close() {
 		this.client.close();
 	}
-	
-	
+		
 	
 	@Override
 	public Iterable<Document> countByYearMonth() {
@@ -257,33 +257,10 @@ public class MongoDBAdapter implements DBFacade {
 
 
 	@Override
-	public Iterable<Document> getEvents(BoundingBox box, Date from, Date to,
-			Integer minMagnitude, Integer maxMagnitude, Integer minDepth,
-			Integer maxDepth) {
+	public Iterable<Document> getEvents(BoundingBox box, EventFilter eventFilter) {
 		
-		ArrayList<Document> queries = new ArrayList<Document>();
+		ArrayList<Document> queries = this.getEventsFiltersQuery(eventFilter);
 		Document query = new Document("$and",queries);
-
-		if(box != null) 
-			queries.add(new Document("geometry", new Document("$geoWithin", new Document("$box",box.getCoordinatesPair()))));
-
-		if(minMagnitude != null)
-			queries.add(new Document("properties.mag", new Document("$gte", minMagnitude)));
-		
-		if(minMagnitude != null)
-			queries.add(new Document("properties.mag", new Document("$lte", maxMagnitude)));
-		
-		if(minDepth != null)
-			queries.add(new Document("properties.depth", new Document("$gte", minDepth)));
-		
-		if(maxDepth != null)
-			queries.add(new Document("properties.depth", new Document("$lte", maxDepth)));
-		
-		if(from != null)
-			queries.add(new Document("time.millisecond", new Document("$gte", from.getTime())));
-		
-		if(to != null)
-			queries.add(new Document("time.millisecond", new Document("$lte", to.getTime())));
 				
 //		Document projection = new Document("_id",0).append("properties.lon", 1).append("properties.lat", 1).append("properties.depth", 1).append("properties.mag", 1);
 		Document projection = new Document("_id",0).append("properties.lon", 1).append("properties.lat", 1);
@@ -307,30 +284,9 @@ public class MongoDBAdapter implements DBFacade {
 	}
 	
 	@Override
-	public Integer getCountryEventsCount(String name,Date from, Date to,
-			Integer minMagnitude, Integer maxMagnitude, Integer minDepth,
-			Integer maxDepth) {
+	public Integer getCountryEventsCount(String name, EventFilter eventFilter) {
 		Document matchCountry;
-		ArrayList<Document> queries = new ArrayList<Document>();
-		
-		if(minMagnitude != null)
-			queries.add(new Document("properties.mag", new Document("$gte", minMagnitude)));
-		
-		if(minMagnitude != null)
-			queries.add(new Document("properties.mag", new Document("$lte", maxMagnitude)));
-		
-		if(minDepth != null)
-			queries.add(new Document("properties.depth", new Document("$gte", minDepth)));
-		
-		if(maxDepth != null)
-			queries.add(new Document("properties.depth", new Document("$lte", maxDepth)));
-		
-		if(from != null)
-			queries.add(new Document("time.millisecond", new Document("$gte", from.getTime())));
-		
-		if(to != null)
-			queries.add(new Document("time.millisecond", new Document("$lte", to.getTime())));
-		
+		ArrayList<Document> queries = this.getEventsFiltersQuery(eventFilter);
 		
 		if(!queries.isEmpty())
 			matchCountry = new Document("$match", new Document("geolocation.name", name)).append("$and", queries);
@@ -448,6 +404,30 @@ public class MongoDBAdapter implements DBFacade {
 		for (Document document : a) {
 			System.out.println(document.toJson());	
 		}	
+	}
+	
+	private ArrayList<Document> getEventsFiltersQuery(EventFilter eventFilter){
+		ArrayList<Document> queries = new ArrayList<Document>();
+		
+		if(eventFilter.getMinMagnitude() != null)
+			queries.add(new Document("properties.mag", new Document("$gte", eventFilter.getMinMagnitude())));
+		
+		if(eventFilter.getMaxMagnitude() != null)
+			queries.add(new Document("properties.mag", new Document("$lte", eventFilter.getMaxMagnitude())));
+		
+		if(eventFilter.getMinDepth() != null)
+			queries.add(new Document("properties.depth", new Document("$gte", eventFilter.getMinDepth())));
+		
+		if(eventFilter.getMaxDepth() != null)
+			queries.add(new Document("properties.depth", new Document("$lte", eventFilter.getMaxDepth())));
+		
+		if(eventFilter.getFrom() != null)
+			queries.add(new Document("time.millisecond", new Document("$gte", eventFilter.getFrom().getTime())));
+		
+		if(eventFilter.getTo() != null)
+			queries.add(new Document("time.millisecond", new Document("$lte", eventFilter.getTo().getTime())));
+		
+		return queries;
 	}
 
 }
