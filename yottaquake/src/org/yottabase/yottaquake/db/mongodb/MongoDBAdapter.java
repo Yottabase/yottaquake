@@ -126,6 +126,13 @@ public class MongoDBAdapter implements DBFacade {
 		System.out.println("initialize flinn regions");
 		db.getCollection(COLL_EARTHQUAKES).drop();
 	}
+	
+	
+	@Override
+	public void initializeCollectionTectonicPlates() {
+		System.out.println("initialize flinn regions");
+		db.getCollection(COLL_TECT_PLATES).drop();
+	}
 
 	
 	@Override
@@ -148,6 +155,13 @@ public class MongoDBAdapter implements DBFacade {
 		Document doc = Document.parse(event.toString());
 		
 		collection.insertOne(doc);	
+	}
+
+
+	@Override
+	public void insertTectonicPLates(JSONObject event) {
+		Document doc = Document.parse(event.toString());
+		db.getCollection(COLL_TECT_PLATES).insertOne(doc);
 	}
 	
 	
@@ -446,6 +460,15 @@ public class MongoDBAdapter implements DBFacade {
 			counts = Integer.valueOf( countryCounts.first().get("total").toString());
 		
 		return counts;
+	}
+
+
+	@Override
+	public Iterable<Document> getTectonicPlates(){
+		MongoCollection<Document> collection = getTectonicPlatesCollection();
+	
+		return  collection.find();
+		
 	}
 
 }

@@ -7,12 +7,45 @@ import org.yottabase.yottaquake.core.CountryDetailLevel;
 import org.yottabase.yottaquake.db.DBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 
-public class MapCountryToEvents {
+public class MapCountryAndPlatesToEvents {
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		DBFacade facade = DBAdapterManager.getFacade();	
 		
 		mapCountryToEvent(facade);
+//		mapPlatesToEvent(facade);
+	}
+	
+	private static void mapPlatesToEvent(DBFacade facade){
+		int count = 0;
+		for (Document plates : facade.getTectonicPlates()) {
+			Document properties = (Document) plates.get("properties");
+			Document geometry = (Document) plates.get("geometry");
+			System.out.println(plates.toJson());
+			Iterable<Document> events = facade.getEventsInPolygon(geometry);
+			
+			for (Document event : events) {
+				count ++;
+				String plateName = properties.getString("PlateName");
+				String layer = properties.getString("LAYER");
+				String code = properties.getString("Code");
+				
+				Document plate_values = new Document();
+				plate_values.append("PlateName", plateName);
+				plate_values.append("LAYER", layer);
+				plate_values.append("Code", code);
+				
+				Document platelocation = new Document();
+				platelocation.append("plate_location", plate_values);
+				
+				facade.updateDocument(event, platelocation);
+				
+				if( (count % 10000) == 0 )
+					 System.out.println(count);
+			}
+			
+		}
+		
 	}
 	
 	private static void mapCountryToEvent(DBFacade facade){
