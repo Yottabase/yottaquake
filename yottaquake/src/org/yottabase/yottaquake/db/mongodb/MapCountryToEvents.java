@@ -12,6 +12,10 @@ public class MapCountryToEvents {
 	public static void main(String[] args) throws FileNotFoundException {
 		DBFacade facade = DBAdapterManager.getFacade();	
 		
+		mapCountryToEvent(facade);
+	}
+	
+	private static void mapCountryToEvent(DBFacade facade){
 		int count = 0;
 		for (Document country : facade.getCountries(CountryDetailLevel.HIGH,null)) {
 			Document properties = (Document) country.get("properties");

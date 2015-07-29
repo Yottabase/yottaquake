@@ -4,7 +4,6 @@ import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -258,14 +257,14 @@ public class MongoDBAdapter implements DBFacade {
 
 	@Override
 	public Iterable<Document> getEvents(BoundingBox box, EventFilter eventFilter) {
-		
 		ArrayList<Document> queries = this.getEventsFiltersQuery(eventFilter);
+		
+		queries.add(new Document("geometry", new Document("$geoWithin", new Document("$box",box.getCoordinatesPair()))));
 		Document query = new Document("$and",queries);
-				
-//		Document projection = new Document("_id",0).append("properties.lon", 1).append("properties.lat", 1).append("properties.depth", 1).append("properties.mag", 1);
 		Document projection = new Document("_id",0).append("properties.lon", 1).append("properties.lat", 1);
-
+		
 		return db.getCollection(COLL_EARTHQUAKES).find(query).projection(projection);
+
 	}
 
 	public Iterable<Document> getCountries(CountryDetailLevel level, BoundingBox box){
@@ -428,6 +427,24 @@ public class MongoDBAdapter implements DBFacade {
 			queries.add(new Document("time.millisecond", new Document("$lte", eventFilter.getTo().getTime())));
 		
 		return queries;
+	}
+	
+	public Integer PlatesEventsCount(String name,EventFilter eventFilter){
+		Document matchCountry;
+		ArrayList<Document> queries = this.getEventsFiltersQuery(eventFilter);
+		
+		if(!queries.isEmpty())
+			matchCountry = new Document("$match", new Document("geolocation.name", name)).append("$and", queries);
+		
+		matchCountry = new Document("$match", new Document("geolocation.name", name));
+		Document groupByCountry = new Document("$group", new Document("_id", "$geolocation.name").append("total", new Document("$sum", 1)));
+		AggregateIterable<Document> countryCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchCountry,groupByCountry));
+		
+		Integer counts =0;
+		if(countryCounts.first() != null)
+			counts = Integer.valueOf( countryCounts.first().get("total").toString());
+		
+		return counts;
 	}
 
 }
