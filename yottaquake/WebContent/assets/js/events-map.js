@@ -116,7 +116,7 @@ jQuery(document).ready(function ($) {
 				    delete p;
 				});
 				
-				if(data.items.length > 50000){
+				if(data.items.length > 20000){
 					$(document).trigger('yottaquake.growl', "Impossibile visualizzare più di " + data.items.length + " punti");
 					return;
 				}
