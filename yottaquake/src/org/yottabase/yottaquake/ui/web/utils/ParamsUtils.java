@@ -44,7 +44,7 @@ public class ParamsUtils {
 		EventFilter eventFilter = new EventFilter();
 
 		// date from
-		String paramFrom = cleanParam(request.getParameter("from"));
+		String paramFrom = cleanParam(request.getParameter("fromDate"));
 		if (paramFrom != null) {
 			DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			try {
@@ -55,7 +55,7 @@ public class ParamsUtils {
 		}
 
 		// date to
-		String paramTo = cleanParam(request.getParameter("to"));
+		String paramTo = cleanParam(request.getParameter("toDate"));
 		if (paramTo != null) {
 			DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			try {

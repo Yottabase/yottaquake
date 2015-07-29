@@ -45,6 +45,7 @@ jQuery(document).ready(function ($) {
 	});
 	
 	var date = $('#filters input.from').datepicker({
+		format: 'dd/mm/yyyy',
 		startDate: '01-01-2000',
         endDate: new Date()
 	}).on('change', function(e){
@@ -60,6 +61,7 @@ jQuery(document).ready(function ($) {
 	}).datepicker('setDate', filters.fromDate);
 	
 	$('#filters input.to').datepicker({
+		format: 'dd/mm/yyyy',
 		startDate: '01-01-2000',
         endDate: new Date()
 	}).on('change', function(e){
