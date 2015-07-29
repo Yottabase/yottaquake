@@ -4,13 +4,10 @@ import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
-
-import javax.swing.plaf.synth.Region;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -98,9 +95,19 @@ public class MongoDBAdapter implements DBFacade {
 		db.getCollection(COLL_EARTHQUAKES).drop();
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("geometry_2dsphere");
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("geolocation.name");
+		db.getCollection(COLL_EARTHQUAKES).dropIndex("properties.lon");
+		db.getCollection(COLL_EARTHQUAKES).dropIndex("properties.lat");
+		db.getCollection(COLL_EARTHQUAKES).dropIndex("properties.mag");
+		db.getCollection(COLL_EARTHQUAKES).dropIndex("properties.depth");
+		db.getCollection(COLL_EARTHQUAKES).dropIndex("time.millisecond");
 		
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("geometry","2dsphere"));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("geolocation.name",1));
+		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("properties.lon",1));
+		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("properties.lat",1));
+		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("properties.mag",1));
+		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("properties.depth",1));
+		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("time.millisecond",1));
 
 	}
 	
