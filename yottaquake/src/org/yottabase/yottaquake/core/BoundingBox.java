@@ -30,46 +30,39 @@ public class BoundingBox {
 		this.bottomRight = bottomRight;
 	}
 	
+	
 	public ArrayList<ArrayList<Double>> getCoordinatesPair(){
-		ArrayList<ArrayList<Double> > boxArray = new ArrayList<ArrayList<Double> >();
-		ArrayList<Double> bottomRight = new ArrayList<Double>();
-		bottomRight.add(this.getBottomRight().getLng());
-		bottomRight.add(this.getBottomRight().getLat());
+		ArrayList<ArrayList<Double> > boxArray = new ArrayList<ArrayList<Double> >();	
+		boxArray.add(this.topLeft.asArray());
+		boxArray.add(this.bottomRight.asArray());
 		
-		ArrayList<Double> topLeft = new ArrayList<Double>();
-		topLeft.add(this.getTopLeft().getLng());
-		topLeft.add(this.getTopLeft().getLat());
-		
-		boxArray.add(topLeft);
-		boxArray.add(bottomRight);
 		return boxArray;
 	}
 	
-	public ArrayList<ArrayList<ArrayList<Double>>> toPolygon(){
+	
+	public ArrayList<ArrayList<ArrayList<Double>>> toPolygon() {
+		ArrayList<ArrayList<Double>> points = null;
+		ArrayList<ArrayList<ArrayList<Double>>> polygon = null;
 
-		ArrayList<Double> topLeftPoint = getCoordinatesPair().get(1);
-		ArrayList<Double> bottomRighttPoint = getCoordinatesPair().get(0);
-
-		ArrayList<Double> topRight = new ArrayList<Double>();
-		LatLng p2= new LatLng(topLeftPoint.get(1), bottomRighttPoint.get(0));
-		topRight.add(p2.getLng());
-		topRight.add(p2.getLat());
-
-		ArrayList<Double> bottomeLeft = new ArrayList<Double>();
-		LatLng p4= new LatLng(topLeftPoint.get(0), bottomRighttPoint.get(1));
-		bottomeLeft.add(p4.getLat());
-		bottomeLeft.add(p4.getLng());
+		LatLng topRightPoint = new LatLng(this.topLeft.getLat(), this.bottomRight.getLng());
+		LatLng bottomLeftPoint = new LatLng(this.bottomRight.getLat(), this.topLeft.getLng());
 		
-		ArrayList<ArrayList<Double> > boxArray = new ArrayList<ArrayList<Double>>();
-		boxArray.add(bottomRighttPoint);
-		boxArray.add(topRight);
-		boxArray.add(topLeftPoint);
-		boxArray.add(bottomeLeft);
-		boxArray.add(bottomRighttPoint);
-
-		ArrayList<ArrayList<ArrayList<Double>>> polygonArray = new ArrayList<ArrayList<ArrayList<Double>>>();
-		polygonArray.add(boxArray);	
+		ArrayList<Double> topRight = topRightPoint.asArray();
+		ArrayList<Double> bottomLeft = bottomLeftPoint.asArray();
+		ArrayList<Double> topLeft = this.topLeft.asArray();
+		ArrayList<Double> bottomRight = this.bottomRight.asArray();
 		
-		return polygonArray;
+		
+		points = new ArrayList<ArrayList<Double>>();
+		points.add(bottomRight);
+		points.add(topRight);
+		points.add(topLeft);
+		points.add(bottomLeft);
+		points.add(bottomRight);
+
+		polygon = new ArrayList<ArrayList<ArrayList<Double>>>();
+		polygon.add(points);	
+		
+		return polygon;
 	}
 }

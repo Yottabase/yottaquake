@@ -3,6 +3,7 @@ package org.yottabase.yottaquake.db.mongodb;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.bson.Document;
@@ -59,7 +60,12 @@ public class TestMain {
 //		facade.getDistinctContinents();
 		
 //		facade.getMagnitude();
-		facade.getDepth();
+//		facade.getDepth();
+		
+		LatLng topLeft = new LatLng(3.0, 1.0);
+		LatLng bottomRight = new LatLng(1.0, 4.0);
+		BoundingBox b = new BoundingBox(topLeft, bottomRight);
+		System.out.println(b.toPolygon());
 	}
 	
 }

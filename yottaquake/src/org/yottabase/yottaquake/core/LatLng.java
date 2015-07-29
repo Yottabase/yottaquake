@@ -1,5 +1,7 @@
 package org.yottabase.yottaquake.core;
 
+import java.util.ArrayList;
+
 public class LatLng {
 
 	public double lat, lng;
@@ -26,6 +28,12 @@ public class LatLng {
 		this.lng = lng;
 	}
 	
-	
+	public ArrayList<Double> asArray() {
+		ArrayList<Double> arrayPoint = new ArrayList<Double>();
+		arrayPoint.add(lng);
+		arrayPoint.add(lat);
+		
+		return arrayPoint;
+	}
 	
 }

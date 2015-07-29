@@ -61,15 +61,28 @@ public class MongoDBAdapter implements DBFacade {
 	}
 	
 	
+	private MongoCollection<Document> getContinentsCollection() {
+		return db.getCollection(COLL_CONTINENTS);
+	}
+	
+	
 	private MongoCollection<Document> getFlinnRegionsCollection(FlinnRegionDetailLevel level) {
 		String collection = null;
 		switch(level) {
 		  case MACRO:  
 			  collection = COLL_FLINN_MACRO; break;
+		  case AGGREGATE:
+			  collection = COLL_FLINN_AGRGT; break;
 		  default:
 			  collection = COLL_FLINN_MICRO; break;
+				  
 		}
 		return db.getCollection(collection);
+	}
+	
+	
+	private MongoCollection<Document> getTectonicPlatesCollection() {
+		return db.getCollection(COLL_TECT_PLATES);
 	}
 	
 	
@@ -236,12 +249,15 @@ public class MongoDBAdapter implements DBFacade {
 	public Iterable<Document> getEvents(BoundingBox box, Date from, Date to,
 			Integer minMagnitude, Integer maxMagnitude, Integer minDepth,
 			Integer maxDepth) {
-		ArrayList<Document> queries = new ArrayList<Document>();
+		
 		Document query = null;
-		if(box!=null){
+		ArrayList<Document> queries = new ArrayList<Document>();
+		
+		if(box != null) {
 			queries.add(new Document("geometry", new Document("$geoWithin", new Document("$box",box.getCoordinatesPair()))));
 			query = new Document("$and",queries);
 		}
+		
 		if(minMagnitude != null)
 			queries.add(new Document("properties.mag", new Document("$gte", minMagnitude)));
 		
@@ -285,7 +301,8 @@ public class MongoDBAdapter implements DBFacade {
 		MongoCollection<Document> collection = getFlinnRegionsCollection(level);
 		return collection.find(new Document("geometry", new Document("$geoIntersects", boxDoc)));
 	}
-
+	
+	// *********************** CONVEX HULL - START ************************** //
 
 	@Override
 	public Set<String> getDistinctMacroRegions() {
@@ -361,20 +378,23 @@ public class MongoDBAdapter implements DBFacade {
 		return collection.find(new Document("properties.continent", continent));
 	}
 	
-	public void getMagnitude(){
+	// *********************** CONVEX HULL - END ************************** //
+	
+	@Override
+	public void getMagnitude() {
 		FindIterable<Document> a = db.getCollection(COLL_EARTHQUAKES).find(new Document("properties.mag", new Document("$gte", 7))).sort(new Document("properties.mag",-1));
 		for (Document document : a) {
 			System.out.println(document.toJson());	
 		}
-		
 	}
 	
-	public void getDepth(){
+	
+	@Override
+	public void getDepth() {
 		FindIterable<Document> a = db.getCollection(COLL_EARTHQUAKES).find(new Document("properties.depth", new Document("$gte", 50))).sort(new Document("properties.depth",-1));
 		for (Document document : a) {
 			System.out.println(document.toJson());	
-		}
-		
+		}	
 	}
 
 }
