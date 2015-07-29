@@ -9,13 +9,7 @@ jQuery(document).ready(function ($) {
 		maxDepth : 750,
 	
 		fromDate : null,
-		toDate : null,
-		
-		zoom : mapDefault.zoom,
-		/*topLeftLat : newBB.topLeft.lat,
-		topLeftLng : newBB.topLeft.lng,
-		bottomRightLat : newBB.bottomRight.lat,
-		bottomRightLng : newBB.bottomRight.lng*/
+		toDate : null
 	};
 	
 	$(document).on('yottaquake.bounding_box_update', function(e, newBB){
