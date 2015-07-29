@@ -42,13 +42,15 @@ public class ParamsUtils {
 	public static EventFilter extractEventFilter(HttpServletRequest request) {
 
 		EventFilter eventFilter = new EventFilter();
+		
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
 		// date from
 		String paramFrom = cleanParam(request.getParameter("fromDate"));
 		if (paramFrom != null) {
-			DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			
 			try {
-				eventFilter.setFrom(format.parse(paramFrom));
+				eventFilter.setFrom(dateFormat.parse(paramFrom));
 			} catch (ParseException e) {
 				System.err.println("Data in formato non valido " + paramFrom);
 			}
@@ -57,9 +59,8 @@ public class ParamsUtils {
 		// date to
 		String paramTo = cleanParam(request.getParameter("toDate"));
 		if (paramTo != null) {
-			DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			try {
-				eventFilter.setTo(format.parse(paramTo));
+				eventFilter.setTo(dateFormat.parse(paramTo));
 			} catch (ParseException e) {
 				System.err.println("Data in formato non valido " + paramTo);
 			}

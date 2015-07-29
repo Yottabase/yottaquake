@@ -45,7 +45,7 @@ jQuery(document).ready(function ($) {
 	});
 	
 	var date = $('#filters input.from').datepicker({
-		format: 'dd/mm/yyyy',
+		format: 'dd-mm-yyyy',
 		startDate: '01-01-2000',
         endDate: new Date()
 	}).on('change', function(e){
@@ -53,15 +53,14 @@ jQuery(document).ready(function ($) {
 		if( $(this).val() == '' ) {
 			filters.fromDate = null;
 		}else{
-			var date = new Date(e.timeStamp);
-			filters.fromDate = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay();
+			filters.fromDate = $(this).val();
 		}
 		
 		$(document).trigger(eventTrigger, filters);
 	}).datepicker('setDate', filters.fromDate);
 	
 	$('#filters input.to').datepicker({
-		format: 'dd/mm/yyyy',
+		format: 'dd-mm-yyyy',
 		startDate: '01-01-2000',
         endDate: new Date()
 	}).on('change', function(e){
@@ -69,8 +68,7 @@ jQuery(document).ready(function ($) {
 		if( $(this).val() == '' ) {
 			filters.toDate = null;
 		}else{
-			var date = new Date(e.timeStamp);
-			filters.toDate = date.getFullYear() + "-" + date.getMonth() + "-" + date.getDay();
+			filters.toDate = $(this).val();
 		}
 		
 		$(document).trigger(eventTrigger, filters);
