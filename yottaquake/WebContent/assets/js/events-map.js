@@ -2,7 +2,7 @@ jQuery(document).ready(function ($) {
 	
 	//init map
 	var map = L.map('chart-events-map')
-	.on('moveend load', function() {
+	.on('moveend', function() {
 		$(document).trigger('yottaquake.bounding_box_update', 
 			{
 				'topLeft' :  this.getBounds().getNorthWest(),
@@ -24,6 +24,9 @@ jQuery(document).ready(function ($) {
 		id: 'mapbox.outdoors'
 	}).addTo(map);
 	
+	setTimeout(function(){
+		map.fire('moveend');
+	}, 0);
 	
 	
 	//markers

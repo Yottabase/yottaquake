@@ -56,4 +56,13 @@ public class EventFilter {
 		this.maxDepth = maxDepth;
 	}
 
+	@Override
+	public String toString() {
+		return "EventFilter [from=" + from + ", to=" + to + ", minMagnitude="
+				+ minMagnitude + ", maxMagnitude=" + maxMagnitude
+				+ ", minDepth=" + minDepth + ", maxDepth=" + maxDepth + "]";
+	}
+	
+	
+
 }

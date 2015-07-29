@@ -74,7 +74,7 @@ public class ParamsUtils {
 		// magnitude max
 		String paramMaxMagnitude = cleanParam(request.getParameter("maxMagnitude"));
 		if (paramMaxMagnitude != null) {
-			eventFilter.setMinMagnitude(Integer.valueOf(paramMaxMagnitude));
+			eventFilter.setMaxMagnitude(Integer.valueOf(paramMaxMagnitude));
 		}
 
 		// depth min
