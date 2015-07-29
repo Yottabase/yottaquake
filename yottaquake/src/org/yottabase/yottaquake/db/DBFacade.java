@@ -1,6 +1,5 @@
 package org.yottabase.yottaquake.db;
 
-import java.util.Date;
 import java.util.Set;
 
 import org.bson.Document;
@@ -17,6 +16,9 @@ public interface DBFacade {
 	public void initializeCollectionCountries();
 	
 	public void initializeCollectionFlinnRegions();
+
+	public void initializeCollectionTectonicPlates();
+
 	
 	/**
 	 * Chiude il database
@@ -28,6 +30,8 @@ public interface DBFacade {
 	 */
 	
 	public void insertEvent(JSONObject event);
+	
+	public void insertTectonicPLates(JSONObject event);
 	
 	public void insertCountry(JSONObject event, CountryDetailLevel level);
 	
@@ -78,4 +82,7 @@ public interface DBFacade {
 	public void getDepth();
 
 	public Integer getCountryEventsCount(String name, EventFilter eventFilter);
+
+	public Iterable<Document> getTectonicPlates();
+
 }
