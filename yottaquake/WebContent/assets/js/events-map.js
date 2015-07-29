@@ -27,6 +27,18 @@ jQuery(document).ready(function ($) {
 	setTimeout(function(){
 		map.fire('moveend');
 	}, 0);
+
+	//popup
+	var popup = null;
+	console.log(popup);
+	$(document).on('yottaquake.filters_update', function(e, filters){
+		if(popup !== null){
+			popup.closePopup();
+			map.removeLayer(popup);
+		}
+		
+		popup = null;
+	});
 	
 	
 	//markers
@@ -145,7 +157,6 @@ jQuery(document).ready(function ($) {
 	//countries
 	var countriesReq = null;
 	var countriesLayer = null;
-	var popup = L.popup();
 	$(document).on('yottaquake.filters_update', function(e, filters){
 		if(countriesReq != null) countriesReq.abort();
 		
@@ -188,10 +199,13 @@ jQuery(document).ready(function ($) {
 					onEachFeature: function (feature, layer) {
 					    layer.on({
 					        click: function(e){
-				        	    popup
-				        	        .setLatLng(e.latlng)
-				        	        .setContent(feature.properties.name + ":" + "<strong>" + feature.count + "</strong>" + "earthquakes")
-				        	        .openOn(map);
+					        	popup = L
+					        		.marker(e.latlng)
+					        		.bindPopup(feature.properties.name + ":" + "<strong>" + feature.count + "</strong>" + "earthquakes")
+					        		.addTo(map)
+					        		.openPopup();
+					        	
+				        	   
 					        }
 					    });
 					}
