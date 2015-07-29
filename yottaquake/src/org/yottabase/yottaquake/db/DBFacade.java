@@ -46,7 +46,7 @@ public interface DBFacade {
 	 */
 	public Iterable<Document> distinctRegion();
 		
-	public Iterable<Document> getCountries(CountryDetailLevel level );
+	public Iterable<Document> getCountries(CountryDetailLevel level, BoundingBox box );
 	
 	public Iterable<Document> getEventsInPolygon(Document geometry);
 	
@@ -56,8 +56,6 @@ public interface DBFacade {
 	
 	//API 
 	
-	public Iterable<Document> getCountriesWithEventsCount(CountryDetailLevel level, BoundingBox box);
-
 	public Iterable<Document> getFlinnRegionsWithEventsCount(FlinnRegionDetailLevel level, BoundingBox box);
 	
 	public Iterable<Document> getEvents(
@@ -82,4 +80,8 @@ public interface DBFacade {
 	public void getMagnitude();
 	
 	public void getDepth();
+
+	Integer getCountryEventsCount(String name, Date from, Date to,
+			Integer minMagnitude, Integer maxMagnitude, Integer minDepth,
+			Integer maxDepth);
 }

@@ -3,10 +3,14 @@ package org.yottabase.yottaquake.db.mongodb;
 import static java.util.Arrays.asList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
+
+import javax.swing.plaf.synth.Region;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
@@ -17,6 +21,7 @@ import org.yottabase.yottaquake.core.FlinnRegionDetailLevel;
 import org.yottabase.yottaquake.db.DBFacade;
 
 import com.mongodb.MongoClient;
+import com.mongodb.client.AggregateIterable;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -92,8 +97,11 @@ public class MongoDBAdapter implements DBFacade {
 		
 		db.getCollection(COLL_EARTHQUAKES).drop();
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("geometry_2dsphere");
+		db.getCollection(COLL_EARTHQUAKES).dropIndex("geolocation.name");
 		
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("geometry","2dsphere"));
+		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("geolocation.name",1));
+
 	}
 	
 	
@@ -187,20 +195,16 @@ public class MongoDBAdapter implements DBFacade {
 	
 	@Override
 	public Iterable<Document> distinctRegion() {
-		Document groupByRegion = new Document("$group", new Document("_id","$properties.flynn_region"));
+		Document groupByRegion = new Document("$group", new Document("_id","$properties.name_s"));
 //		Document project = new Document("$project", new Document("_id",0).append("year", "$_id.year").append("count", 1));
 //		Document sort = new Document("$sort", new Document("total",1));
+		AggregateIterable<Document> distinctMcroRegions = db.getCollection("flinn").aggregate(asList(groupByRegion));
 		
-		return db.getCollection(COLL_EARTHQUAKES).aggregate(asList(groupByRegion));
-	}
-	
-
-	@Override
-	public Iterable<Document> getCountries(CountryDetailLevel level) {
-		MongoCollection<Document> collection = getCountriesCollection(level);
-		FindIterable<Document> countries = collection.find();
-		
-		return countries;
+		for (Document region : distinctMcroRegions) {
+			 FindIterable<Document> regionByName = db.getCollection("flinn").find(new Document("properties.name_s",region.get("_id")));
+			 System.out.println(regionByName.first().toJson());
+		}
+		return null;
 	}
 	
 
@@ -250,14 +254,12 @@ public class MongoDBAdapter implements DBFacade {
 			Integer minMagnitude, Integer maxMagnitude, Integer minDepth,
 			Integer maxDepth) {
 		
-		Document query = null;
 		ArrayList<Document> queries = new ArrayList<Document>();
-		
-		if(box != null) {
+		Document query = new Document("$and",queries);
+
+		if(box != null) 
 			queries.add(new Document("geometry", new Document("$geoWithin", new Document("$box",box.getCoordinatesPair()))));
-			query = new Document("$and",queries);
-		}
-		
+
 		if(minMagnitude != null)
 			queries.add(new Document("properties.mag", new Document("$gte", minMagnitude)));
 		
@@ -282,15 +284,59 @@ public class MongoDBAdapter implements DBFacade {
 		return db.getCollection(COLL_EARTHQUAKES).find(query).projection(projection);
 	}
 
+	public Iterable<Document> getCountries(CountryDetailLevel level, BoundingBox box){
+		//db.countryHigh.find({geometry: {$geoIntersects: {$geometry: {type: "Polygon" ,coordinates: [[ [ 0, 0 ], [ 100, 0 ], [ 100, 89 ], [ 0,89 ], [0,0] ]]}}}})
+		MongoCollection<Document> collection = getCountriesCollection(level);
+		FindIterable<Document> countries;
+		if(box != null){
+			Document boxDoc = new Document("$geometry",new Document("type","Polygon").append("coordinates", box.toPolygon()));
+			countries = collection.find(new Document("geometry", new Document("$geoIntersects", boxDoc)));
+		}
+		else 
+			countries = collection.find();
+			
+		return countries;
+		
+	}
 	
 	@Override
-	public Iterable<Document> getCountriesWithEventsCount(CountryDetailLevel level, BoundingBox box) {
-		//db.countryHigh.find({geometry: {$geoIntersects: {$geometry: {type: "Polygon" ,coordinates: [[ [ 0, 0 ], [ 100, 0 ], [ 100, 89 ], [ 0,89 ], [0,0] ]]}}}})
-		System.out.println(box.toPolygon());
-		Document boxDoc = new Document("$geometry",new Document("type","Polygon").append("coordinates", box.toPolygon()));
+	public Integer getCountryEventsCount(String name,Date from, Date to,
+			Integer minMagnitude, Integer maxMagnitude, Integer minDepth,
+			Integer maxDepth) {
+		Document matchCountry;
+		ArrayList<Document> queries = new ArrayList<Document>();
 		
-		MongoCollection<Document> collection = getCountriesCollection(level);
-		return collection.find(new Document("geometry", new Document("$geoIntersects", boxDoc)));
+		if(minMagnitude != null)
+			queries.add(new Document("properties.mag", new Document("$gte", minMagnitude)));
+		
+		if(minMagnitude != null)
+			queries.add(new Document("properties.mag", new Document("$lte", maxMagnitude)));
+		
+		if(minDepth != null)
+			queries.add(new Document("properties.depth", new Document("$gte", minDepth)));
+		
+		if(maxDepth != null)
+			queries.add(new Document("properties.depth", new Document("$lte", maxDepth)));
+		
+		if(from != null)
+			queries.add(new Document("time.millisecond", new Document("$gte", from.getTime())));
+		
+		if(to != null)
+			queries.add(new Document("time.millisecond", new Document("$lte", to.getTime())));
+		
+		
+		if(!queries.isEmpty())
+			matchCountry = new Document("$match", new Document("geolocation.name", name)).append("$and", queries);
+		
+		matchCountry = new Document("$match", new Document("geolocation.name", name));
+		Document groupByCountry = new Document("$group", new Document("_id", "$geolocation.name").append("total", new Document("$sum", 1)));
+		AggregateIterable<Document> countryCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchCountry,groupByCountry));
+		
+		Integer counts =0;
+		if(countryCounts.first() != null)
+			counts = Integer.valueOf( countryCounts.first().get("total").toString());
+		
+		return counts;
 	}
 
 

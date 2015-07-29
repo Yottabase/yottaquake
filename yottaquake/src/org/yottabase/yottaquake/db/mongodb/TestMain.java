@@ -23,6 +23,7 @@ public class TestMain {
 //		System.out.println(facade.countEvents());
 //		facade.bigEarthQuake(5);
 //		facade.distinctRegion();
+	
 //		facade.countByMonth();
 //		facade.countByYear();
 //		facade.countByYearMonth();
@@ -31,7 +32,7 @@ public class TestMain {
 //		facade.getCountriesWithEventCount(CountryDetailLevel.HIGH);	
 //		Set<String> regions = facade.getDistinctMacroRegions();
 		
-//		BoundingBox box = new BoundingBox(new LatLng(0, 150),new LatLng(89, 0));
+		BoundingBox box = new BoundingBox(new LatLng(0, 10),new LatLng(89, 0));
 //		DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S'Z'");
 //		String dateInString = "1999-03-27T18:04:43.5Z";
 //		Date from = format.parse(dateInString);
@@ -39,20 +40,21 @@ public class TestMain {
 		
 //		dateInString = "2092-03-27T18:04:43.5Z";
 //		Date to = format.parse(dateInString);
-//		Integer minMagnitude = new Integer(1);
-//		Integer maxMagnitude = new Integer(5);
+//		Integer minMagnitude = new Integer(5);
+//		Integer maxMagnitude = new Integer(7);
 //		Integer minDepth = new Integer(10);
-//		Date from = null;
-//		Date to = null;
-//		Integer minMagnitude = null;
-//		Integer maxMagnitude = null;
-//		Integer minDepth = null;
-//		Integer maxDepth = null;
+		Date from = null;
+		Date to = null;
+		Integer minMagnitude = null;
+		Integer maxMagnitude = null;
+		Integer minDepth = null;
+		Integer maxDepth = null;
 		
 //		Iterable<Document> regions = facade.getCountriesWithEventsCount(CountryDetailLevel.HIGH, box);
 //		Iterable<Document> regions = facade.getFlinnRegionsWithEventsCount(FlinnRegionDetailLevel.MICRO, box);
 //		Iterable<Document> regions = facade.getEvents(box, from, to, minMagnitude, maxMagnitude, minDepth, maxDepth);
 //		
+		System.out.println(facade.getCountryEventsCount("Italy",from, to, minMagnitude, maxMagnitude, minDepth, maxDepth));
 //		for (Document document : regions) {
 //			System.out.println(document.toJson());
 //		}
@@ -62,10 +64,10 @@ public class TestMain {
 //		facade.getMagnitude();
 //		facade.getDepth();
 		
-		LatLng topLeft = new LatLng(3.0, 1.0);
-		LatLng bottomRight = new LatLng(1.0, 4.0);
-		BoundingBox b = new BoundingBox(topLeft, bottomRight);
-		System.out.println(b.toPolygon());
+//		LatLng topLeft = new LatLng(3.0, 1.0);
+//		LatLng bottomRight = new LatLng(1.0, 4.0);
+//		BoundingBox b = new BoundingBox(topLeft, bottomRight);
+//		System.out.println(b.toPolygon());
 	}
 	
 }
