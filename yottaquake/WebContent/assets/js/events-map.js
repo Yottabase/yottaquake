@@ -30,14 +30,10 @@ jQuery(document).ready(function ($) {
 
 	//popup
 	var popup = null;
-	console.log(popup);
 	$(document).on('yottaquake.filters_update', function(e, filters){
 		if(popup !== null){
-			popup.closePopup();
 			map.removeLayer(popup);
 		}
-		
-		popup = null;
 	});
 	
 	
@@ -199,6 +195,7 @@ jQuery(document).ready(function ($) {
 					onEachFeature: function (feature, layer) {
 					    layer.on({
 					        click: function(e){
+					        	if(popup != null) map.removeLayer(popup);
 					        	popup = L
 					        		.marker(e.latlng)
 					        		.bindPopup(feature.properties.name + ":" + "<strong>" + feature.count + "</strong>" + "earthquakes")
