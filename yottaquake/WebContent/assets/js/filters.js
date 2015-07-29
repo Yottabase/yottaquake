@@ -33,9 +33,9 @@ jQuery(document).ready(function ($) {
 		max: 10, 
 		value: [filters.minMagnitude, filters.maxMagnitude],
 		range: true
-	}).on('change', function(e){
-		filters.minMagnitude = e.value.newValue[0];
-		filters.maxMagnitude = e.value.newValue[1];
+	}).on('slideStop', function(e){
+		filters.minMagnitude = e.value[0];
+		filters.maxMagnitude = e.value[1];
 		$(document).trigger(eventTrigger, filters);
 	});
 	
@@ -44,9 +44,9 @@ jQuery(document).ready(function ($) {
 		max: 750, 
 		value: [filters.minDepth, filters.maxDepth],
 		range: true
-	}).on('change', function(e){
-		filters.minDepth = e.value.newValue[0];
-		filters.maxDepth = e.value.newValue[1];
+	}).on('slideStop', function(e){
+		filters.minDepth = e.value[0];
+		filters.maxDepth = e.value[1];
 		$(document).trigger(eventTrigger, filters);
 	});
 	
