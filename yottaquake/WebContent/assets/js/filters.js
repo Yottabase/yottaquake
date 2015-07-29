@@ -5,7 +5,7 @@ jQuery(document).ready(function ($) {
 		minMagnitude : 3,
 		maxMagnitude : 10,
 		
-		minDepth : 100,
+		minDepth : 10,
 		maxDepth : 750,
 	
 		fromDate : null,
