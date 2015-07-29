@@ -37,7 +37,7 @@ jQuery(document).ready(function ($) {
 	});
 	
 	
-	//markers
+	//********************* cluster *********************// 
 	var markers = L.markerClusterGroup();
 	
 	var markersReq = null;
@@ -46,6 +46,11 @@ jQuery(document).ready(function ($) {
 		if(filters.showClusteredEvents){
 			markersReq = $.getJSON(wsUrl + "api-events.do", filters, function(data){
 				var coords = [];
+				
+				if(data.items.length > 50000){
+					$(document).trigger('yottaquake.growl', "Impossibile visualizzare cluster di " + data.items.length + " punti");
+					return;
+				}
 				
 				for (var i = 0; i < data.items.length; i++) {
 					var event = data.items[i];
@@ -62,7 +67,8 @@ jQuery(document).ready(function ($) {
 		}
 	});
 	
-	//heatmap
+	
+	//********************* heatmap *********************//
 	var heat = L.heatLayer([], {
 		//radius : 50, 
 		//blur: 30, 
@@ -75,6 +81,11 @@ jQuery(document).ready(function ($) {
 		if(heatReq != null) heatReq.abort();
 		if(filters.showHeatMap){
 			heatReq = $.getJSON(wsUrl + "api-events.do", filters, function(data){
+				
+				if(data.items.length > 100000){
+					$(document).trigger('yottaquake.growl', "Impossibile visualizzare heatmap di " + data.items.length + " punti");
+					return;
+				}
 				
 				var coords = [];
 				for (var i = 0; i < data.items.length; i++) {
@@ -89,7 +100,8 @@ jQuery(document).ready(function ($) {
 		}
 	});
 	
-	//markers
+	
+	//********************* markers *********************//
 	var pointersReq = null;
 	var pointers = [];
 	var pointerIcon = L.MakiMarkers.icon({icon: "triangle", color: "#f00", size: "s"});
@@ -104,35 +116,10 @@ jQuery(document).ready(function ($) {
 				    delete p;
 				});
 				
-				var coords = [];
-				for (var i = 0; i < data.items.length; i++) {
-					var event = data.items[i];
-					var mapPointer = L.marker([event.properties.lat, event.properties.lon], {icon: pointerIcon}).addTo(map);
-					pointers.push(mapPointer);
+				if(data.items.length > 50000){
+					$(document).trigger('yottaquake.growl', "Impossibile visualizzare più di " + data.items.length + " punti");
+					return;
 				}
-			});
-		}else{
-			pointers.forEach(function(p) {
-			    map.removeLayer(p);
-			    delete p;
-			});
-		}
-	});
-	
-	//markers
-	var pointersReq = null;
-	var pointers = [];
-	var pointerIcon = L.MakiMarkers.icon({icon: "triangle", color: "#f00", size: "s"});
-	
-	$(document).on('yottaquake.filters_update', function(e, filters){
-		if(pointersReq != null) pointersReq.abort();
-		if(filters.showEvents){
-			pointersReq = $.getJSON(wsUrl + "api-events.do", filters, function(data){
-				
-				pointers.forEach(function(p) {
-				    map.removeLayer(p);
-				    delete p;
-				});
 				
 				var coords = [];
 				for (var i = 0; i < data.items.length; i++) {
@@ -150,7 +137,7 @@ jQuery(document).ready(function ($) {
 	});
 	
 	
-	//countries
+	//********************* countries *********************//
 	var countriesReq = null;
 	var countriesLayer = null;
 	$(document).on('yottaquake.filters_update', function(e, filters){

@@ -7,4 +7,17 @@ jQuery(document).ready(function ($) {
 	     ajaxStop: function() { $body.removeClass("loading"); }    
 	});
 	
+	$(document).on('yottaquake.growl', function(e, message){
+		
+		var growl = $('#growl')
+			.text(message)
+			.fadeIn({
+				duration: 600,
+				complete : function(){
+					setTimeout(function(){
+						growl.fadeOut();
+					}, 5000);
+				}
+			});
+	});
 });
