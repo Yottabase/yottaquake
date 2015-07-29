@@ -38,18 +38,26 @@ public class CountriesAction extends AbstractAction{
 		DBFacade facade = DBAdapterManager.getFacade();
 		
 		JSONArray items = new JSONArray();
+		int min =  Integer.MAX_VALUE;
+		int max = 0;
 		for(Document doc : facade.getCountries(mapDetailLevel, box)){
 			Document properties = (Document) doc.get("properties");
 			Integer counts = facade.getCountryEventsCount(properties.get("name").toString(), eventFilter);
+			min = Math.min(min, counts);
+			max = Math.max(max, counts);
 			
 			JSONObject obj = new JSONObject(doc.toJson());
 			obj.put("count", counts);
 			items.put(obj);
-			
 		}
 		
+		JSONObject result = new JSONObject();
+		result.put("minCount", min);
+		result.put("maxCount", max);
+		result.put("items", items);
+		
 		response.setContentType(this.CONTENT_TYPE_JSON);
-		response.getWriter().write(items.toString());
+		response.getWriter().write(result.toString());
 
 	}
 

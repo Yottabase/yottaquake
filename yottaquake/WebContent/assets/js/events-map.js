@@ -162,19 +162,19 @@ jQuery(document).ready(function ($) {
 			
 			countriesReq = $.getJSON(wsUrl + "api-countries.do", customFilters, function(data){
 				var mapColor = d3.scale.linear()
-	    			.domain([0, 1])
-	    			.range(['#fcbba1', '#99000d']);
+	    			.domain([data.minCount, (data.maxCount-data.minCount)/2,  data.maxCount])
+	    			.range(['#fee0d2', '#fc9272', '#de2d26']);
 				
 				var geoData = 
 					{
 						"type": "FeatureCollection",
-						"features": data 
+						"features": data.items 
 					};
 				
 				if(countriesLayer !== null) map.removeLayer(countriesLayer);
 				 countriesLayer = L.geoJson(geoData, {
 					style: function (feature) {
-						feature.color = mapColor(Math.random());
+						feature.color = mapColor(feature.count);
 						return {
 					        fillColor: feature.color,
 					        weight: 1,
