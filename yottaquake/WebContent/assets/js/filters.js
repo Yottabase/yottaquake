@@ -1,11 +1,24 @@
 jQuery(document).ready(function ($) {
 	
 	var eventTrigger = 'yottaquake.filters_update';
-	var filters = {};
+	var filters = {
+		minMagnitude : 3,
+		maxMagnitude : 10,
+		
+		minDepth : 100,
+		maxDepth : 750,
+	
+		fromDate : null,
+		toDate : null,
+		
+		zoom : mapDefault.zoom,
+		/*topLeftLat : newBB.topLeft.lat,
+		topLeftLng : newBB.topLeft.lng,
+		bottomRightLat : newBB.bottomRight.lat,
+		bottomRightLng : newBB.bottomRight.lng*/
+	};
 	
 	$(document).on('yottaquake.bounding_box_update', function(e, newBB){
-		
-		console.log(newBB);
 		filters.zoom = newBB.zoom;
 		filters.topLeftLat = newBB.topLeft.lat;
 		filters.topLeftLng = newBB.topLeft.lng;
@@ -17,8 +30,8 @@ jQuery(document).ready(function ($) {
 	
 	$("#filters input.magnitude").slider({
 		min: 0, 
-		max: 7, 
-		value: [0, 7],
+		max: 10, 
+		value: [filters.minMagnitude, filters.maxMagnitude],
 		range: true
 	}).on('change', function(e){
 		filters.minMagnitude = e.value.newValue[0];
@@ -28,8 +41,8 @@ jQuery(document).ready(function ($) {
 	
 	var depthSlider = $("#filters input.depth").slider({
 		min: 0, 
-		max: 10, 
-		value: [0, 10],
+		max: 750, 
+		value: [filters.minDepth, filters.maxDepth],
 		range: true
 	}).on('change', function(e){
 		filters.minDepth = e.value.newValue[0];
@@ -50,7 +63,7 @@ jQuery(document).ready(function ($) {
 		}
 		
 		$(document).trigger(eventTrigger, filters);
-	}).datepicker('setDate', null);
+	}).datepicker('setDate', filters.fromDate);
 	
 	$('#filters input.to').datepicker({
 		startDate: '01-01-2000',
@@ -65,7 +78,7 @@ jQuery(document).ready(function ($) {
 		}
 		
 		$(document).trigger(eventTrigger, filters);
-	}).datepicker('setDate', null);
+	}).datepicker('setDate', filters.toDate);
 	
 	$('#filters .layers input[type=checkbox]')
 		.attr('checked', false)
