@@ -311,7 +311,7 @@ public class MongoDBAdapter implements DBFacade {
 
 
 	@Override
-	public Iterable<Document> getFlinnRegionsWithEventsCount(BoundingBox box) {
+	public Iterable<Document> getFlinnRegions(BoundingBox box) {
 		Document boxDoc = new Document("$geometry",new Document("type","Polygon").append("coordinates", box.toPolygon()));
 		
 		MongoCollection<Document> collection = getFlinnRegionsCollection();
@@ -490,6 +490,27 @@ public class MongoDBAdapter implements DBFacade {
 	@Override
 	public Iterable<Document> getFlinnRegions() {
 		return getFlinnRegionsCollection().find();
+	}
+
+
+	@Override
+	public Integer getFlinnRegionEventsCount(String name, EventFilter eventFilter) {
+		Document matchFlinnRegion;
+		ArrayList<Document> queries = this.getEventsFiltersQuery(eventFilter);
+		
+		if(queries.isEmpty())
+			matchFlinnRegion = new Document("$match", new Document("flinnRegion.name_l", name));
+		else
+			matchFlinnRegion = new Document("$match", new Document("flinnRegion.name_l", name).append("$and", queries));
+				
+		Document groupByFlinnRegion = new Document("$group", new Document("_id", "$flinnRegion.name_l").append("total", new Document("$sum", 1)));
+		AggregateIterable<Document> flinnRegionCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchFlinnRegion, groupByFlinnRegion));
+		
+		int counts = 0;
+		if (flinnRegionCounts.first() != null)
+			counts = Integer.valueOf( flinnRegionCounts.first().get("total").toString());
+		
+		return counts;
 	}
 
 }

@@ -64,7 +64,7 @@ public interface DBFacade {
 	
 	//API 
 	
-	public Iterable<Document> getFlinnRegionsWithEventsCount(BoundingBox box);
+	public Iterable<Document> getFlinnRegions(BoundingBox box);
 	
 	public Iterable<Document> getEvents(BoundingBox box, EventFilter eventFilter);
 	
@@ -93,5 +93,7 @@ public interface DBFacade {
 	public Iterable<Document> getContinents();
 
 	public Iterable<Document> getFlinnRegions();
+
+	public Integer getFlinnRegionEventsCount(String name, EventFilter eventFilter);
 
 }
