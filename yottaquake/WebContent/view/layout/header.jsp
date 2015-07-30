@@ -72,7 +72,6 @@
     			options : {
     				minZoom: 2,
     				maxZoom: 18,
-    				attribution: 'Dev by <strong>Yottabase</strong>'
     			}
     		},
     		Satellite : {
@@ -80,7 +79,6 @@
     			options : {
     				type: 'sat',
     				ext: 'jpg',
-        			attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency',
         			subdomains: '1234'
     			}
     		}

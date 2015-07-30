@@ -14,12 +14,22 @@ jQuery(document).ready(function ($) {
 	.setView([mapDefault.lat, mapDefault.lng], mapDefault.zoom);
 	
 	//tile
-	var tile = L.tileLayer(mapTileTypes["Default"].url, mapTileTypes["Default"].options).addTo(map);
+	var defaultTile = "Default";
+	var url = mapTileTypes[defaultTile].url;
+	var options = mapTileTypes[defaultTile].options;
+	options.attribution = 'Dev by <strong>Yottabase</strong>';
+	
+	var tile = L.tileLayer(url, options).addTo(map);
 	
 	$(document).on('yottaquake.filters_update', function(e, filters){
 		
 		map.removeLayer(tile);
-		tile = L.tileLayer(mapTileTypes[filters.mapTileType].url, mapTileTypes[filters.mapTileType].options).addTo(map);
+		
+		var url = mapTileTypes[filters.mapTileType].url;
+		var options = mapTileTypes[filters.mapTileType].options;
+		options.attribution = 'Dev by <strong>Yottabase</strong>';
+		
+		tile = L.tileLayer(url, options).addTo(map);
 		
 	});
 	
