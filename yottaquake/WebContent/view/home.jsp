@@ -42,8 +42,7 @@
 				</div>
 
 				<div class="form-group layers">
-					<label for="exampleInputPassword1">Layer di visualizzazione</label>
-
+					<label for="exampleInputPassword1">Layers</label>
 					<div class="checkbox">
 						<label><input type="checkbox" data-layer-filter="showCountries">Mappa politica</label>
 					</div>
@@ -53,6 +52,10 @@
 					<div class="checkbox">
 						<label><input type="checkbox" data-layer-filter="showFlinnRegions">Regioni di Flinn</label>
 					</div>
+				</div>				
+				
+				<div class="form-group layers">
+					<label for="exampleInputPassword1">Eventi</label>					
 					<div class="checkbox">
 						<label><input type="checkbox" data-layer-filter="showClusteredEvents">Eventi clusterizzati</label>
 					</div>
