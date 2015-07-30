@@ -4,6 +4,13 @@
 
 	<div class="row">
 		<div class="col-md-3" id="filters">
+		
+			<h2>
+				<img alt="Yottaquake" src="assets/images/icon.png" />
+				<span style="color: #EE4E3A;">Yotta<strong>Quake</strong></span>
+			</h2>
+		
+			
 
 			<h3>Filtri</h3>
 			<form>
@@ -83,7 +90,7 @@
 				</div>				
 				
 				<div class="form-group layers">
-					<label>Eventi</label>					
+					<label>Eventi sismici</label>					
 					<div class="checkbox">
 						<label><input type="checkbox" data-layer-filter="showClusteredEvents">Eventi clusterizzati</label>
 					</div>
@@ -91,7 +98,7 @@
 						<label><input type="checkbox" data-layer-filter="showHeatMap">Heat map</label>
 					</div>
 					<div class="checkbox">
-						<label><input type="checkbox" data-layer-filter="showEvents">Eventi</label>
+						<label><input type="checkbox" data-layer-filter="showEvents">Eventi singoli</label>
 					</div>
 				</div>				
 			</form>
