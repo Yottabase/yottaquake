@@ -36,6 +36,8 @@ jQuery(document).ready(function ($) {
 		magTypeSel
 		.select2({
 			theme : 'bootstrap',
+			allowClear: true,
+		    placeholder: "Tipo magnitudo"
 		})
 		.on('change', function(e){
 			filters.magnitudeType = $(this).val();
