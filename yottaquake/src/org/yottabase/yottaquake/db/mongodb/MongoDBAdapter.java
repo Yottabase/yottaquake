@@ -388,14 +388,13 @@ public class MongoDBAdapter implements DBFacade {
 	// *********************** CONVEX HULL - END ************************** //
 	
 	@Override
-	public void getMagnitude() {
+	public Iterable<Document> getMagnitudeTypes() {
 		Document groupByMagType = new Document("$group", new Document("_id","$properties.magtype").append("max", new Document("$max","$properties.mag")).append("min", new Document("$min","$properties.mag")).append("total", new Document("$sum", 1)));
 		Document sort = new Document("$sort", new Document("total", -1));
 
-		AggregateIterable<Document> distinctMagType = db.getCollection(COLL_EARTHQUAKES).aggregate(asList(groupByMagType,sort));
+		AggregateIterable<Document> distinctMagTypes = db.getCollection(COLL_EARTHQUAKES).aggregate(asList(groupByMagType,sort));
 
-		for (Document magType : distinctMagType) 
-			System.out.println(magType.toJson());
+		return distinctMagTypes;
 		
 	}
 	

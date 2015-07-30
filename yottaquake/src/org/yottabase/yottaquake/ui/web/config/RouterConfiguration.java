@@ -21,6 +21,8 @@ public class RouterConfiguration {
 		routes.add(new Route("api-tectonic-plates", "org.yottabase.yottaquake.ui.web.action.api.TectonicPlatesAction"));
 		routes.add(new Route("api-flinn-regions", "org.yottabase.yottaquake.ui.web.action.api.FlinnRegionsAction"));
 		
+		routes.add(new Route("api-magnitude-types", "org.yottabase.yottaquake.ui.web.action.api.MagTypesAction"));
+		
 		
 		//pages
 		routes.add(new Route("home", "org.yottabase.yottaquake.ui.web.action.page.HomeAction"));
