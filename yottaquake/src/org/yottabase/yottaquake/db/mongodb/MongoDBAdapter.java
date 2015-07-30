@@ -257,7 +257,7 @@ public class MongoDBAdapter implements DBFacade {
 		
 		queries.add(new Document("geometry", new Document("$geoWithin", new Document("$box",box.getCoordinatesPair()))));
 		Document query = new Document("$and",queries);
-		Document projection = new Document("_id",0).append("properties.lon", 1).append("properties.lat", 1).append("properties.mag", 1).append("properties.depth", 1);
+		Document projection = new Document("_id",0).append("properties.lon", 1).append("properties.lat", 1).append("properties.mag", 1).append("properties.depth", 1).append("properties.magtype", 1);
 		
 		return db.getCollection(COLL_EARTHQUAKES).find(query).projection(projection);
 
