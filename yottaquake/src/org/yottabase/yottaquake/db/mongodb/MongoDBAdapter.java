@@ -98,6 +98,7 @@ public class MongoDBAdapter implements DBFacade {
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("properties.lon");
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("properties.lat");
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("properties.mag");
+		db.getCollection(COLL_EARTHQUAKES).dropIndex("properties.magtype");
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("properties.depth");
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("time.millisecond");
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("plate_location.PlateName");
@@ -107,6 +108,7 @@ public class MongoDBAdapter implements DBFacade {
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("properties.lon",1));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("properties.lat",1));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("properties.mag",1));
+		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("properties.magtype",1));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("properties.depth",1));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("time.millisecond",1));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("plate_location.PlateName",1));
@@ -412,6 +414,9 @@ public class MongoDBAdapter implements DBFacade {
 	private ArrayList<Document> getEventsFiltersQuery(EventFilter eventFilter){
 		ArrayList<Document> queries = new ArrayList<Document>();
 		
+		if(eventFilter.getMagnitudeType() != null)
+			queries.add(new Document("properties.magtype", new Document("$regex", eventFilter.getMagnitudeType()).append("$options", "i")));
+
 		if(eventFilter.getMinMagnitude() != null)
 			queries.add(new Document("properties.mag", new Document("$gte", eventFilter.getMinMagnitude())));
 		
