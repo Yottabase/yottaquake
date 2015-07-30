@@ -286,7 +286,7 @@ public class MongoDBAdapter implements DBFacade {
 		//db.countryHigh.find({geometry: {$geoIntersects: {$geometry: {type: "Polygon" ,coordinates: [[ [ 0, 0 ], [ 100, 0 ], [ 100, 89 ], [ 0,89 ], [0,0] ]]}}}})
 		MongoCollection<Document> collection = getCountriesCollection(level);
 		FindIterable<Document> countries;
-		if(box != null){
+		if(box != null && level != CountryDetailLevel.LOW){
 			Document boxDoc = new Document("$geometry",new Document("type","Polygon").append("coordinates", box.toPolygon()));
 			countries = collection.find(new Document("geometry", new Document("$geoIntersects", boxDoc)));
 		}
