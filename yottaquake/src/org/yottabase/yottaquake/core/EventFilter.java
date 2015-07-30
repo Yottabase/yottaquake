@@ -7,6 +7,7 @@ public class EventFilter {
 	private Date from, to;
 	private Integer minMagnitude, maxMagnitude;
 	private Integer minDepth, maxDepth;
+	private String magnitudeType;
 
 	public Date getFrom() {
 		return from;
@@ -56,13 +57,20 @@ public class EventFilter {
 		this.maxDepth = maxDepth;
 	}
 
+	public String getMagnitudeType() {
+		return magnitudeType;
+	}
+
+	public void setMagnitudeType(String magnitudeType) {
+		this.magnitudeType = magnitudeType;
+	}
+
 	@Override
 	public String toString() {
 		return "EventFilter [from=" + from + ", to=" + to + ", minMagnitude="
 				+ minMagnitude + ", maxMagnitude=" + maxMagnitude
-				+ ", minDepth=" + minDepth + ", maxDepth=" + maxDepth + "]";
+				+ ", minDepth=" + minDepth + ", maxDepth=" + maxDepth
+				+ ", magnitudeType=" + magnitudeType + "]";
 	}
-	
-	
 
 }

@@ -8,6 +8,18 @@
 			<h3>Filtri</h3>
 			<form>
 				<div class="form-group">
+					<label for="exampleInputPassword1">Tipologia magnitudo</label>
+
+					<div class="row">
+						<div class="col-md-12">
+							<select class="form-control magnitudeType">
+							    <option>Tutti</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			
+				<div class="form-group">
 					<label for="exampleInputPassword1">Magnitudo</label>
 
 					<div class="row">

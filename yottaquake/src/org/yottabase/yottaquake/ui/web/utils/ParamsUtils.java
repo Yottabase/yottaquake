@@ -77,6 +77,12 @@ public class ParamsUtils {
 		if (paramMaxMagnitude != null) {
 			eventFilter.setMaxMagnitude(Integer.valueOf(paramMaxMagnitude));
 		}
+		
+		// magnitude type
+		String paramMagnitudeType = cleanParam(request.getParameter("magnitudeType"));
+		if (paramMagnitudeType != null) {
+			eventFilter.setMagnitudeType(paramMagnitudeType);
+		}
 
 		// depth min
 		String paramMinDepth = cleanParam(request.getParameter("minDepth"));
@@ -89,7 +95,7 @@ public class ParamsUtils {
 		if (paramMinDepth != null && paramMaxDepth != null) {
 			eventFilter.setMaxDepth(Integer.valueOf(paramMaxDepth));
 		}
-
+		
 		return eventFilter;
 
 	}

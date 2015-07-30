@@ -2,6 +2,8 @@ jQuery(document).ready(function ($) {
 	
 	var eventTrigger = 'yottaquake.filters_update';
 	var filters = {
+		magnitudeType : null,
+			
 		minMagnitude : 3,
 		maxMagnitude : 10,
 		
@@ -20,6 +22,20 @@ jQuery(document).ready(function ($) {
 		filters.bottomRightLng = newBB.bottomRight.lng;
 		
 		$(document).trigger(eventTrigger, filters);
+	});
+	
+	$.getJSON(wsUrl + "api-magnitude-types.do", function(data){
+		var magTypeSel = $('#filters select.magnitudeType');
+		data.forEach(function(magType){
+			magTypeSel.append($('<option>', {
+			    value: magType._id,
+			    text: magType._id
+			}));
+		});
+		magTypeSel.on('change', function(e){
+			filters.magnitudeType = $(this).val();
+			$(document).trigger(eventTrigger, filters);
+		});
 	});
 	
 	$("#filters input.magnitude").slider({
