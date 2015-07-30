@@ -3,6 +3,7 @@ jQuery(document).ready(function ($) {
 	var eventTrigger = 'yottaquake.filters_update';
 	var filters = {
 		magnitudeType : null,
+		mapTileType : "Default",
 			
 		minMagnitude : 3,
 		maxMagnitude : 10,
@@ -42,6 +43,25 @@ jQuery(document).ready(function ($) {
 		});
 	});
 	
+	//mapTileType
+	var mapTileTypeSel = $('#filters select.mapTileType');
+	for(tileName in mapTileTypes){
+		mapTileTypeSel.append($('<option>', {
+		    value: tileName,
+		    text: tileName
+		}));
+	};
+	mapTileTypeSel
+		.select2({
+			theme : 'bootstrap',
+			minimumResultsForSearch: Infinity
+		})
+		.on('change', function(e){
+			filters.mapTileType = $(this).val();
+			$(document).trigger(eventTrigger, filters);
+		});
+	
+	
 	$("#filters input.magnitude").slider({
 		min: 0, 
 		max: 10, 
@@ -64,7 +84,7 @@ jQuery(document).ready(function ($) {
 		$(document).trigger(eventTrigger, filters);
 	});
 	
-	var date = $('#filters input.from').datepicker({
+	var fromDate = $('#filters input.from').datepicker({
 		format: 'dd-mm-yyyy',
 		startDate: '01-01-2000',
         endDate: new Date()
@@ -77,7 +97,7 @@ jQuery(document).ready(function ($) {
 		}
 		
 		$(document).trigger(eventTrigger, filters);
-	}).datepicker('setDate', filters.fromDate);
+	});
 	
 	$('#filters input.to').datepicker({
 		format: 'dd-mm-yyyy',
@@ -92,7 +112,7 @@ jQuery(document).ready(function ($) {
 		}
 		
 		$(document).trigger(eventTrigger, filters);
-	}).datepicker('setDate', filters.toDate);
+	});
 	
 	$('#filters .layers input[type=checkbox]')
 		.attr('checked', false)

@@ -7,18 +7,34 @@
 
 			<h3>Filtri</h3>
 			<form>
-				<div class="form-group">
-					<label>Tipologia magnitudo</label>
+				<div class="row">
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Tipologia magnitudo</label>
 
-					<div class="row">
-						<div class="col-md-12">
-							<select class="form-control magnitudeType">
-								<option value=""></option>
-							</select>
+							<div class="row">
+								<div class="col-md-12">
+									<select class="form-control magnitudeType">
+										<option value=""></option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group">
+							<label>Mappa</label>
+
+							<div class="row">
+								<div class="col-md-12">
+									<select class="form-control mapTileType">
+									</select>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
-			
+
 				<div class="form-group">
 					<label>Magnitudo</label>
 
