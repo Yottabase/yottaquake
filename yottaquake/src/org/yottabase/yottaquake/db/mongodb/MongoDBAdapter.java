@@ -100,6 +100,7 @@ public class MongoDBAdapter implements DBFacade {
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("properties.mag");
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("properties.depth");
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("time.millisecond");
+		db.getCollection(COLL_EARTHQUAKES).dropIndex("plate_location.PlateName");
 		
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("geometry","2dsphere"));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("geolocation.name",1));
@@ -108,6 +109,8 @@ public class MongoDBAdapter implements DBFacade {
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("properties.mag",1));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("properties.depth",1));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("time.millisecond",1));
+		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("plate_location.PlateName",1));
+
 
 	}
 	
@@ -226,30 +229,6 @@ public class MongoDBAdapter implements DBFacade {
 		}
 		return null;
 	}
-	
-
-//	
-//	public Iterable<Document> getCountriesWithEventCount(CountryDetailLevel level) {
-//		MongoCollection<Document> collection = getCountriesCollection(level);
-//		
-//		Document groupByIsoA3 = new Document("$group", new Document("_id", new Document("iso_a3", "$geolocation.iso_a3")).append("count", new Document("$sum", 1)));
-//		Document sort = new Document("$sort", new Document("count", 1));
-//
-//		AggregateIterable<Document> eventsCount = db.getCollection(COLL_EARTHQUAKES).aggregate(asList(groupByIsoA3, sort));
-//		
-//		FindIterable<Document> countries = null;
-//		for (Document document : eventsCount) {
-//			Document properties = (Document) document.get("_id");
-//			
-//			Document project = new Document(new Document("_id", 1).append("geometry", 1).append("type", 1).append("properties.NAME", 1).append("properties.NAME_LONG",1).append("properties.ISO_A3", 1).append("properties.CONTINENT", 1));
-//			countries = collection.find(new Document("properties.ISO_A3",properties.get("properties"))).projection(project);
-//			
-//			for (Document country : countries)
-//				country.put("count",document.get("count"));
-//		}
-//		
-//		return countries;	
-//	}
 	
 	
 	@Override
@@ -447,32 +426,42 @@ public class MongoDBAdapter implements DBFacade {
 		return queries;
 	}
 	
-	
+	/*
+	 * query placche tettoniche
+	 */
 	public Integer PlatesEventsCount(String name,EventFilter eventFilter){
-		Document matchCountry;
+		Document matchPlate;
 		ArrayList<Document> queries = this.getEventsFiltersQuery(eventFilter);
 		
-		if(!queries.isEmpty())
-			matchCountry = new Document("$match", new Document("geolocation.name", name)).append("$and", queries);
+		if(queries.isEmpty())
+			matchPlate = new Document("$match", new Document("plate_location.PlateName", name));
+		else
+			matchPlate = new Document("$match", new Document("plate_location.PlateName", name).append("$and", queries));
 		
-		matchCountry = new Document("$match", new Document("geolocation.name", name));
-		Document groupByCountry = new Document("$group", new Document("_id", "$geolocation.name").append("total", new Document("$sum", 1)));
-		AggregateIterable<Document> countryCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchCountry,groupByCountry));
+		Document groupByPlate = new Document("$group", new Document("_id", "$plate_location.PlateName").append("total", new Document("$sum", 1)));
+		AggregateIterable<Document> plateCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchPlate,groupByPlate));
 		
 		Integer counts =0;
-		if(countryCounts.first() != null)
-			counts = Integer.valueOf( countryCounts.first().get("total").toString());
+		if(plateCounts.first() != null)
+			counts = Integer.valueOf( plateCounts.first().get("total").toString());
 		
 		return counts;
 	}
 
 
 	@Override
-	public Iterable<Document> getTectonicPlates(){
+	public Iterable<Document> getTectonicPlates(BoundingBox box){
 		MongoCollection<Document> collection = getTectonicPlatesCollection();
-	
-		return  collection.find();
 		
+		FindIterable<Document> plates;
+		if(box != null ){
+			Document boxDoc = new Document("$geometry",new Document("type","Polygon").append("coordinates", box.toPolygon()));
+			plates = collection.find(new Document("geometry", new Document("$geoIntersects", boxDoc)));
+		}
+		else 
+			plates = collection.find();
+			
+		return plates;		
 	}
 
 }

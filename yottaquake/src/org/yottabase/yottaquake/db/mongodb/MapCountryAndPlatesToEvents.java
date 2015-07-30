@@ -13,12 +13,12 @@ public class MapCountryAndPlatesToEvents {
 		DBFacade facade = DBAdapterManager.getFacade();	
 		
 		mapCountryToEvent(facade);
-//		mapPlatesToEvent(facade);
+		mapPlatesToEvent(facade);
 	}
 	
 	private static void mapPlatesToEvent(DBFacade facade){
 		int count = 0;
-		for (Document plates : facade.getTectonicPlates()) {
+		for (Document plates : facade.getTectonicPlates(null)) {
 			Document properties = (Document) plates.get("properties");
 			Document geometry = (Document) plates.get("geometry");
 			System.out.println(plates.toJson());

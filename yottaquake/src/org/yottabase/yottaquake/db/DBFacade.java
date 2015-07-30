@@ -83,6 +83,8 @@ public interface DBFacade {
 
 	public Integer getCountryEventsCount(String name, EventFilter eventFilter);
 
-	public Iterable<Document> getTectonicPlates();
+	public Iterable<Document> getTectonicPlates(BoundingBox box);
+
+	public Integer PlatesEventsCount(String string, EventFilter eventFilter);
 
 }
