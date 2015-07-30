@@ -389,10 +389,14 @@ public class MongoDBAdapter implements DBFacade {
 	
 	@Override
 	public void getMagnitude() {
-		FindIterable<Document> a = db.getCollection(COLL_EARTHQUAKES).find(new Document("properties.mag", new Document("$gte", 7))).sort(new Document("properties.mag",-1));
-		for (Document document : a) {
-			System.out.println(document.toJson());	
-		}
+		Document groupByMagType = new Document("$group", new Document("_id","$properties.magtype").append("max", new Document("$max","$properties.mag")).append("min", new Document("$min","$properties.mag")).append("total", new Document("$sum", 1)));
+		Document sort = new Document("$sort", new Document("total", -1));
+
+		AggregateIterable<Document> distinctMagType = db.getCollection(COLL_EARTHQUAKES).aggregate(asList(groupByMagType,sort));
+
+		for (Document magType : distinctMagType) 
+			System.out.println(magType.toJson());
+		
 	}
 	
 	
