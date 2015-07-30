@@ -134,7 +134,9 @@ jQuery(document).ready(function ($) {
 				for (var i = 0; i < data.items.length; i++) {
 					var event = data.items[i];
 					var icon = pointersIcon[Math.round(event.properties.mag)];
-					var mapPointer = L.marker([event.properties.lat, event.properties.lon], {icon: icon}).addTo(map);
+					var mapPointer = L.marker([event.properties.lat, event.properties.lon], {icon: icon})
+						.bindPopup("Magnitudo: <strong>" + event.properties.mag + "</strong><br/>Profondita: <strong>" + event.properties.depth + "km </strong>")
+						.addTo(map);
 					pointers.push(mapPointer);
 				}
 			});
