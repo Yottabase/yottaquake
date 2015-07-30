@@ -280,6 +280,7 @@ public class MongoDBAdapter implements DBFacade {
 		return db.getCollection(COLL_EARTHQUAKES).find(query).projection(projection);
 
 	}
+	
 
 	public Iterable<Document> getCountries(CountryDetailLevel level, BoundingBox box){
 		//db.countryHigh.find({geometry: {$geoIntersects: {$geometry: {type: "Polygon" ,coordinates: [[ [ 0, 0 ], [ 100, 0 ], [ 100, 89 ], [ 0,89 ], [0,0] ]]}}}})
@@ -296,6 +297,7 @@ public class MongoDBAdapter implements DBFacade {
 		
 	}
 	
+	
 	@Override
 	public Integer getCountryEventsCount(String name, EventFilter eventFilter) {
 		Document matchCountry;
@@ -305,7 +307,7 @@ public class MongoDBAdapter implements DBFacade {
 			matchCountry = new Document("$match", new Document("geolocation.name", name));
 		else
 			matchCountry = new Document("$match", new Document("geolocation.name", name).append("$and", queries));
-		
+				
 		Document groupByCountry = new Document("$group", new Document("_id", "$geolocation.name").append("total", new Document("$sum", 1)));
 		AggregateIterable<Document> countryCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchCountry, groupByCountry));
 		
@@ -420,6 +422,7 @@ public class MongoDBAdapter implements DBFacade {
 		}	
 	}
 	
+	
 	private ArrayList<Document> getEventsFiltersQuery(EventFilter eventFilter){
 		ArrayList<Document> queries = new ArrayList<Document>();
 		
@@ -436,13 +439,14 @@ public class MongoDBAdapter implements DBFacade {
 			queries.add(new Document("properties.depth", new Document("$lte", eventFilter.getMaxDepth())));
 		
 		if(eventFilter.getFrom() != null)
-			queries.add(new Document("time.millisecond", new Document("$gte", eventFilter.getFrom().getTime())));
+			queries.add(new Document("time.milliseconds", new Document("$gte", eventFilter.getFrom().getTime())));
 		
 		if(eventFilter.getTo() != null)
-			queries.add(new Document("time.millisecond", new Document("$lte", eventFilter.getTo().getTime())));
+			queries.add(new Document("time.milliseconds", new Document("$lte", eventFilter.getTo().getTime())));
 		
 		return queries;
 	}
+	
 	
 	public Integer PlatesEventsCount(String name,EventFilter eventFilter){
 		Document matchCountry;
