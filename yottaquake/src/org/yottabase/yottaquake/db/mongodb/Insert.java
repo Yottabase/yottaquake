@@ -39,33 +39,47 @@ public class Insert {
 		 * inserisci eventi
 		 */
 		InputStream inputStreamEarthquake = new FileInputStream(new File(path + "/earthquakes.json"));
-		insertEarthquake(facade,inputStreamEarthquake);
+		insertEarthquakes(facade,inputStreamEarthquake);
 
 		/*
 		 * inserisci country
 		 */
-		facade.initializeCollectionCountries();
-
+		facade.initializeCountriesCollection();
 		for (CountryDetailLevel level : detail2fileName.keySet()) {
 			String filePath = args[0] + "/" + detail2fileName.get(level) + ".json";
 			InputStream inputStreamCountry = new FileInputStream(new File(filePath));
 			System.out.println(filePath);
 
-			insertCountry(facade,inputStreamCountry,level);			
+			insertCountry(facade, inputStreamCountry, level);			
 		}
 		
 		/*
-		 * inserisci le placche tettoniche
+		 * Insert continents
+		 */
+		File continentFile = new File(path + "/continents.json");
+		InputStream continentsIS = new FileInputStream( continentFile );
+		insertContinents(facade, continentsIS);
+		
+		/*
+		 * Insert flinn regions
+		 */
+		File flinnRegionsFile = new File(path + "/flinn_regions.json");
+		InputStream flinnRegionsIS = new FileInputStream( flinnRegionsFile );
+		insertFlinnRegions(facade, flinnRegionsIS);
+		
+		/*
+		 * Insert tectonic plates
 		 */
 		InputStream inputStreamTectonic = new FileInputStream(new File(path + "/tectonic_plates.json"));
 		insertTectonicPlates(facade,inputStreamTectonic);
 		
 		/*
-		 * map caountry e placche
+		 * Map countries, continents and plates to events
 		 */
-		
-		mapCountryToEvent(facade);
-		mapPlatesToEvent(facade);
+		mapCountriesToEvents(facade);
+		mapContinentsToEvents(facade);
+		mapFlinnRegionsToEvents(facade);
+		mapTectonicPlatesToEvents(facade);
 
 	}
 	
@@ -126,8 +140,8 @@ public class Insert {
 	}
 
 	
-	private static void insertEarthquake(DBFacade facade, InputStream inputStream) throws ParseException{
-		facade.initializeCollectionEarthquake();
+	private static void insertEarthquakes(DBFacade facade, InputStream inputStream) throws ParseException{
+		facade.initializeEarthquakesCollection();
 		JSONTokener json = new JSONTokener(inputStream);
 		
 		int count = 0 ;
@@ -146,13 +160,12 @@ public class Insert {
 				System.out.println(count);
 			
 		}
-		System.out.println("INSERTED EVENTS");
+		System.out.println("EVENTS INSERTED");
 
 	}
 	
 	
 	private static void insertCountry(DBFacade facade, InputStream inputStream, CountryDetailLevel level){
-			
 		JSONTokener json = new JSONTokener(inputStream);
 		JSONObject countries = (JSONObject) json.nextValue();
 		JSONArray country = (JSONArray) countries.get("features");
@@ -166,34 +179,167 @@ public class Insert {
 			if( (count % 100) == 0 )
 				System.out.println(count);
 		}
-		System.out.println("INSERTED COUNTRIES");
+		System.out.println("COUNTRIES INSERTED");
 
 	}
 	
 	
-	private static void insertTectonicPlates(DBFacade facade, InputStream inputStream){
-		facade.initializeCollectionTectonicPlates();
+	private static void insertContinents(DBFacade facade, InputStream inputStream) {
+		facade.initializeContinentsCollection();
 		JSONTokener json = new JSONTokener(inputStream);
 		
 		int count = 0 ;
 		while (json.more()) {
 			count++;
 			
-			JSONObject event = (JSONObject) json.nextValue();
+			JSONObject continent = (JSONObject) json.nextValue();
 			
-			facade.insertTectonicPLates(event);
+			facade.insertContinent(continent);
 			
 			if(count % 100 == 0)
 				System.out.println(count);
 			
 		}
-		System.out.println("INSERTED TECTONIC PLATES");
+		System.out.println("CONTINENTS INSERTED");
 		
 	}
 	
+	
+	private static void insertFlinnRegions(DBFacade facade, InputStream inputStream) {
+		facade.initializeFlinnRegionsCollection();
+		JSONTokener json = new JSONTokener(inputStream);
+		
+		int count = 0 ;
+		while (json.more()) {
+			count++;
+			
+			JSONObject flinnRegion = (JSONObject) json.nextValue();
+			
+			facade.insertFlinnRegion(flinnRegion);
+			
+			if(count % 100 == 0)
+				System.out.println(count);
+			
+		}
+		System.out.println("FLINN REGIONS INSERTED");
+		
+	}
+	
+	
+	private static void insertTectonicPlates(DBFacade facade, InputStream inputStream) {
+		facade.initializeTectonicPlatesCollection();
+		JSONTokener json = new JSONTokener(inputStream);
+		
+		int count = 0 ;
+		while (json.more()) {
+			count++;
+			
+			JSONObject tectonicPlate = (JSONObject) json.nextValue();
+			
+			facade.insertTectonicPlate(tectonicPlate);
+			
+			if(count % 100 == 0)
+				System.out.println(count);
+			
+		}
+		System.out.println("TECTONIC PLATES INSERTED");
+		
+	}
+	
+	
+	private static void mapCountriesToEvents(DBFacade facade){
+		System.out.println("BEGINNING MAPPING OF COUNTRIES TO EVENTS");
 
-	private static void mapPlatesToEvent(DBFacade facade){
-		System.out.println("START MAP TECTONIC PLATES TO EVENT");
+		int count = 0;
+		for (Document country : facade.getCountries(CountryDetailLevel.HIGH,null)) {
+			Document properties = (Document) country.get("properties");
+			Document geometry = (Document) country.get("geometry");
+			Iterable<Document> events = DBAdapterManager.getFacade().getEventsInPolygon(geometry);
+			
+			for (Document event : events) {
+				count ++;
+				String country_name = properties.getString("name");
+				String country_code = properties.getString("iso_a3");
+				String continent = properties.getString("continent");
+				
+				Document geo_values = new Document();
+				geo_values.append("name", country_name);
+				geo_values.append("iso_a3", country_code);
+				geo_values.append("continent", continent);
+				
+				Document geolocation = new Document();
+				geolocation.append("geolocation", geo_values);
+				
+				facade.updateDocument(event, geolocation);
+				
+				if( (count % 100000) == 0 )
+					 System.out.println( "map country: " + count);
+			}
+		}
+		System.out.println("COMPLETED MAP COUNTRIES TO EVENT");
+	}
+	
+	
+	private static void mapContinentsToEvents(DBFacade facade) {
+		System.out.println("BEGINNING MAPPING OF CONTINENTS TO EVENTS");
+
+		int count = 0;
+		for (Document continent : facade.getContinents()) {
+			Document properties = (Document) continent.get("properties");
+			Document geometry = (Document) continent.get("geometry");
+			Iterable<Document> eventsInContinent = facade.getEventsInPolygon(geometry);
+			
+			for (Document event : eventsInContinent) {
+				count ++;
+				
+				String name = properties.getString("CONTINENT");
+				
+				Document newValue = new Document();
+				newValue.append("CONTINENT", name);
+				
+				facade.updateDocument(event, newValue);
+				
+				if( (count % 100000) == 0 )
+					 System.out.println("\tEvents mapped: " + count);
+			}
+		}
+		System.out.println("MAPPING OF CONTINENTS EVENTS COMPLETED");
+
+	}
+	
+	
+	private static void mapFlinnRegionsToEvents(DBFacade facade) {
+		System.out.println("BEGINNING MAPPING OF FLINN REGIONS TO EVENTS");
+
+		int count = 0;
+		for (Document region : facade.getFlinnRegions()) {
+			Document properties = (Document) region.get("properties");
+			Document geometry = (Document) region.get("geometry");
+			Iterable<Document> eventsInRegion = facade.getEventsInPolygon(geometry);
+			
+			for (Document event : eventsInRegion) {
+				count ++;
+				
+				String name_l = properties.getString("name_l");
+				
+				Document regionValues = new Document();
+				regionValues.append("name_l", name_l);
+				
+				Document newValue = new Document();
+				newValue.append("flinnRegion", regionValues);
+				
+				facade.updateDocument(event, newValue);
+				
+				if( (count % 100000) == 0 )
+					 System.out.println("\tEvents mapped: " + count);
+			}
+		}
+		System.out.println("MAPPING OF FLINN REGIONS TO EVENTS COMPLETED");
+	}
+	
+	
+	private static void mapTectonicPlatesToEvents(DBFacade facade){
+		System.out.println("BEGINNING MAPPING OF TECTONIC PLATES TO EVENTS");
 
 		int count = 0;
 		for (Document plates : facade.getTectonicPlates(null)) {
@@ -221,42 +367,8 @@ public class Insert {
 					 System.out.println("map plates: " + count);
 			}
 		}
-		System.out.println("COMPLETED MAP TECTONIC PLATES TO EVENT");
+		System.out.println("MAPPING OF TECTONIC PLATES TO EVENTS COMPLETED");
 
-	}
-	
-	
-	private static void mapCountryToEvent(DBFacade facade){
-		System.out.println("START MAP COUNTRIES TO EVENT");
-
-		int count = 0;
-		for (Document country : facade.getCountries(CountryDetailLevel.HIGH,null)) {
-			Document properties = (Document) country.get("properties");
-			Document geometry = (Document) country.get("geometry");
-			Iterable<Document> events = DBAdapterManager.getFacade().getEventsInPolygon(geometry);
-			
-			for (Document event : events) {
-				count ++;
-				String country_name = properties.getString("name");
-				String country_code = properties.getString("iso_a3");
-				String continent = properties.getString("continent");
-				
-				Document geo_values = new Document();
-				geo_values.append("name", country_name);
-				geo_values.append("iso_a3", country_code);
-				geo_values.append("continent", continent);
-				
-				Document geolocation = new Document();
-				geolocation.append("geolocation", geo_values);
-				
-				facade.updateDocument(event, geolocation);
-				
-				if( (count % 100000) == 0 )
-					 System.out.println( "map country: " +count);
-			}
-		}
-		System.out.println("COMPLETED MAP COUNTRIES TO EVENT");
 	}	
-	
 	
 }

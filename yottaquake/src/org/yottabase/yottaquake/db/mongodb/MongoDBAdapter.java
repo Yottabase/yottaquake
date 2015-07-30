@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import org.yottabase.yottaquake.core.BoundingBox;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
 import org.yottabase.yottaquake.core.EventFilter;
-import org.yottabase.yottaquake.core.FlinnRegionDetailLevel;
 import org.yottabase.yottaquake.db.DBFacade;
 
 import com.mongodb.MongoClient;
@@ -36,9 +35,7 @@ public class MongoDBAdapter implements DBFacade {
 	private final static String COLL_COUNTRIES_HIGH = "countryHigh";
 	private final static String COLL_CONTINENTS = "continents";
 	
-	private final static String COLL_FLINN_MICRO = "flinn_micro";
-	private final static String COLL_FLINN_AGRGT = "flinn_agrgt";
-	private final static String COLL_FLINN_MACRO = "flinn_macro";
+	private final static String COLL_FLINN_REGIONS = "flinn_regions";
 	
 	private final static String COLL_TECT_PLATES = "tectonic_plates";
 	
@@ -46,6 +43,11 @@ public class MongoDBAdapter implements DBFacade {
 	public MongoDBAdapter(MongoClient client, MongoDatabase db) {
 		this.client = client;
 		this.db = db;
+	}
+	
+	
+	private MongoCollection<Document> getEarthquakesCollection() {
+		return db.getCollection(COLL_EARTHQUAKES);
 	}
 	
 	
@@ -68,18 +70,8 @@ public class MongoDBAdapter implements DBFacade {
 	}
 	
 	
-	private MongoCollection<Document> getFlinnRegionsCollection(FlinnRegionDetailLevel level) {
-		String collection = null;
-		switch(level) {
-		  case MACRO:  
-			  collection = COLL_FLINN_MACRO; break;
-		  case AGGREGATE:
-			  collection = COLL_FLINN_AGRGT; break;
-		  default:
-			  collection = COLL_FLINN_MICRO; break;
-				  
-		}
-		return db.getCollection(collection);
+	private MongoCollection<Document> getFlinnRegionsCollection() {
+		return db.getCollection(COLL_FLINN_REGIONS);
 	}
 	
 	
@@ -89,9 +81,7 @@ public class MongoDBAdapter implements DBFacade {
 	
 	
 	@Override
-	public void initializeCollectionEarthquake() {
-		System.out.println("initialize earthquake");
-		
+	public void initializeEarthquakesCollection() {	
 		db.getCollection(COLL_EARTHQUAKES).drop();
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("geometry_2dsphere");
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("geolocation.name");
@@ -110,64 +100,83 @@ public class MongoDBAdapter implements DBFacade {
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("properties.depth",1));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("time.millisecond",1));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("plate_location.PlateName",1));
-
-
+		
+		System.out.println("Collection \'Earthquakes\' initialized");
 	}
 	
 	
 	@Override
-	public void initializeCollectionCountries() {
-		System.out.println("initialize countries");
+	public void initializeCountriesCollection() {
 		db.getCollection(COLL_COUNTRIES_LOW).drop();
 		db.getCollection(COLL_COUNTRIES_MEDIUM).drop();
 		db.getCollection(COLL_COUNTRIES_HIGH).drop();
+		System.out.println("Collection \'Countries\' initialized");
 	}
 	
 	
 	@Override
-	public void initializeCollectionFlinnRegions() {
-		System.out.println("initialize flinn regions");
-		db.getCollection(COLL_FLINN_MICRO).drop();
-		db.getCollection(COLL_FLINN_MACRO).drop();
-		db.getCollection(COLL_FLINN_AGRGT).drop();
-
+	public void initializeContinentsCollection() {
+		db.getCollection(COLL_CONTINENTS).drop();
+		System.out.println("Collection \'Continents\' initialized");
 	}
 	
 	
 	@Override
-	public void initializeCollectionTectonicPlates() {
-		System.out.println("initialize tectonic plates");
+	public void initializeFlinnRegionsCollection() {
+		db.getCollection(COLL_FLINN_REGIONS).drop();
+		System.out.println("Collection \'Flinn Regions\' initialized");
+	}
+	
+	
+	@Override
+	public void initializeTectonicPlatesCollection() {
 		db.getCollection(COLL_TECT_PLATES).drop();
-	}
-
-	
-	@Override
-	public void insertFlinnRegion(JSONObject flinnRegion) {
-		Document doc = Document.parse(flinnRegion.toString());
-		db.getCollection(COLL_FLINN_MICRO).insertOne(doc);
+		System.out.println("Collection \'Tectonic Plates\' initialized");
 	}
 	
 	
 	@Override
 	public void insertEvent(JSONObject event) {
+		MongoCollection<Document> earthquakesCollection = getEarthquakesCollection();
 		Document doc = Document.parse(event.toString());
-		db.getCollection(COLL_EARTHQUAKES).insertOne(doc);
+		
+		earthquakesCollection.insertOne(doc);
 	}
 
 	
 	@Override
-	public void insertCountry(JSONObject event, CountryDetailLevel level) {
-		MongoCollection<Document> collection = getCountriesCollection(level);
-		Document doc = Document.parse(event.toString());
+	public void insertCountry(JSONObject country, CountryDetailLevel level) {
+		MongoCollection<Document> countriesCollection = getCountriesCollection(level);
+		Document doc = Document.parse(country.toString());
 		
-		collection.insertOne(doc);	
+		countriesCollection.insertOne(doc);	
+	}
+	
+	
+	@Override
+	public void insertContinent(JSONObject continent) {
+		MongoCollection<Document> continentCollection = getContinentsCollection();
+		Document doc = Document.parse(continent.toString());
+		
+		continentCollection.insertOne(doc);
+	}
+	
+	
+	@Override
+	public void insertFlinnRegion(JSONObject flinnRegion) {
+		MongoCollection<Document> flinnRegionsCollection = getFlinnRegionsCollection();
+		Document doc = Document.parse(flinnRegion.toString());
+		
+		flinnRegionsCollection.insertOne(doc);
 	}
 
 
 	@Override
-	public void insertTectonicPLates(JSONObject event) {
-		Document doc = Document.parse(event.toString());
-		db.getCollection(COLL_TECT_PLATES).insertOne(doc);
+	public void insertTectonicPlate(JSONObject tectonicPlate) {
+		MongoCollection<Document> tectonicPlatesCollection = getTectonicPlatesCollection();
+		Document doc = Document.parse(tectonicPlate.toString());
+		
+		tectonicPlatesCollection.insertOne(doc);
 	}
 	
 	
@@ -302,10 +311,10 @@ public class MongoDBAdapter implements DBFacade {
 
 
 	@Override
-	public Iterable<Document> getFlinnRegionsWithEventsCount(FlinnRegionDetailLevel level, BoundingBox box) {
+	public Iterable<Document> getFlinnRegionsWithEventsCount(BoundingBox box) {
 		Document boxDoc = new Document("$geometry",new Document("type","Polygon").append("coordinates", box.toPolygon()));
 		
-		MongoCollection<Document> collection = getFlinnRegionsCollection(level);
+		MongoCollection<Document> collection = getFlinnRegionsCollection();
 		return collection.find(new Document("geometry", new Document("$geoIntersects", boxDoc)));
 	}
 	
@@ -313,7 +322,7 @@ public class MongoDBAdapter implements DBFacade {
 
 	@Override
 	public Set<String> getDistinctMacroRegions() {
-		FindIterable<Document> regions = db.getCollection(COLL_FLINN_MICRO).find();
+		FindIterable<Document> regions = db.getCollection(COLL_FLINN_REGIONS).find();
 		Set<String> distinctMacroRegions = new HashSet<String>();
 		
 		for (Document region : regions) {
@@ -329,13 +338,13 @@ public class MongoDBAdapter implements DBFacade {
 	@Override
 	public Iterable<Document> getRegionsByMacroRegion(String macroRegion) {
 		Pattern prefix = Pattern.compile("^"+macroRegion+";");
-		return db.getCollection(COLL_FLINN_MICRO).find(new Document("properties.name_h", prefix));
+		return db.getCollection(COLL_FLINN_REGIONS).find(new Document("properties.name_h", prefix));
 	}
 	
 	
 	@Override
 	public Set<String> getDistinctRegionsAggregates() {
-		FindIterable<Document> regionsNames = db.getCollection(COLL_FLINN_MICRO).find()
+		FindIterable<Document> regionsNames = db.getCollection(COLL_FLINN_REGIONS).find()
 				.projection(new Document("properties.name_h", 1))
 				.sort(new Document("properties.name_h", 1));
 		
@@ -360,7 +369,7 @@ public class MongoDBAdapter implements DBFacade {
 	@Override
 	public Iterable<Document> getRegionsByAggregate(String aggregate) {
 		Pattern prefix = Pattern.compile(".*;" + aggregate);
-		return db.getCollection(COLL_FLINN_MICRO).find(new Document("properties.name_h", prefix));
+		return db.getCollection(COLL_FLINN_REGIONS).find(new Document("properties.name_h", prefix));
 	}
 	
 	
@@ -469,6 +478,18 @@ public class MongoDBAdapter implements DBFacade {
 			plates = collection.find();
 			
 		return plates;		
+	}
+
+
+	@Override
+	public Iterable<Document> getContinents() {
+		return getContinentsCollection().find();
+	}
+
+
+	@Override
+	public Iterable<Document> getFlinnRegions() {
+		return getFlinnRegionsCollection().find();
 	}
 
 }
