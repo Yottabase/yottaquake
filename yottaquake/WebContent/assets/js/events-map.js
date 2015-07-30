@@ -170,7 +170,17 @@ jQuery(document).ready(function ($) {
 			httpRequest : null,
 			drawedLayer : null,
 			api : "api-tectonic-plates.do",
-			httpRequestCallback : null,
+			httpRequestCallback : function(filters){
+				
+				if(filters.zoom <= 3){
+					filters.topLeftLat = null;
+					filters.topLeftLng = null;
+					filters.bottomRightLat = null;
+					filters.bottomRightLng = null;
+				}
+					
+				return filters;
+			},
 		}
 	};
 	
