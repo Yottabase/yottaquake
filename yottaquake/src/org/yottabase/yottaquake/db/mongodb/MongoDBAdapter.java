@@ -127,13 +127,16 @@ public class MongoDBAdapter implements DBFacade {
 	@Override
 	public void initializeCollectionFlinnRegions() {
 		System.out.println("initialize flinn regions");
-		db.getCollection(COLL_EARTHQUAKES).drop();
+		db.getCollection(COLL_FLINN_MICRO).drop();
+		db.getCollection(COLL_FLINN_MACRO).drop();
+		db.getCollection(COLL_FLINN_AGRGT).drop();
+
 	}
 	
 	
 	@Override
 	public void initializeCollectionTectonicPlates() {
-		System.out.println("initialize flinn regions");
+		System.out.println("initialize tectonic plates");
 		db.getCollection(COLL_TECT_PLATES).drop();
 	}
 
