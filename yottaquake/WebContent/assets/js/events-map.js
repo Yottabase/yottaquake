@@ -104,7 +104,16 @@ jQuery(document).ready(function ($) {
 	//********************* markers *********************//
 	var pointersReq = null;
 	var pointers = [];
-	var pointerIcon = L.MakiMarkers.icon({icon: "triangle", color: "#f00", size: "s"});
+	var pointersIcon = [];
+	
+	var mapColor = d3.scale.linear()
+		.domain([1, 10])
+		.range(['yellow', 'red']);
+	
+	for(i=1; i < 10; i++){
+		pointersIcon[i] = L.MakiMarkers.icon({icon: "triangle", color: mapColor(i), size: "s"});	
+	}
+	
 	
 	$(document).on('yottaquake.filters_update', function(e, filters){
 		if(pointersReq != null) pointersReq.abort();
@@ -124,7 +133,8 @@ jQuery(document).ready(function ($) {
 				var coords = [];
 				for (var i = 0; i < data.items.length; i++) {
 					var event = data.items[i];
-					var mapPointer = L.marker([event.properties.lat, event.properties.lon], {icon: pointerIcon}).addTo(map);
+					var icon = pointersIcon[Math.round(event.properties.mag)];
+					var mapPointer = L.marker([event.properties.lat, event.properties.lon], {icon: icon}).addTo(map);
 					pointers.push(mapPointer);
 				}
 			});
