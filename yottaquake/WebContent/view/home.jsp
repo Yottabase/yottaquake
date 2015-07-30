@@ -13,7 +13,7 @@
 					<div class="row">
 						<div class="col-md-12">
 							<select class="form-control magnitudeType">
-							    <option>Tutti</option>
+								<option value=""></option>
 							</select>
 						</div>
 					</div>

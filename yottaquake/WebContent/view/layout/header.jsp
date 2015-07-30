@@ -45,6 +45,9 @@
     <script src="assets/js/lib/bootstrap-datepicker.min.js"></script>
     <link href="assets/css/lib/bootstrap-datepicker3.min.css" rel="stylesheet">
     
+    <script src="assets/js/lib/select2.min.js"></script>
+    <link href="assets/css/lib/select2.min.css" rel="stylesheet">
+    <link href="assets/css/lib/select2-bootstrap.min.css" rel="stylesheet">
     
     <!--  //TODO: remove this sample -->
     <script src="http://leaflet.github.io/Leaflet.markercluster/example/realworld.388.js"></script>

@@ -32,7 +32,11 @@ jQuery(document).ready(function ($) {
 			    text: magType._id
 			}));
 		});
-		magTypeSel.on('change', function(e){
+		magTypeSel
+		.select2({
+			theme : 'bootstrap',
+		})
+		.on('change', function(e){
 			filters.magnitudeType = $(this).val();
 			$(document).trigger(eventTrigger, filters);
 		});
