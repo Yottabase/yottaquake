@@ -8,7 +8,7 @@
 			<h3>Filtri</h3>
 			<form>
 				<div class="form-group">
-					<label for="exampleInputPassword1">Tipologia magnitudo</label>
+					<label>Tipologia magnitudo</label>
 
 					<div class="row">
 						<div class="col-md-12">
@@ -20,7 +20,7 @@
 				</div>
 			
 				<div class="form-group">
-					<label for="exampleInputPassword1">Magnitudo</label>
+					<label>Magnitudo</label>
 
 					<div class="row">
 						<div class="col-md-12">
@@ -30,7 +30,7 @@
 				</div>
 
 				<div class="form-group">
-					<label for="exampleInputPassword1">Periodo</label>
+					<label>Periodo</label>
 
 					<div class="row">
 						<div class="col-md-6">
@@ -44,7 +44,7 @@
 				</div>
 
 				<div class="form-group">
-					<label for="exampleInputPassword1">Profondita</label>
+					<label>Profondita</label>
 
 					<div class="row">
 						<div class="col-md-12">
@@ -54,7 +54,7 @@
 				</div>
 
 				<div class="form-group layers">
-					<label for="exampleInputPassword1">Layers</label>
+					<label>Layers</label>
 					<div class="checkbox">
 						<label><input type="checkbox" data-layer-filter="showCountries">Mappa politica</label>
 					</div>
@@ -67,7 +67,7 @@
 				</div>				
 				
 				<div class="form-group layers">
-					<label for="exampleInputPassword1">Eventi</label>					
+					<label>Eventi</label>					
 					<div class="checkbox">
 						<label><input type="checkbox" data-layer-filter="showClusteredEvents">Eventi clusterizzati</label>
 					</div>
