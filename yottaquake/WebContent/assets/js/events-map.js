@@ -242,8 +242,8 @@ jQuery(document).ready(function ($) {
 				
 				geoForm.httpRequest = $.getJSON(wsUrl + geoForm.api, customFilters, function(data){
 					var mapColor = d3.scale.linear()
-		    			.domain([data.minCount, (data.maxCount-data.minCount)/2,  data.maxCount])
-		    			.range(['#fee0d2', '#fc9272', '#de2d26']);
+		    			.domain([data.minCount, data.maxCount])
+		    			.range(['#fff7bc', '#d95f0e']);
 					
 					var geoData = 
 						{
