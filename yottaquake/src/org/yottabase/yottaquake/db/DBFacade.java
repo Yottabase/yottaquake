@@ -111,7 +111,7 @@ public interface DBFacade {
 
 	public Integer getFlinnRegionEventsCount(String name, EventFilter eventFilter);
 
-	public Integer geContinentEventCount(String name, EventFilter eventFilter);
+	public Integer geContinentEventsCount(String name, EventFilter eventFilter);
 
 	public void insertPoint(Document point);
 	

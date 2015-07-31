@@ -503,11 +503,18 @@ public class MongoDBAdapter implements DBFacade {
 		Document groupByPlate = new Document("$group", new Document("_id", "$plate_location.PlateName").append("total", new Document("$sum", 1)));
 		AggregateIterable<Document> plateCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchPlate,groupByPlate));
 		
-		Integer counts =0;
-		if(plateCounts.first() != null)
-			counts = Integer.valueOf( plateCounts.first().get("total").toString());
+		int ratio = 0;
+		if (plateCounts.first() != null) {
+			Document country = plateCounts.first();
+			int surface = (int) country.get("surface");
+			int count = (int) country.get("total");
+			
+			if (surface != 0) {
+				ratio = count / surface;
+			}
+		}
 		
-		return counts;
+		return ratio;
 	}
 
 
@@ -562,16 +569,23 @@ public class MongoDBAdapter implements DBFacade {
 		Document groupByFlinnRegion = new Document("$group", new Document("_id", "$flinnRegion.name_l").append("total", new Document("$sum", 1)));
 		AggregateIterable<Document> flinnRegionCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchFlinnRegion, groupByFlinnRegion));
 		
-		int counts = 0;
-		if (flinnRegionCounts.first() != null)
-			counts = Integer.valueOf( flinnRegionCounts.first().get("total").toString());
+		int ratio = 0;
+		if (flinnRegionCounts.first() != null) {
+			Document country = flinnRegionCounts.first();
+			int surface = (int) country.get("surface");
+			int count = (int) country.get("total");
+			
+			if (surface != 0) {
+				ratio = count / surface;
+			}
+		}
 		
-		return counts;
+		return ratio;
 	}
 
 
 	@Override
-	public Integer geContinentEventCount(String name, EventFilter eventFilter) {
+	public Integer geContinentEventsCount(String name, EventFilter eventFilter) {
 		Document matchContinent;
 		ArrayList<Document> queries = this.getEventsFiltersQuery(eventFilter);
 		
@@ -583,11 +597,18 @@ public class MongoDBAdapter implements DBFacade {
 		Document groupByContinent = new Document("$group", new Document("_id", "$CONTINENT").append("total", new Document("$sum", 1)));
 		AggregateIterable<Document> continentCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchContinent, groupByContinent));
 		
-		int counts = 0;
-		if (continentCounts.first() != null)
-			counts = Integer.valueOf( continentCounts.first().get("total").toString());
+		int ratio = 0;
+		if (continentCounts.first() != null) {
+			Document country = continentCounts.first();
+			int surface = (int) country.get("surface");
+			int count = (int) country.get("total");
+			
+			if (surface != 0) {
+				ratio = count / surface;
+			}
+		}
 		
-		return counts;
+		return ratio;
 	}
 
 
