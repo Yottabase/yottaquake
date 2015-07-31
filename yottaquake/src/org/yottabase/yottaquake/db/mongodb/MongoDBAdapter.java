@@ -92,6 +92,9 @@ public class MongoDBAdapter implements DBFacade {
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("properties.depth");
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("time.millisecond");
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("plate_location.PlateName");
+		db.getCollection(COLL_EARTHQUAKES).dropIndex("flinnRegion.name_l");
+		db.getCollection(COLL_EARTHQUAKES).dropIndex("CONTINENT");
+		
 		
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("geometry","2dsphere"));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("geolocation.name",1));
@@ -102,6 +105,9 @@ public class MongoDBAdapter implements DBFacade {
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("properties.depth",1));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("time.millisecond",1));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("plate_location.PlateName",1));
+		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("flinnRegion.name_l",1));
+		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("CONTINENT",1));
+
 		
 		System.out.println("Collection \'Earthquakes\' initialized");
 	}
