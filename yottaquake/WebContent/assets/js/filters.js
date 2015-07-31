@@ -25,25 +25,27 @@ jQuery(document).ready(function ($) {
 		$(document).trigger(eventTrigger, filters);
 	});
 	
-	$.getJSON(wsUrl + "api-magnitude-types.do", function(data){
-		var magTypeSel = $('#filters select.magnitudeType');
-		data.forEach(function(magType){
-			magTypeSel.append($('<option>', {
-			    value: magType._id,
-			    text: magType._id
-			}));
-		});
-		magTypeSel
-		.select2({
-			theme : 'bootstrap',
-			allowClear: true,
-		    placeholder: "Tipo magnitudo"
+	
+	//mapTypeSel
+	var magTypeSel = $('#filters select.magnitudeType');
+	magnitudeTypes.getList().forEach(function(magType){
+		magTypeSel.append($('<option>', {
+		    value: magType._id,
+		    text: magType._id,
 		})
-		.on('change', function(e){
-			filters.magnitudeType = $(this).val();
-			$(document).trigger(eventTrigger, filters);
-		});
+		);
 	});
+	magTypeSel
+	.select2({
+		theme : 'bootstrap',
+		allowClear: true,
+	    placeholder: "Tipo magnitudo"
+	})
+	.on('change', function(e){
+		filters.magnitudeType = $(this).val();
+		$(document).trigger(eventTrigger, filters);
+	});
+	
 	
 	//mapTileType
 	var mapTileTypeSel = $('#filters select.mapTileType');
