@@ -62,9 +62,9 @@
    			zoom : 10
     	};
     	var visualizationLimit = {
-    		cluster : 50000,
-    		heatMap : 100000,
-    		markers : 20000
+    		cluster : 400000,
+    		heatMap : 600000,
+    		markers : 8000
     	};
     	var mapTileTypes = {
     		Geografica : {
