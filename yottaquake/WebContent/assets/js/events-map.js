@@ -261,7 +261,7 @@ jQuery(document).ready(function ($) {
 						        	if(popup != null) map.removeLayer(popup);
 						        	popup = L
 						        		.marker(e.latlng)
-						        		.bindPopup(feature.name + ":" + " <strong>" + feature.count + "</strong>" + "earthquakes")
+						        		.bindPopup(feature.name + ":" + " <strong>" + feature.count + "</strong>" + " eventi sismici")
 						        		.addTo(map)
 						        		.openPopup();
 						        }
