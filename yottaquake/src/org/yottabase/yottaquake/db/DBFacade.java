@@ -8,6 +8,8 @@ import org.yottabase.yottaquake.core.BoundingBox;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
 import org.yottabase.yottaquake.core.EventFilter;
 
+import com.mongodb.client.MongoCollection;
+
 public interface DBFacade {
 
 	public void initializeEarthquakesCollection();
@@ -19,6 +21,8 @@ public interface DBFacade {
 	public void initializeFlinnRegionsCollection();
 
 	public void initializeTectonicPlatesCollection();
+	
+	public void initializeCoordinatesCollection();
 
 	
 	/**
@@ -37,6 +41,19 @@ public interface DBFacade {
 	public void insertContinent(JSONObject continent);
 	
 	public void insertTectonicPlate(JSONObject tectonicPlate);
+	
+	/**
+	 * collections getters
+	 */
+	public MongoCollection<Document> getEarthquakesCollection();
+	
+	public MongoCollection<Document> getCountriesCollection(CountryDetailLevel level);
+	
+	public MongoCollection<Document> getFlinnRegionsCollection();
+	
+	public MongoCollection<Document> getContinentsCollection();
+	
+	public MongoCollection<Document> getTectonicPlatesCollection();
 	
 	/**
 	 * raggruppa per anno e mese 
@@ -95,5 +112,11 @@ public interface DBFacade {
 	public Integer getFlinnRegionEventsCount(String name, EventFilter eventFilter);
 
 	public Integer geContinentEventCount(String name, EventFilter eventFilter);
+
+	public void insertPoint(Document point);
+	
+	public Iterable<Document> getPointsInPolygon(Document geometry);
+	
+	public boolean addSurface(MongoCollection<Document> collection, Object docId, int surface);
 
 }

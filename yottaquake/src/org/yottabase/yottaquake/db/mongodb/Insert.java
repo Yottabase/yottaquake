@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,8 @@ import org.json.JSONTokener;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
 import org.yottabase.yottaquake.db.DBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
+
+import com.mongodb.client.MongoCollection;
 
 public class Insert {
 
@@ -39,7 +42,7 @@ public class Insert {
 		 * inserisci eventi
 		 */
 		InputStream inputStreamEarthquake = new FileInputStream(new File(path + "/earthquakes.json"));
-		insertEarthquakes(facade,inputStreamEarthquake);
+		insertEarthquakes(facade, inputStreamEarthquake);
 
 		/*
 		 * inserisci country
@@ -74,12 +77,23 @@ public class Insert {
 		insertTectonicPlates(facade,inputStreamTectonic);
 		
 		/*
-		 * Map countries, continents and plates to events
+		 * Insert global coordinates
+		 */
+		insertCoordinates(facade);
+		
+		/*
+		 * Map countries, continents, flinn region and plates to events
 		 */
 		mapCountriesToEvents(facade);
 		mapContinentsToEvents(facade);
 		mapFlinnRegionsToEvents(facade);
 		mapTectonicPlatesToEvents(facade);
+		mapSurfaces2Polygons(facade);
+		
+		/*
+		 * Map surface to countries, continents, plates, 
+		 */
+		mapSurfaces2Polygons(facade);
 
 	}
 	
@@ -247,6 +261,29 @@ public class Insert {
 	}
 	
 	
+	private static void insertCoordinates(DBFacade facade) {
+		facade.initializeCoordinatesCollection();
+		
+		for (int lng = -179; lng < 179; lng++) {
+			for (int lat = -89; lat < 89; lat++) {
+				ArrayList<Integer> coordinates = new ArrayList<Integer>(3);
+				coordinates.add(lng);
+				coordinates.add(lat);
+				coordinates.add(0);
+				
+				Document geometry = new Document();
+				geometry.put("coordinates", coordinates);
+				geometry.put("type", "Point");
+				
+				Document point = new Document();
+				point.put("geometry", geometry);
+				
+				facade.insertPoint(point);
+			}
+		}
+	}
+	
+	
 	private static void mapCountriesToEvents(DBFacade facade){
 		System.out.println("BEGINNING MAPPING OF COUNTRIES TO EVENTS");
 
@@ -369,6 +406,42 @@ public class Insert {
 		}
 		System.out.println("MAPPING OF TECTONIC PLATES TO EVENTS COMPLETED");
 
-	}	
+	}
+	
+	
+	private static void mapSurfaces2Polygons(DBFacade facade){
+		System.out.println("MAPPING SURFACE TO COUNTRIES - HIGH");
+		mapSurfaces2PolygonInCollection(facade, facade.getCountriesCollection(CountryDetailLevel.HIGH));
+		
+		System.out.println("MAPPING SURFACE TO COUNTRIES - MEDIUM");
+		mapSurfaces2PolygonInCollection(facade, facade.getCountriesCollection(CountryDetailLevel.MEDIUM));
+		
+		System.out.println("MAPPING SURFACE TO COUNTRIES - LOW");
+		mapSurfaces2PolygonInCollection(facade, facade.getCountriesCollection(CountryDetailLevel.LOW));
+		
+		System.out.println("MAPPING SURFACE TO FLINN REGIONS");
+		mapSurfaces2PolygonInCollection(facade, facade.getFlinnRegionsCollection());
+		
+		System.out.println("MAPPING SURFACE TO CONTINENTS");
+		mapSurfaces2PolygonInCollection(facade, facade.getContinentsCollection());
+		
+		System.out.println("MAPPING SURFACE TO TECTONIC PLATES");
+		mapSurfaces2PolygonInCollection(facade, facade.getTectonicPlatesCollection());
+	}
+	
+	
+	@SuppressWarnings("unused")
+	private static void mapSurfaces2PolygonInCollection(DBFacade facade, MongoCollection<Document> collection) {
+		for (Document doc : collection.find()) {
+			Document geometry = (Document) doc.get("geometry");
+			Iterable<Document> pointsInPolygon = facade.getPointsInPolygon(geometry);
+			
+			int surface = 0;
+			for (Document point : pointsInPolygon)
+				surface++;
+			
+			facade.addSurface(collection, doc.get("_id"), surface);
+		}
+	}
 	
 }
