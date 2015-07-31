@@ -116,8 +116,8 @@ jQuery(document).ready(function ($) {
 	var pointersIcon = [];
 	
 	var mapColor = d3.scale.linear()
-		.domain([1, 10])
-		.range(['yellow', 'red']);
+		.domain([1, 6, 10])
+		.range(['yellow', 'red', 'darkred']);
 	
 	for(i=1; i < 10; i++){
 		pointersIcon[i] = L.MakiMarkers.icon({icon: "triangle", color: mapColor(i), size: "s"});	
@@ -146,7 +146,7 @@ jQuery(document).ready(function ($) {
 					
 					var d = new Date(Date.parse(event.properties.time));
 					var label = 
-						"Time: <strong>" + d.getDay() + "/" + d.getMonth() + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "</strong><br/>" +
+						"Time: <strong>" + d.getDate() + "/" + (d.getMonth() +1) + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "</strong><br/>" +
 						"Latitude: <strong>" + event.properties.lat + "</strong><br/>" +
 						"Longitude: <strong>" + event.properties.lon + "</strong><br/>" +
 						"Depth: <strong>" + event.properties.depth + " km </strong><br/>" +
