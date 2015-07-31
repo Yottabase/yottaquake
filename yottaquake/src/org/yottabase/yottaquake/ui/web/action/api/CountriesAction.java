@@ -1,6 +1,7 @@
 package org.yottabase.yottaquake.ui.web.action.api;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,12 +43,14 @@ public class CountriesAction extends AbstractAction{
 		int max = 0;
 		for(Document doc : facade.getCountries(mapDetailLevel, box)){
 			Document properties = (Document) doc.get("properties");
-			Integer counts = facade.getCountryEventsCount(properties.get("name").toString(), eventFilter);
+			String name = properties.get("name").toString();
+			Integer counts = facade.getCountryEventsCount(name, eventFilter);
 			min = Math.min(min, counts);
 			max = Math.max(max, counts);
 			
 			JSONObject obj = new JSONObject(doc.toJson());
 			obj.put("count", counts);
+			obj.put("name", name);
 			items.put(obj);
 		}
 		

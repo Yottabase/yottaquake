@@ -38,6 +38,7 @@ public class ContinentsAction extends AbstractAction{
 			
 			JSONObject obj = new JSONObject(doc.toJson());
 			obj.put("count", counts);
+			obj.put("name", name);
 			items.put(obj);
 		}
 		
