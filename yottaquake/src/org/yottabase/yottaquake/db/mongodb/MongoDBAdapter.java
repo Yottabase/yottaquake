@@ -316,15 +316,6 @@ public class MongoDBAdapter implements DBFacade {
 		
 		return counts;
 	}
-
-
-	@Override
-	public Iterable<Document> getFlinnRegions(BoundingBox box) {
-		Document boxDoc = new Document("$geometry",new Document("type","Polygon").append("coordinates", box.toPolygon()));
-		
-		MongoCollection<Document> collection = getFlinnRegionsCollection();
-		return collection.find(new Document("geometry", new Document("$geoIntersects", boxDoc)));
-	}
 	
 	// *********************** CONVEX HULL - START ************************** //
 
@@ -499,8 +490,18 @@ public class MongoDBAdapter implements DBFacade {
 
 
 	@Override
-	public Iterable<Document> getFlinnRegions() {
-		return getFlinnRegionsCollection().find();
+	public Iterable<Document> getFlinnRegions(BoundingBox box) {
+		MongoCollection<Document> collection = getFlinnRegionsCollection();
+		
+		FindIterable<Document> flinnRegions;
+		if(box != null ){
+			Document boxDoc = new Document("$geometry",new Document("type","Polygon").append("coordinates", box.toPolygon()));
+			flinnRegions = collection.find(new Document("geometry", new Document("$geoIntersects", boxDoc)));
+		}
+		else 
+			flinnRegions = collection.find();
+			
+		return flinnRegions;		
 	}
 
 
