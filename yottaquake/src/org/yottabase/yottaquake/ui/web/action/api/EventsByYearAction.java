@@ -33,7 +33,7 @@ public class EventsByYearAction extends AbstractAction{
 		response.setContentType(this.CONTENT_TYPE_JSON);
 		response.getWriter().write(items.toString());
 		
-//		facade.close();
+		facade.close();
 	}
 
 }

@@ -48,7 +48,7 @@ public class EventsByMonthAction extends AbstractAction{
 		response.setContentType(this.CONTENT_TYPE_JSON);
 		response.getWriter().write(json.toString());
 		
-//		facade.close();
+		facade.close();
 	}
 
 }

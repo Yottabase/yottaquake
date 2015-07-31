@@ -53,7 +53,7 @@ public class FlinnRegionsAction extends AbstractAction{
 		response.setContentType(this.CONTENT_TYPE_JSON);
 		response.getWriter().write(result.toString());
 
-	
+		facade.close();
 
 	}
 
