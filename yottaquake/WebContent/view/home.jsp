@@ -82,10 +82,13 @@
 						<label><input type="checkbox" data-layer-filter="showCountries">Mappa politica</label>
 					</div>
 					<div class="checkbox">
-						<label><input type="checkbox" data-layer-filter="showTectonicPlates">Placche tettoniche</label>
+						<label><input type="checkbox" data-layer-filter="showFlinnRegions">Regioni di Flinn</label>
 					</div>
 					<div class="checkbox">
-						<label><input type="checkbox" data-layer-filter="showFlinnRegions">Regioni di Flinn</label>
+						<label><input type="checkbox" data-layer-filter="showContinents">Continenti</label>
+					</div>
+					<div class="checkbox">
+						<label><input type="checkbox" data-layer-filter="showTectonicPlates">Placche tettoniche</label>
 					</div>
 				</div>				
 				
