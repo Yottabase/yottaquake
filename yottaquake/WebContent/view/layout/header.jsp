@@ -45,6 +45,9 @@
     <script src="assets/js/lib/bootstrap-datepicker.min.js"></script>
     <link href="assets/css/lib/bootstrap-datepicker3.min.css" rel="stylesheet">
     
+    <script src="assets/js/lib/select2.min.js"></script>
+    <link href="assets/css/lib/select2.min.css" rel="stylesheet">
+    <link href="assets/css/lib/select2-bootstrap.min.css" rel="stylesheet">
     
     <!--  //TODO: remove this sample -->
     <script src="http://leaflet.github.io/Leaflet.markercluster/example/realworld.388.js"></script>
@@ -62,6 +65,23 @@
     		cluster : 50000,
     		heatMap : 100000,
     		markers : 20000
+    	};
+    	var mapTileTypes = {
+    		Default : {
+    			url : "https://api.tiles.mapbox.com/v4/mapbox.outdoors/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ",
+    			options : {
+    				minZoom: 2,
+    				maxZoom: 18,
+    			}
+    		},
+    		Satellite : {
+    			url : "http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}",
+    			options : {
+    				type: 'sat',
+    				ext: 'jpg',
+        			subdomains: '1234'
+    			}
+    		}
     	};
     </script>
     

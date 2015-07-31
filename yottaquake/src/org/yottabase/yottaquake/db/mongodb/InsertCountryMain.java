@@ -27,7 +27,7 @@ public class InsertCountryMain {
 	
 	public static void main(String[] args) throws FileNotFoundException {
 		DBFacade facade = DBAdapterManager.getFacade();
-		facade.initializeCollectionCountries();
+		facade.initializeCountriesCollection();
 		
 		for (CountryDetailLevel level : detail2fileName.keySet()) {
 			String filePath = args[0] + "/" + detail2fileName.get(level) + ".json";

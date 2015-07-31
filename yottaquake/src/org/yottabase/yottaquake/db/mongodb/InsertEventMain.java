@@ -19,7 +19,7 @@ public class InsertEventMain {
 
 	public static void main(String[] args) throws FileNotFoundException, ParseException {
 		DBFacade facade = DBAdapterManager.getFacade();
-		facade.initializeCollectionEarthquake();
+		facade.initializeEarthquakesCollection();
 
 		String path = args[0];
 		InputStream inputStream = new FileInputStream(new File(path + "/earthquakes.json"));

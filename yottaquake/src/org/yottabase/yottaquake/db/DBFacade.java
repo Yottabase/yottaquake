@@ -7,17 +7,18 @@ import org.json.JSONObject;
 import org.yottabase.yottaquake.core.BoundingBox;
 import org.yottabase.yottaquake.core.CountryDetailLevel;
 import org.yottabase.yottaquake.core.EventFilter;
-import org.yottabase.yottaquake.core.FlinnRegionDetailLevel;
 
 public interface DBFacade {
 
-	public void initializeCollectionEarthquake();
+	public void initializeEarthquakesCollection();
 
-	public void initializeCollectionCountries();
+	public void initializeCountriesCollection();
 	
-	public void initializeCollectionFlinnRegions();
+	public void initializeContinentsCollection();
+	
+	public void initializeFlinnRegionsCollection();
 
-	public void initializeCollectionTectonicPlates();
+	public void initializeTectonicPlatesCollection();
 
 	
 	/**
@@ -31,9 +32,11 @@ public interface DBFacade {
 	
 	public void insertEvent(JSONObject event);
 	
-	public void insertTectonicPLates(JSONObject event);
+	public void insertCountry(JSONObject country, CountryDetailLevel level);
 	
-	public void insertCountry(JSONObject event, CountryDetailLevel level);
+	public void insertContinent(JSONObject continent);
+	
+	public void insertTectonicPlate(JSONObject tectonicPlate);
 	
 	/**
 	 * raggruppa per anno e mese 
@@ -61,7 +64,7 @@ public interface DBFacade {
 	
 	//API 
 	
-	public Iterable<Document> getFlinnRegionsWithEventsCount(FlinnRegionDetailLevel level, BoundingBox box);
+	public Iterable<Document> getFlinnRegions(BoundingBox box);
 	
 	public Iterable<Document> getEvents(BoundingBox box, EventFilter eventFilter);
 	
@@ -86,5 +89,11 @@ public interface DBFacade {
 	public Iterable<Document> getTectonicPlates(BoundingBox box);
 
 	public Integer PlatesEventsCount(String string, EventFilter eventFilter);
+
+	public Iterable<Document> getContinents();
+
+	public Iterable<Document> getFlinnRegions();
+
+	public Integer getFlinnRegionEventsCount(String name, EventFilter eventFilter);
 
 }
