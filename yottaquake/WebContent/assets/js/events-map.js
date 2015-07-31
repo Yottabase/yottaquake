@@ -190,7 +190,19 @@ jQuery(document).ready(function ($) {
 					
 				return filters;
 			},
-		}
+		},
+		showContinents : {
+			httpRequest : null,
+			drawedLayer : null,
+			api : "api-continents.do",
+			httpRequestCallback : null
+		},
+		showFlinnRegions : {
+			httpRequest : null,
+			drawedLayer : null,
+			api : "api-flinn-regions.do",
+			httpRequestCallback : null
+		},
 	};
 	
 	$(document).on('yottaquake.filters_update', function(e, filters){
