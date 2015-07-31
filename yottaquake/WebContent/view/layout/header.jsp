@@ -94,6 +94,7 @@
     </script>
     
     <!-- app -->
+    <script src="assets/js/common.js"></script>
 	<link href="assets/css/events-by-month.css" rel="stylesheet">
     <script src="assets/js/events-by-month.js"></script>
     
@@ -105,7 +106,7 @@
     
     <link href="assets/css/style.css" rel="stylesheet">
     <script src="assets/js/filters.js"></script>
-    <script src="assets/js/common.js"></script>
+    
   </head>
 
   <body>

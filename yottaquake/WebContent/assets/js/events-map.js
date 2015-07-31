@@ -115,14 +115,17 @@ jQuery(document).ready(function ($) {
 	var pointers = [];
 	var pointersIcon = [];
 	
-	var mapColor = d3.scale.linear()
-		.domain([1, 10])
-		.range(['yellow', 'red']);
-	
-	for(i=1; i < 10; i++){
-		pointersIcon[i] = L.MakiMarkers.icon({icon: "triangle", color: mapColor(i), size: "s"});	
-	}
-	
+	magnitudeTypes.getList().forEach(function(magType){
+		
+		var icons = []
+		
+		for(i=Math.round(magType.min); i < Math.round(magType.max); i++){
+			icons.push( L.MakiMarkers.icon({icon: "triangle", color: magType.mapColor(i), size: "s"}) );	
+		}
+		
+		pointersIcon[magType._id] = icons;
+		
+	});
 	
 	$(document).on('yottaquake.filters_update', function(e, filters){
 		if(pointersReq != null) pointersReq.abort();
@@ -142,11 +145,11 @@ jQuery(document).ready(function ($) {
 				var coords = [];
 				for (var i = 0; i < data.items.length; i++) {
 					var event = data.items[i];
-					var icon = pointersIcon[Math.round(event.properties.mag)];
+					var icon = pointersIcon[event.properties.magtype.toUpperCase()][Math.round(event.properties.mag)];
 					
 					var d = new Date(Date.parse(event.properties.time));
 					var label = 
-						"Time: <strong>" + d.getDay() + "/" + d.getMonth() + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "</strong><br/>" +
+						"Time: <strong>" + d.getDate() + "/" + (d.getMonth() +1) + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "</strong><br/>" +
 						"Latitude: <strong>" + event.properties.lat + "</strong><br/>" +
 						"Longitude: <strong>" + event.properties.lon + "</strong><br/>" +
 						"Depth: <strong>" + event.properties.depth + " km </strong><br/>" +
