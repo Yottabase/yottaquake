@@ -456,7 +456,7 @@ public class MongoDBAdapter implements DBFacade {
 	/*
 	 * query placche tettoniche
 	 */
-	public Integer PlatesEventsCount(String name,EventFilter eventFilter){
+	public Integer getTectonicPlatesEventsCount(String name,EventFilter eventFilter){
 		Document matchPlate;
 		ArrayList<Document> queries = this.getEventsFiltersQuery(eventFilter);
 		
@@ -520,6 +520,27 @@ public class MongoDBAdapter implements DBFacade {
 		int counts = 0;
 		if (flinnRegionCounts.first() != null)
 			counts = Integer.valueOf( flinnRegionCounts.first().get("total").toString());
+		
+		return counts;
+	}
+
+
+	@Override
+	public Integer geContinentEventCount(String name, EventFilter eventFilter) {
+		Document matchContinent;
+		ArrayList<Document> queries = this.getEventsFiltersQuery(eventFilter);
+		
+		if(queries.isEmpty())
+			matchContinent = new Document("$match", new Document("CONTINENT", name));
+		else
+			matchContinent = new Document("$match", new Document("CONTINENT", name).append("$and", queries));
+				
+		Document groupByContinent = new Document("$group", new Document("_id", "$CONTINENT").append("total", new Document("$sum", 1)));
+		AggregateIterable<Document> continentCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchContinent, groupByContinent));
+		
+		int counts = 0;
+		if (continentCounts.first() != null)
+			counts = Integer.valueOf( continentCounts.first().get("total").toString());
 		
 		return counts;
 	}

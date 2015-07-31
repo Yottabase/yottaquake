@@ -16,7 +16,7 @@ import org.yottabase.yottaquake.db.DBFacade;
 import org.yottabase.yottaquake.ui.web.core.AbstractAction;
 import org.yottabase.yottaquake.ui.web.utils.ParamsUtils;
 
-public class TectonicPlatesAction extends AbstractAction{
+public class ContinentsAction extends AbstractAction{
 
 	@Override
 	public void run(HttpServletRequest request, HttpServletResponse response)
@@ -32,9 +32,9 @@ public class TectonicPlatesAction extends AbstractAction{
 		JSONArray items = new JSONArray();
 		int min =  Integer.MAX_VALUE;
 		int max = 0;
-		for(Document doc : facade.getTectonicPlates(box)){
-			String name = ((Document) doc.get("properties")).getString("PlateName");
-			Integer counts = facade.getTectonicPlatesEventsCount(name, eventFilter);
+		for(Document doc : facade.getContinents()){
+			String name = ((Document) doc.get("properties")).getString("CONTINENT");
+			Integer counts = facade.geContinentEventCount(name, eventFilter);
 			min = Math.min(min, counts);
 			max = Math.max(max, counts);
 			

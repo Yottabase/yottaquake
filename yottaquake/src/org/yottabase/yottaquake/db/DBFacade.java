@@ -88,12 +88,14 @@ public interface DBFacade {
 
 	public Iterable<Document> getTectonicPlates(BoundingBox box);
 
-	public Integer PlatesEventsCount(String string, EventFilter eventFilter);
+	public Integer getTectonicPlatesEventsCount(String string, EventFilter eventFilter);
 
 	public Iterable<Document> getContinents();
 
 	public Iterable<Document> getFlinnRegions();
 
 	public Integer getFlinnRegionEventsCount(String name, EventFilter eventFilter);
+
+	public Integer geContinentEventCount(String name, EventFilter eventFilter);
 
 }
