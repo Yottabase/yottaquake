@@ -1,18 +1,12 @@
 package org.yottabase.yottaquake.db.mongodb;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
-import org.bson.Document;
 import org.yottabase.yottaquake.core.BoundingBox;
-import org.yottabase.yottaquake.core.CountryDetailLevel;
-import org.yottabase.yottaquake.core.FlinnRegionDetailLevel;
 import org.yottabase.yottaquake.core.LatLng;
-import org.yottabase.yottaquake.db.DBFacade;
 import org.yottabase.yottaquake.db.DBAdapterManager;
+import org.yottabase.yottaquake.db.DBFacade;
 
 public class TestMain {
 
