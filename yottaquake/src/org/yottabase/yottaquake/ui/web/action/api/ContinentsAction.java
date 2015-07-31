@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.bson.Document;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.yottabase.yottaquake.core.BoundingBox;
 import org.yottabase.yottaquake.core.EventFilter;
 import org.yottabase.yottaquake.db.DBAdapterManager;
 import org.yottabase.yottaquake.db.DBFacade;
@@ -23,7 +22,6 @@ public class ContinentsAction extends AbstractAction{
 			throws ServletException, IOException {
 
 		// params
-		BoundingBox box = ParamsUtils.extractBoundingBox(request);
 		EventFilter eventFilter = ParamsUtils.extractEventFilter(request);
 		
 		// data
