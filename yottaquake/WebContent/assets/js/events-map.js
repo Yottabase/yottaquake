@@ -143,8 +143,17 @@ jQuery(document).ready(function ($) {
 				for (var i = 0; i < data.items.length; i++) {
 					var event = data.items[i];
 					var icon = pointersIcon[Math.round(event.properties.mag)];
+					
+					var d = new Date(Date.parse(event.properties.time));
+					var label = 
+						"Time: <strong>" + d.getDay() + "/" + d.getMonth() + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "</strong><br/>" +
+						"Latitude: <strong>" + event.properties.lat + "</strong><br/>" +
+						"Longitude: <strong>" + event.properties.lon + "</strong><br/>" +
+						"Depth: <strong>" + event.properties.depth + " km </strong><br/>" +
+						"Magnitude: <strong>" + event.properties.mag + " ("+ event.properties.magtype.toUpperCase() +")</strong><br/>";
+					
 					var mapPointer = L.marker([event.properties.lat, event.properties.lon], {icon: icon})
-						.bindPopup("Magnitudo: <strong>" + event.properties.mag + "</strong><br/>Profondita: <strong>" + event.properties.depth + "km </strong>")
+						.bindPopup(label)
 						.addTo(map);
 					pointers.push(mapPointer);
 				}
