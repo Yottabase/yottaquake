@@ -34,7 +34,7 @@ public class FlinnRegionsAction extends AbstractAction{
 		int min =  Integer.MAX_VALUE;
 		int max = 0;
 		for(Document doc : facade.getFlinnRegions(box)){
-			String name = ((Document) ((Document) doc.get("properties")).get("flinnRegion")).getString("name_l") ;
+			String name = ((Document) doc.get("properties")).getString("name_l") ;
 			Integer counts = facade.getFlinnRegionEventsCount(name, eventFilter);
 			min = Math.min(min, counts);
 			max = Math.max(max, counts);
