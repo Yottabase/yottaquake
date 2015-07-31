@@ -14,7 +14,7 @@ jQuery(document).ready(function ($) {
 	.setView([mapDefault.lat, mapDefault.lng], mapDefault.zoom);
 	
 	//tile
-	var defaultTile = "Default";
+	var defaultTile = "Geografica";
 	var url = mapTileTypes[defaultTile].url;
 	var options = mapTileTypes[defaultTile].options;
 	options.attribution = 'Dev by <strong>Yottabase</strong>';

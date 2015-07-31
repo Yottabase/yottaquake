@@ -67,22 +67,27 @@
     		markers : 20000
     	};
     	var mapTileTypes = {
-    		Default : {
+    		Geografica : {
     			url : "https://api.tiles.mapbox.com/v4/mapbox.outdoors/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6IjZjNmRjNzk3ZmE2MTcwOTEwMGY0MzU3YjUzOWFmNWZhIn0.Y8bhBaUMqFiPrDRW9hieoQ",
     			options : {
     				minZoom: 2,
     				maxZoom: 18,
     			}
     		},
-    		Satellite : {
+    		Satellitare : {
     			url : "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     			options : {}
     		},
     		Terrena : {
     			url : "http://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
     			options : {
-    				maxZoom: 16,
-    				attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+    				maxZoom: 8, //default 16
+    			}
+    		},
+    		Semplice : {
+    			url : "http://openmapsurfer.uni-hd.de/tiles/roadsg/x={x}&y={y}&z={z}",
+    			options : {
+    				maxZoom: 19
     			}
     		}
     	};

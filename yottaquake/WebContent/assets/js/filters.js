@@ -3,7 +3,7 @@ jQuery(document).ready(function ($) {
 	var eventTrigger = 'yottaquake.filters_update';
 	var filters = {
 		magnitudeType : null,
-		mapTileType : "Default",
+		mapTileType : "Geografica",
 			
 		minMagnitude : 3,
 		maxMagnitude : 10,
