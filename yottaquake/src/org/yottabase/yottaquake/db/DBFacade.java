@@ -63,9 +63,7 @@ public interface DBFacade {
 	public boolean updateDocument(Document document, Document update);
 	
 	//API 
-	
-	public Iterable<Document> getFlinnRegions(BoundingBox box);
-	
+		
 	public Iterable<Document> getEvents(BoundingBox box, EventFilter eventFilter);
 	
 	public Set<String> getDistinctMacroRegions(); 
@@ -92,7 +90,7 @@ public interface DBFacade {
 
 	public Iterable<Document> getContinents();
 
-	public Iterable<Document> getFlinnRegions();
+	public Iterable<Document> getFlinnRegions(BoundingBox box);
 
 	public Integer getFlinnRegionEventsCount(String name, EventFilter eventFilter);
 

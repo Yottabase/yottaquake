@@ -312,7 +312,7 @@ public class Insert {
 		System.out.println("BEGINNING MAPPING OF FLINN REGIONS TO EVENTS");
 
 		int count = 0;
-		for (Document region : facade.getFlinnRegions()) {
+		for (Document region : facade.getFlinnRegions(null)) {
 			Document properties = (Document) region.get("properties");
 			Document geometry = (Document) region.get("geometry");
 			Iterable<Document> eventsInRegion = facade.getEventsInPolygon(geometry);
