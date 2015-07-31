@@ -95,13 +95,13 @@
 				<div class="form-group layers">
 					<label>Eventi sismici</label>					
 					<div class="checkbox">
+						<label><input type="checkbox" data-layer-filter="showEvents">Eventi singoli</label>
+					</div>
+					<div class="checkbox">
 						<label><input type="checkbox" data-layer-filter="showClusteredEvents">Eventi clusterizzati</label>
 					</div>
 					<div class="checkbox">
 						<label><input type="checkbox" data-layer-filter="showHeatMap">Heat map</label>
-					</div>
-					<div class="checkbox">
-						<label><input type="checkbox" data-layer-filter="showEvents">Eventi singoli</label>
 					</div>
 				</div>				
 			</form>
