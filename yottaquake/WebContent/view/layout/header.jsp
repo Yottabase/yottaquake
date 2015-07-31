@@ -75,12 +75,8 @@
     			}
     		},
     		Satellite : {
-    			url : "http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}",
-    			options : {
-    				type: 'sat',
-    				ext: 'jpg',
-        			subdomains: '1234'
-    			}
+    			url : "http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    			options : {}
     		},
     		Terrena : {
     			url : "http://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
