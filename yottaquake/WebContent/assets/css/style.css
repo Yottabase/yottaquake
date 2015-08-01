@@ -42,10 +42,6 @@ body strong{
     border-right: solid 1px #e7e7e7;
 }
 
-#filters input{
-	width: 100%;
-}
-
 #filters  .slider{
 	width: 100%;
 }
