@@ -112,3 +112,4 @@
   <body>
    	<div id="label-loading">Aggiornamento dati in corso...</div>
    	<div id="growl">Aggiornamento dati in corso...</div>
+   	

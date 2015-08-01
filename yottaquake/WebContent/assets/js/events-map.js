@@ -45,6 +45,21 @@ jQuery(document).ready(function ($) {
 		}
 	});
 	
+	//legend
+	var legend = $('<div id="legend"><ul class="list-unstyled"></ul></div>');
+	legend.appendTo('body');
+	var list = legend.find('ul');
+	$(document).on('yottaquake.legend_update', function(e, data){
+		list.empty();
+		data.legend.forEach(function(elem){
+			list.append($('<li><span class="colorbox" style="background: '+ elem.color +';"></span>'+ elem.count +'</li>'));
+		})
+		legend.show();
+	});	
+	$(document).on('yottaquake.filters_update', function(e, filters){
+		legend.hide();
+	});
+	
 	
 	//********************* cluster *********************// 
 	var markers = L.markerClusterGroup();
@@ -256,6 +271,24 @@ jQuery(document).ready(function ($) {
 					var mapColor = d3.scale.linear()
 		    			.domain([data.minCount, data.maxCount])
 		    			.range(['#fff7bc', '#d95f0e']);
+					
+					var mapNumber = d3.scale.linear()
+	    				.domain([1, 5])
+	    				.range([data.minCount, data.maxCount]);
+					
+					var legendData = [];
+					var colorNumbers = 5;
+					
+					if(data.minCount == data.maxCount) colorNumbers = 1;
+					
+					for(var i = colorNumbers; i >= 1; i--){
+						legendData.push({
+							color : mapColor(mapNumber(i)),
+							count : Math.round(mapNumber(i))
+						});
+					}
+					$(document).trigger('yottaquake.legend_update', {legend : legendData});
+					
 					
 					var geoData = 
 						{

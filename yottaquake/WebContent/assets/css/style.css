@@ -23,10 +23,11 @@
 }
 
 
-body{
+html, body{
 	background-color: #fff;
 	font-family: 'roboto', Arial, sans-serif;
 	position: relative;
+	height: 100%;
 }
 
 body b,
@@ -93,6 +94,39 @@ body.loading #label-loading{
 	padding: 5px 20px;
 	min-width: 300px;
 	border-bottom-left-radius: 3px; 
+}
+
+#legend{
+	position: absolute;
+	font-weight: normal;
+	font-size: 16px;
+	
+	right: 0;
+	bottom: 0;
+	z-index: 10000;
+	
+    border-right: solid 1px #e7e7e7;
+	background-color: rgba(231, 231, 231, 0.9);
+	background: rgba(231, 231, 231, 0.9);
+	display: none;
+	color: #000;
+	padding: 5px 20px;
+	width: 130px;
+	border-top-left-radius: 3px; 
+	padding-top: 10px;
+}
+
+#legend ul li{
+	margin-bottom: 5px;
+	height: 25px;
+}
+
+.colorbox{
+	display: inline-block;
+	width: 25px;
+	height: 25px;
+	background: #000;
+	margin-right: 5px;
 }
 
 .select2-container--bootstrap{
