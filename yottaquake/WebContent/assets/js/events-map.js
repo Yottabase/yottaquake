@@ -176,6 +176,7 @@ jQuery(document).ready(function ($) {
 						"Time: <strong>" + d.getDate() + "/" + (d.getMonth() +1) + "/" + d.getFullYear() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "</strong><br/>" +
 						"Latitude: <strong>" + event.properties.lat + "</strong><br/>" +
 						"Longitude: <strong>" + event.properties.lon + "</strong><br/>" +
+						"Flinn region: <strong>" + event.flinnRegion.name_l + "</strong><br/>" +
 						"Depth: <strong>" + event.properties.depth + " km </strong><br/>" +
 						"Magnitude: <strong>" + event.properties.mag + " ("+ event.properties.magtype.toUpperCase() +")</strong><br/>";
 					
