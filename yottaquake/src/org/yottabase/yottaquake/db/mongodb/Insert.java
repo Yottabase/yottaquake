@@ -291,7 +291,7 @@ public class Insert {
 		for (Document country : facade.getCountries(CountryDetailLevel.HIGH,null)) {
 			Document properties = (Document) country.get("properties");
 			Document geometry = (Document) country.get("geometry");
-			Iterable<Document> events = DBAdapterManager.getFacade().getEventsInPolygon(geometry);
+			Iterable<Document> events = facade.getEventsInPolygon(geometry);
 			
 			for (Document event : events) {
 				count ++;
