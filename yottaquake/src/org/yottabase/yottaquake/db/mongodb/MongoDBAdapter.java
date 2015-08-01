@@ -39,6 +39,8 @@ public class MongoDBAdapter implements DBFacade {
 	
 	private final static String COLL_TECT_PLATES = "tectonic_plates";
 	
+	private final static String COLL_COORDINATES = "coordinates";
+	
 	
 	public MongoDBAdapter(MongoClient client, MongoDatabase db) {
 		this.client = client;
@@ -46,12 +48,12 @@ public class MongoDBAdapter implements DBFacade {
 	}
 	
 	
-	private MongoCollection<Document> getEarthquakesCollection() {
+	public MongoCollection<Document> getEarthquakesCollection() {
 		return db.getCollection(COLL_EARTHQUAKES);
 	}
 	
 	
-	private MongoCollection<Document> getCountriesCollection(CountryDetailLevel level) {
+	public MongoCollection<Document> getCountriesCollection(CountryDetailLevel level) {
 		String collection = null;
 		switch(level) {
 		  case HIGH:  
@@ -65,17 +67,17 @@ public class MongoDBAdapter implements DBFacade {
 	}
 	
 	
-	private MongoCollection<Document> getContinentsCollection() {
+	public MongoCollection<Document> getContinentsCollection() {
 		return db.getCollection(COLL_CONTINENTS);
 	}
 	
 	
-	private MongoCollection<Document> getFlinnRegionsCollection() {
+	public MongoCollection<Document> getFlinnRegionsCollection() {
 		return db.getCollection(COLL_FLINN_REGIONS);
 	}
 	
 	
-	private MongoCollection<Document> getTectonicPlatesCollection() {
+	public MongoCollection<Document> getTectonicPlatesCollection() {
 		return db.getCollection(COLL_TECT_PLATES);
 	}
 	
@@ -95,7 +97,6 @@ public class MongoDBAdapter implements DBFacade {
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("flinnRegion.name_l");
 		db.getCollection(COLL_EARTHQUAKES).dropIndex("CONTINENT");
 		
-		
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("geometry","2dsphere"));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("geolocation.name",1));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("properties.lon",1));
@@ -107,7 +108,6 @@ public class MongoDBAdapter implements DBFacade {
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("plate_location.PlateName",1));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("flinnRegion.name_l",1));
 		db.getCollection(COLL_EARTHQUAKES).createIndex(new Document("CONTINENT",1));
-
 		
 		System.out.println("Collection \'Earthquakes\' initialized");
 	}
@@ -118,6 +118,14 @@ public class MongoDBAdapter implements DBFacade {
 		db.getCollection(COLL_COUNTRIES_LOW).drop();
 		db.getCollection(COLL_COUNTRIES_MEDIUM).drop();
 		db.getCollection(COLL_COUNTRIES_HIGH).drop();
+		
+		db.getCollection(COLL_COUNTRIES_HIGH).dropIndex("surface");
+		db.getCollection(COLL_COUNTRIES_MEDIUM).dropIndex("surface");
+		db.getCollection(COLL_COUNTRIES_LOW).dropIndex("surface");
+		
+		db.getCollection(COLL_COUNTRIES_HIGH).createIndex(new Document("surface",1));
+		db.getCollection(COLL_COUNTRIES_MEDIUM).createIndex(new Document("surface",1));
+		db.getCollection(COLL_COUNTRIES_LOW).createIndex(new Document("surface",1));
 		System.out.println("Collection \'Countries\' initialized");
 	}
 	
@@ -125,6 +133,10 @@ public class MongoDBAdapter implements DBFacade {
 	@Override
 	public void initializeContinentsCollection() {
 		db.getCollection(COLL_CONTINENTS).drop();
+		
+		db.getCollection(COLL_CONTINENTS).dropIndex("surface");
+		db.getCollection(COLL_CONTINENTS).createIndex(new Document("surface",1));
+
 		System.out.println("Collection \'Continents\' initialized");
 	}
 	
@@ -132,6 +144,10 @@ public class MongoDBAdapter implements DBFacade {
 	@Override
 	public void initializeFlinnRegionsCollection() {
 		db.getCollection(COLL_FLINN_REGIONS).drop();
+		
+		db.getCollection(COLL_FLINN_REGIONS).dropIndex("surface");
+		db.getCollection(COLL_FLINN_REGIONS).createIndex(new Document("surface",1));
+
 		System.out.println("Collection \'Flinn Regions\' initialized");
 	}
 	
@@ -139,7 +155,22 @@ public class MongoDBAdapter implements DBFacade {
 	@Override
 	public void initializeTectonicPlatesCollection() {
 		db.getCollection(COLL_TECT_PLATES).drop();
+		
+		db.getCollection(COLL_TECT_PLATES).dropIndex("surface");
+		db.getCollection(COLL_TECT_PLATES).createIndex(new Document("surface",1));
+
 		System.out.println("Collection \'Tectonic Plates\' initialized");
+	}
+	
+	
+	@Override
+	public void initializeCoordinatesCollection() {
+		db.getCollection(COLL_COORDINATES).drop();
+		
+		db.getCollection(COLL_COORDINATES).dropIndex("geometry_2dsphere");
+		db.getCollection(COLL_COORDINATES).createIndex(new Document("geometry","2dsphere"));
+		
+		System.out.println("Collection \'Coordinates\' initialized");		
 	}
 	
 	
@@ -256,6 +287,12 @@ public class MongoDBAdapter implements DBFacade {
 		//db.earthquake.find({geometry: {$geoWithin: {$geometry: {type : "Polygon", coordinates: [ [ [ 3, 50 ], [ 17, 50 ], [ 19, 36 ], [ 2, 39 ], [3, 50] ] ]}}}}).pretty()
 		return db.getCollection(COLL_EARTHQUAKES).find(new Document("geometry", new Document("$geoWithin", new Document("$geometry", geometry))));
 	}
+	
+	
+	@Override
+	public Iterable<Document> getPointsInPolygon(Document geometry) {
+		return db.getCollection(COLL_COORDINATES).find(new Document("geometry", new Document("$geoWithin", new Document("$geometry", geometry))));
+	}
 
 
 	@Override
@@ -307,14 +344,21 @@ public class MongoDBAdapter implements DBFacade {
 		else
 			matchCountry = new Document("$match", new Document("geolocation.name", name).append("$and", queries));
 				
-		Document groupByCountry = new Document("$group", new Document("_id", "$geolocation.name").append("total", new Document("$sum", 1)));
+		Document groupByCountry = new Document("$group", new Document("_id", "$geolocation.name").append("surface", "$surface").append("total", new Document("$sum", 1)));
 		AggregateIterable<Document> countryCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchCountry, groupByCountry));
 		
-		int counts = 0;
-		if (countryCounts.first() != null)
-			counts = Integer.valueOf( countryCounts.first().get("total").toString());
+		int ratio = 0;
+		if (countryCounts.first() != null) {
+			Document country = countryCounts.first();
+			int surface = (int) country.get("surface");
+			int count = (int) country.get("total");
+			
+			if (surface != 0) {
+				ratio = count / surface;
+			}
+		}
 		
-		return counts;
+		return ratio;
 	}
 	
 	// *********************** CONVEX HULL - START ************************** //
@@ -459,11 +503,18 @@ public class MongoDBAdapter implements DBFacade {
 		Document groupByPlate = new Document("$group", new Document("_id", "$plate_location.PlateName").append("total", new Document("$sum", 1)));
 		AggregateIterable<Document> plateCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchPlate,groupByPlate));
 		
-		Integer counts =0;
-		if(plateCounts.first() != null)
-			counts = Integer.valueOf( plateCounts.first().get("total").toString());
+		int ratio = 0;
+		if (plateCounts.first() != null) {
+			Document country = plateCounts.first();
+			int surface = (int) country.get("surface");
+			int count = (int) country.get("total");
+			
+			if (surface != 0) {
+				ratio = count / surface;
+			}
+		}
 		
-		return counts;
+		return ratio;
 	}
 
 
@@ -518,16 +569,23 @@ public class MongoDBAdapter implements DBFacade {
 		Document groupByFlinnRegion = new Document("$group", new Document("_id", "$flinnRegion.name_l").append("total", new Document("$sum", 1)));
 		AggregateIterable<Document> flinnRegionCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchFlinnRegion, groupByFlinnRegion));
 		
-		int counts = 0;
-		if (flinnRegionCounts.first() != null)
-			counts = Integer.valueOf( flinnRegionCounts.first().get("total").toString());
+		int ratio = 0;
+		if (flinnRegionCounts.first() != null) {
+			Document country = flinnRegionCounts.first();
+			int surface = (int) country.get("surface");
+			int count = (int) country.get("total");
+			
+			if (surface != 0) {
+				ratio = count / surface;
+			}
+		}
 		
-		return counts;
+		return ratio;
 	}
 
 
 	@Override
-	public Integer geContinentEventCount(String name, EventFilter eventFilter) {
+	public Integer geContinentEventsCount(String name, EventFilter eventFilter) {
 		Document matchContinent;
 		ArrayList<Document> queries = this.getEventsFiltersQuery(eventFilter);
 		
@@ -539,11 +597,34 @@ public class MongoDBAdapter implements DBFacade {
 		Document groupByContinent = new Document("$group", new Document("_id", "$CONTINENT").append("total", new Document("$sum", 1)));
 		AggregateIterable<Document> continentCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchContinent, groupByContinent));
 		
-		int counts = 0;
-		if (continentCounts.first() != null)
-			counts = Integer.valueOf( continentCounts.first().get("total").toString());
+		int ratio = 0;
+		if (continentCounts.first() != null) {
+			Document country = continentCounts.first();
+			int surface = (int) country.get("surface");
+			int count = (int) country.get("total");
+			
+			if (surface != 0) {
+				ratio = count / surface;
+			}
+		}
 		
-		return counts;
+		return ratio;
+	}
+
+
+	@Override
+	public void insertPoint(Document point) {
+		db.getCollection(COLL_COORDINATES).insertOne(point);
+	}
+
+
+	@Override
+	public boolean addSurface(MongoCollection<Document> collection, Object docId, int surface) {
+		Bson filter = new Document("_id", docId);
+		Bson update = new Document("$set", new Document("surface", surface));
+		UpdateResult result = collection.updateOne(filter, update);
+		
+		return result.wasAcknowledged();
 	}
 
 }
