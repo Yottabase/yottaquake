@@ -489,8 +489,10 @@ public class MongoDBAdapter implements DBFacade {
 		if(eventFilter.getFrom() != null)
 			queries.add(new Document("time.milliseconds", new Document("$gte", eventFilter.getFrom().getTime())));
 		
-		if(eventFilter.getTo() != null)
-			queries.add(new Document("time.milliseconds", new Document("$lte", eventFilter.getTo().getTime())));
+		if(eventFilter.getTo() != null){
+			long toTime = eventFilter.getTo().getTime() + (long) 86399000;
+			queries.add(new Document("time.milliseconds", new Document("$lte", toTime)));
+		}
 		
 		return queries;
 	}
