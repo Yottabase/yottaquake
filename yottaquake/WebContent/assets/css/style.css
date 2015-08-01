@@ -95,4 +95,8 @@ body.loading #label-loading{
 	border-bottom-left-radius: 3px; 
 }
 
+.select2-container--bootstrap{
+	font-weight: 300;
+}
+
 

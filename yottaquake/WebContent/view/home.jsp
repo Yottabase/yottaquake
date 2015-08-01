@@ -100,8 +100,21 @@
 					<div class="checkbox">
 						<label><input type="checkbox" data-layer-filter="showClusteredEvents">Eventi clusterizzati</label>
 					</div>
-					<div class="checkbox">
-						<label><input type="checkbox" data-layer-filter="showHeatMap">Heat map</label>
+
+					<div class="row">
+						<div class="col-md-5">
+							<div class="checkbox">
+								<label><input type="checkbox"
+									data-layer-filter="showHeatMap">Heat map</label>
+							</div>
+						</div>
+						<div class="col-md-7">
+							<select class="form-control heatType input-sm">
+								<option value="count" selected="selected">Heat map densit&aacute;</option>
+								<option value="depth">Heat map profondit&aacute;</option>
+								<option value="magnitude">Heat map magnitudo</option>
+							</select>
+						</div>
 					</div>
 				</div>				
 			</form>

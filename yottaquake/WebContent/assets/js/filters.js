@@ -4,6 +4,7 @@ jQuery(document).ready(function ($) {
 	var filters = {
 		magnitudeType : null,
 		mapTileType : "Geografica",
+		heatType : "count",
 			
 		minMagnitude : 3,
 		maxMagnitude : 10,
@@ -126,6 +127,24 @@ jQuery(document).ready(function ($) {
 			filters[filterName] = status; 
 			$(document).trigger(eventTrigger, filters);
 	    });
+	
+	//heatTypeSel
+	var heatTypeSel = $('#filters select.heatType')
+	.select2({
+		theme : 'bootstrap',
+		minimumResultsForSearch: Infinity,
+		enable : false,
+	})
+	.val(filters.heatType)
+	.change()
+	.on('change', function(e){
+		filters.heatType = $(this).val();
+		$(document).trigger(eventTrigger, filters);
+	});
+	
+	$(document).on('yottaquake.filters_update', function(e, filters){
+		heatTypeSel.select2("enable", filters.showHeatMap);
+	});
 	
 	
 });

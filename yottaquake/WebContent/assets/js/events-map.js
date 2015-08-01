@@ -99,7 +99,16 @@ jQuery(document).ready(function ($) {
 				var coords = [];
 				for (var i = 0; i < data.items.length; i++) {
 					var event = data.items[i];
-					coords.push(new L.LatLng(event.properties.lat, event.properties.lon));
+					switch(filters.heatType) {
+					    case 'depth':
+					    	coords.push(new L.LatLng(event.properties.lat, event.properties.lon, event.properties.depth));
+					        break;
+					    case 'magnitude':
+					    	coords.push(new L.LatLng(event.properties.lat, event.properties.lon, event.properties.magnitude));
+					        break;
+					    default:
+					    	coords.push(new L.LatLng(event.properties.lat, event.properties.lon));
+					}
 				}
 				heat.setLatLngs(coords);
 				
