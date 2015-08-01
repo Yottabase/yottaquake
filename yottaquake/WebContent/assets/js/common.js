@@ -45,11 +45,11 @@ jQuery(document).ready(function ($) {
 	            		types.push(type._id);
 	            	});
 	            	
-	            	var color = d3.scale.category20b().domain(types);
+	            	var color = d3.scale.category10().domain(types);
 	            	
 	            	for(i=0; i<cache.length; i++){
 	            		var type = cache[i];
-	            		var darkColor = cache[i].darkColor = color(type._id);
+	            		var darkColor = cache[i].darkColor = d3.rgb(color(type._id)).darker(1.5).toString();
 	            		var lightColor = cache[i].lightColor = d3.rgb(color(type._id)).brighter(1.5).toString();
 	            		
 	            		cache[i].mapColor = d3.scale.linear()
