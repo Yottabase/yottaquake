@@ -28,11 +28,24 @@ jQuery(document).ready(function ($) {
 	
 	
 	//mapTypeSel
+	function formatMagType (state) {
+		  if (!state.id) { return state.text; }
+		  
+		  var color = magnitudeTypes.getColor(state.text);
+		  var icon = L.MakiMarkers.icon({icon: "triangle", color: color, size: "s"});
+		  var tooltip = magnitudeTypes.getLabel(state.text);
+		  
+		  var $state = $(
+		    '<div title ="'+tooltip+'" style="font-size: 18px; color: ' + color +';"><div style="display: inline-block; height: 30px; margin-right: 10px; overflow: hidden;">'
+		    	+'<img src="' + icon.options.iconUrl + '" /></div> ' + state.text + '</div>'
+		  );
+		  return $state;
+		};
 	var magTypeSel = $('#filters select.magnitudeType');
 	magnitudeTypes.getList().forEach(function(magType){
 		magTypeSel.append($('<option>', {
 		    value: magType._id,
-		    text: magType._id,
+		    text: magType._id
 		})
 		);
 	});
@@ -40,7 +53,8 @@ jQuery(document).ready(function ($) {
 	.select2({
 		theme : 'bootstrap',
 		allowClear: true,
-	    placeholder: "Tipo magnitudo"
+	    placeholder: "Tipo magnitudo",
+	    templateResult: formatMagType
 	})
 	.on('change', function(e){
 		filters.magnitudeType = $(this).val();
