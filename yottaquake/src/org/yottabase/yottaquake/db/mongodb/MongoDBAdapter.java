@@ -351,21 +351,14 @@ public class MongoDBAdapter implements DBFacade {
 		else
 			matchCountry = new Document("$match", new Document("geolocation.name", name).append("$and", queries));
 				
-		Document groupByCountry = new Document("$group", new Document("_id", "$geolocation.name").append("surface", "$surface").append("total", new Document("$sum", 1)));
+		Document groupByCountry = new Document("$group", new Document("_id", "$geolocation.name").append("total", new Document("$sum", 1)));
 		AggregateIterable<Document> countryCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchCountry, groupByCountry));
 		
-		int ratio = 0;
-		if (countryCounts.first() != null) {
-			Document country = countryCounts.first();
-			int surface = (int) country.get("surface");
-			int count = (int) country.get("total");
-			
-			if (surface != 0) {
-				ratio = count / surface;
-			}
-		}
+		int counts = 0;
+		if (countryCounts.first() != null)
+			counts = Integer.valueOf( countryCounts.first().get("total").toString());
 		
-		return ratio;
+		return counts;
 	}
 	
 	// *********************** CONVEX HULL - START ************************** //
@@ -512,18 +505,11 @@ public class MongoDBAdapter implements DBFacade {
 		Document groupByPlate = new Document("$group", new Document("_id", "$plate_location.PlateName").append("total", new Document("$sum", 1)));
 		AggregateIterable<Document> plateCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchPlate,groupByPlate));
 		
-		int ratio = 0;
-		if (plateCounts.first() != null) {
-			Document country = plateCounts.first();
-			int surface = (int) country.get("surface");
-			int count = (int) country.get("total");
-			
-			if (surface != 0) {
-				ratio = count / surface;
-			}
-		}
+		Integer counts =0;
+		if(plateCounts.first() != null)
+			counts = Integer.valueOf( plateCounts.first().get("total").toString());
 		
-		return ratio;
+		return counts;
 	}
 
 
@@ -578,18 +564,11 @@ public class MongoDBAdapter implements DBFacade {
 		Document groupByFlinnRegion = new Document("$group", new Document("_id", "$flinnRegion.name_l").append("total", new Document("$sum", 1)));
 		AggregateIterable<Document> flinnRegionCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchFlinnRegion, groupByFlinnRegion));
 		
-		int ratio = 0;
-		if (flinnRegionCounts.first() != null) {
-			Document country = flinnRegionCounts.first();
-			int surface = (int) country.get("surface");
-			int count = (int) country.get("total");
-			
-			if (surface != 0) {
-				ratio = count / surface;
-			}
-		}
+		int counts = 0;
+		if (flinnRegionCounts.first() != null)
+			counts = Integer.valueOf( flinnRegionCounts.first().get("total").toString());
 		
-		return ratio;
+		return counts;
 	}
 
 
@@ -606,18 +585,11 @@ public class MongoDBAdapter implements DBFacade {
 		Document groupByContinent = new Document("$group", new Document("_id", "$CONTINENT").append("total", new Document("$sum", 1)));
 		AggregateIterable<Document> continentCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchContinent, groupByContinent));
 		
-		int ratio = 0;
-		if (continentCounts.first() != null) {
-			Document country = continentCounts.first();
-			int surface = (int) country.get("surface");
-			int count = (int) country.get("total");
-			
-			if (surface != 0) {
-				ratio = count / surface;
-			}
-		}
+		int counts = 0;
+		if (continentCounts.first() != null)
+			counts = Integer.valueOf( continentCounts.first().get("total").toString());
 		
-		return ratio;
+		return counts;
 	}
 
 
