@@ -33,6 +33,13 @@ public class ContinentsAction extends AbstractAction{
 		for(Document doc : facade.getContinents()){
 			String name = ((Document) doc.get("properties")).getString("CONTINENT");
 			Integer counts = facade.geContinentEventsCount(name, eventFilter);
+			
+			Integer surface = doc.getInteger("surface");
+			if(surface == 0)
+				counts = 0;
+			else
+				counts = (int) (((double) counts.intValue() / (double) surface.intValue()) * 100000);
+			
 			min = Math.min(min, counts);
 			max = Math.max(max, counts);
 			
