@@ -264,12 +264,12 @@ public class Insert {
 	private static void insertCoordinates(DBFacade facade) {
 		facade.initializeCoordinatesCollection();
 		
-		for (int lng = -179; lng < 179; lng++) {
-			for (int lat = -89; lat < 89; lat++) {
-				ArrayList<Integer> coordinates = new ArrayList<Integer>(3);
+		for (double lng = -179.0; lng < 179.0; lng += 0.25) {
+			for (double lat = -89.0; lat < 89.0; lat += 0.25) {
+				ArrayList<Double> coordinates = new ArrayList<Double>(3);
 				coordinates.add(lng);
 				coordinates.add(lat);
-				coordinates.add(0);
+				coordinates.add(0.0);
 				
 				Document geometry = new Document();
 				geometry.put("coordinates", coordinates);

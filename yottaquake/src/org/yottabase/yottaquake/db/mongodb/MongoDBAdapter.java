@@ -356,7 +356,7 @@ public class MongoDBAdapter implements DBFacade {
 		
 		int counts = 0;
 		if (countryCounts.first() != null)
-			counts = Integer.valueOf( countryCounts.first().get("total").toString());
+			counts = Integer.valueOf( countryCounts.first().get("total").toString() );
 		
 		return counts;
 	}
@@ -505,9 +505,9 @@ public class MongoDBAdapter implements DBFacade {
 		Document groupByPlate = new Document("$group", new Document("_id", "$plate_location.PlateName").append("total", new Document("$sum", 1)));
 		AggregateIterable<Document> plateCounts = db.getCollection(COLL_EARTHQUAKES).aggregate(Arrays.asList(matchPlate,groupByPlate));
 		
-		Integer counts =0;
+		Integer counts = 0;
 		if(plateCounts.first() != null)
-			counts = Integer.valueOf( plateCounts.first().get("total").toString());
+			counts = Integer.valueOf( plateCounts.first().get("total").toString() );
 		
 		return counts;
 	}
@@ -566,7 +566,7 @@ public class MongoDBAdapter implements DBFacade {
 		
 		int counts = 0;
 		if (flinnRegionCounts.first() != null)
-			counts = Integer.valueOf( flinnRegionCounts.first().get("total").toString());
+			counts = Integer.valueOf( flinnRegionCounts.first().get("total").toString() );
 		
 		return counts;
 	}
@@ -587,7 +587,7 @@ public class MongoDBAdapter implements DBFacade {
 		
 		int counts = 0;
 		if (continentCounts.first() != null)
-			counts = Integer.valueOf( continentCounts.first().get("total").toString());
+			counts = Integer.valueOf( continentCounts.first().get("total").toString() );
 		
 		return counts;
 	}
