@@ -133,4 +133,7 @@ body.loading #label-loading{
 	font-weight: 300;
 }
 
-
+.select2-container--bootstrap .select2-results__option--highlighted[aria-selected] {
+    background-color: #eee;
+    color: inherit;
+}
