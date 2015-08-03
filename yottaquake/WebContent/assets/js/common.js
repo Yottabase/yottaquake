@@ -96,6 +96,7 @@ jQuery(document).ready(function ($) {
 	            case "MB" : return "Body:\nBased on the amplitude of P body-waves. This scale is most appropriate for deep-focus earthquakes.";
 	            case "MB" : return "Body:\nBased on the amplitude of P body-waves. This scale is most appropriate for deep-focus earthquakes.";
 	            case "MC" : return "Completeness:\n The magnitude above which all events are reported. If the earthquake process obeys the Gutenberg-Richter (G-R) law, Mc can be defined as the magnitude at which the lower end of the frequency magnitude distribution (FMD) departs from the exponential decay.";
+	            case "MH" : return "Hsu:\nIn order to determine the magnitude for Taiwan earthquakes, Hsu (1971) corrected the surface-wave magnitude, measured from the seismograms recorded by the WWSSN, to the maximum trace amplitude (A) and epicentral distance (Delta) recorded by the displacement-type seismographs of the old network of the CWB.";
 	            default: return "";
 	        	}
 	        }
