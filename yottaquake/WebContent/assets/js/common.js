@@ -51,6 +51,7 @@ jQuery(document).ready(function ($) {
 	            		var type = cache[i];
 	            		var darkColor = cache[i].darkColor = d3.rgb(color(type._id)).darker(1.5).toString();
 	            		var lightColor = cache[i].lightColor = d3.rgb(color(type._id)).brighter(1.5).toString();
+	            		cache[i].baseColor = color(type._id);
 	            		
 	            		cache[i].mapColor = d3.scale.linear()
 	        				.domain([type.min, type.max])
@@ -82,7 +83,7 @@ jQuery(document).ready(function ($) {
             			selected = type;
             		}
             	});
-	        	return selected.darkColor;
+	        	return selected.baseColor;
 	        },
 	        getLabel : function(magnitudeType) {
 	        	switch(magnitudeType) {
