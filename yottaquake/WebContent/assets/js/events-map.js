@@ -270,17 +270,17 @@ jQuery(document).ready(function ($) {
 				
 				geoForm.httpRequest = $.getJSON(wsUrl + geoForm.api, customFilters, function(data){
 					var mapColor = d3.scale.linear()
-		    			.domain([data.minCount, data.maxCount])
+		    			.domain([data.minDensity, data.maxDensity])
 		    			.range(['#fff7bc', '#d95f0e']);
 					
 					var mapNumber = d3.scale.linear()
 	    				.domain([1, 5])
-	    				.range([data.minCount, data.maxCount]);
+	    				.range([data.minDensity, data.maxDensity]);
 					
 					var legendData = [];
 					var colorNumbers = 5;
 					
-					if(data.minCount == data.maxCount) colorNumbers = 1;
+					if(data.minDensity == data.maxDensity) colorNumbers = 1;
 					
 					for(var i = colorNumbers; i >= 1; i--){
 						legendData.push({
@@ -300,7 +300,7 @@ jQuery(document).ready(function ($) {
 					if(geoForm.drawedLayer !== null) map.removeLayer(geoForm.drawedLayer);
 					geoForm.drawedLayer = L.geoJson(geoData, {
 						style: function (feature) {
-							feature.color = mapColor(feature.count);
+							feature.color = mapColor(feature.density);
 							return {
 						        fillColor: feature.color,
 						        weight: 1,

@@ -46,24 +46,24 @@ public class CountriesAction extends AbstractAction{
 			String name = properties.get("name").toString();
 			Integer counts = facade.getCountryEventsCount(name, eventFilter);
 			
+			Integer density = 0;
 			Integer surface = doc.getInteger("surface");
-			if(surface == 0)
-				counts = 0;
-			else
-				counts = (int) (((double) counts.intValue() / (double) surface.intValue()) * 100000);
+			if(surface != 0)
+				density = (int) (((double) counts.intValue() / (double) surface.intValue()) * 100000);
 			
-			min = Math.min(min, counts);
-			max = Math.max(max, counts);
+			min = Math.min(min, density);
+			max = Math.max(max, density);
 			
 			JSONObject obj = new JSONObject(doc.toJson());
+			obj.put("density", density);
 			obj.put("count", counts);
 			obj.put("name", name);
 			items.put(obj);
 		}
 		
 		JSONObject result = new JSONObject();
-		result.put("minCount", min);
-		result.put("maxCount", max);
+		result.put("minDensity", min);
+		result.put("maxDensity", max);
 		result.put("items", items);
 		
 		response.setContentType(this.CONTENT_TYPE_JSON);
