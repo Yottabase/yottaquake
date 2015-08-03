@@ -87,13 +87,15 @@ jQuery(document).ready(function ($) {
 	        },
 	        getLabel : function(magnitudeType) {
 	        	switch(magnitudeType) {
-	        	case "MD" : return "Duration: based on the duration of shaking as measured by the time decay of the amplitude of the seismogram. Often used to compute magnitude from seismograms with “clipped” waveforms due to limited dynamic recording range of analog instrumentation, which makes it impossible to measure peak amplitudes.";
-	            case "ML": return "Local: the original magnitude relationship defined by Richter and Gutenberg for local earthquakes in 1935. It is based on the maximum amplitude of a seismogram recorded on a Wood-Anderson torsion seismograph. Although these instruments are no longer widely in use, ML values are calculated using modern instrumentation with appropriate adjustments.";
-	            case "MS": return "Surface wave: a magnitude for distant earthquakes based on the amplitude of Rayleigh surface waves measured at a period near 20 sec.";
-	            case "MW": return "Moment: based on the moment of the earthquake, which is equal to the rigidity of the earth times the average amount of slip on the fault times the amount of fault area that slipped.";
-	            case "ME" : return "Energy: based on the amount of recorded seismic energy radiated by the earthquake.";
-	            case "MI" : return "Moment: based on the integral of the first few seconds of P wave on broadband instruments (Tsuboi method).";
-	            case "MB" : return "Body: based on the amplitude of P body-waves. This scale is most appropriate for deep-focus earthquakes.";
+	        	case "MD" : return "Duration:\nBased on the duration of shaking as measured by the time decay of the amplitude of the seismogram. Often used to compute magnitude from seismograms with “clipped” waveforms due to limited dynamic recording range of analog instrumentation, which makes it impossible to measure peak amplitudes.";
+	            case "ML": return "Local:\nThe original magnitude relationship defined by Richter and Gutenberg for local earthquakes in 1935. It is based on the maximum amplitude of a seismogram recorded on a Wood-Anderson torsion seismograph. Although these instruments are no longer widely in use, ML values are calculated using modern instrumentation with appropriate adjustments.";
+	            case "MS": return "Surface wave:\nA magnitude for distant earthquakes based on the amplitude of Rayleigh surface waves measured at a period near 20 sec.";
+	            case "MW": return "Moment:\nBased on the moment of the earthquake, which is equal to the rigidity of the earth times the average amount of slip on the fault times the amount of fault area that slipped.";
+	            case "ME" : return "Energy:\nBased on the amount of recorded seismic energy radiated by the earthquake.";
+	            case "MI" : return "Moment:\nBased on the integral of the first few seconds of P wave on broadband instruments (Tsuboi method).";
+	            case "MB" : return "Body:\nBased on the amplitude of P body-waves. This scale is most appropriate for deep-focus earthquakes.";
+	            case "MB" : return "Body:\nBased on the amplitude of P body-waves. This scale is most appropriate for deep-focus earthquakes.";
+	            case "MC" : return "Completeness:\n The magnitude above which all events are reported. If the earthquake process obeys the Gutenberg-Richter (G-R) law, Mc can be defined as the magnitude at which the lower end of the frequency magnitude distribution (FMD) departs from the exponential decay.";
 	            default: return "";
 	        	}
 	        }
