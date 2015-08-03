@@ -444,7 +444,7 @@ public class MongoDBAdapter implements DBFacade {
 		Document project = new Document("$project", new Document("properties.mag",1).append("properties.magtype", new Document("$toUpper", "$properties.magtype")));
 		Document groupByMagType = new Document("$group", new Document("_id","$properties.magtype").append("max", new Document("$max","$properties.mag")).append("min", new Document("$min","$properties.mag")).append("total", new Document("$sum", 1)));
 		Document sort = new Document("$sort", new Document("total", -1));
-		Document limit = new Document("$limit", 10);
+		Document limit = new Document("$limit", 11);
 
 		AggregateIterable<Document> distinctMagTypes = db.getCollection(COLL_EARTHQUAKES).aggregate(asList(project,groupByMagType,sort,limit));
 
