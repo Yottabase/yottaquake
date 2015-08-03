@@ -24,8 +24,14 @@ public class MagTypesAction extends AbstractAction{
 		
 		JSONArray result = new JSONArray();
 		
+		int i = 1;
 		for(Document magType : facade.getMagnitudeTypes()){
-			result.put(new JSONObject(magType.toJson()));
+			JSONObject json = new JSONObject(magType.toJson());
+			if(json.get("_id").equals("")) continue;
+			if(i > 10) break;
+			
+			result.put(json);
+			i++;
 		}
 		
 		response.setContentType(this.CONTENT_TYPE_JSON);
