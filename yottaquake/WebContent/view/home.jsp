@@ -10,9 +10,6 @@
 				<span style="color: #EE4E3A;">Yotta<strong>Quake</strong></span>
 			</h2>
 		
-			
-
-			<h3>Filtri</h3>
 			<form>
 				<div class="row">
 					<div class="col-md-6">

@@ -43,6 +43,10 @@ body strong{
     border-right: solid 1px #e7e7e7;
 }
 
+#filters form{
+	margin-top: 20px;
+}
+
 #filters  .slider{
 	width: 100%;
 }
