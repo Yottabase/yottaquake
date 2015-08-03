@@ -121,6 +121,18 @@ body.loading #label-loading{
 	height: 25px;
 }
 
+#legend ul{
+	margin-top: 8px;
+}
+
+#legend h4{
+	margin: 0;
+}
+
+#legend small{
+	font-size: 10px;
+}
+
 .colorbox{
 	display: inline-block;
 	width: 25px;

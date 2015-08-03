@@ -46,7 +46,7 @@ jQuery(document).ready(function ($) {
 	});
 	
 	//legend
-	var legend = $('<div id="legend"><h4>Densità sismica</h4><ul class="list-unstyled"></ul></div>');
+	var legend = $('<div id="legend"><h4>Densità sismica</h4><small>(eventi/superficie)</small><ul class="list-unstyled"></ul></div>');
 	legend.appendTo('body');
 	var list = legend.find('ul');
 	$(document).on('yottaquake.legend_update', function(e, data){
