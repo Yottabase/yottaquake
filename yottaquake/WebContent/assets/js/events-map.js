@@ -143,8 +143,8 @@ jQuery(document).ready(function ($) {
 		
 		var icons = []
 		
-		for(i=Math.round(magType.min); i < Math.round(magType.max); i++){
-			icons.push( L.MakiMarkers.icon({icon: "triangle", color: magType.mapColor(i), size: "s"}) );	
+		for(i=Math.round(magType.min); i <= Math.round(magType.max); i++){
+			icons[i] = L.MakiMarkers.icon({icon: "triangle", color: magType.mapColor(i), size: "s"}) ;	
 		}
 		
 		pointersIcon[magType._id] = icons;
