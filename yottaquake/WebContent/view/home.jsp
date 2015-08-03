@@ -102,17 +102,17 @@
 					</div>
 
 					<div class="row">
-						<div class="col-md-5">
+						<div class="col-md-6">
 							<div class="checkbox">
 								<label><input type="checkbox"
 									data-layer-filter="showHeatMap">Heat map</label>
 							</div>
 						</div>
-						<div class="col-md-7">
+						<div class="col-md-6">
 							<select class="form-control heatType input-sm">
-								<option value="count" selected="selected">Heat map densit&aacute;</option>
-								<option value="depth">Heat map profondit&aacute;</option>
-								<option value="magnitude">Heat map magnitudo</option>
+								<option value="count" selected="selected">Attivit&aacute;</option>
+								<option value="depth">Profondit&aacute;</option>
+								<option value="magnitude">Magnitudo</option>
 							</select>
 						</div>
 					</div>
