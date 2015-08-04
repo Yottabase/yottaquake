@@ -54,7 +54,7 @@
     
     <script type="text/javascript">
     	//js config
-    	var wsUrl = "http://localhost:8080/yottaquake/";
+    	var wsUrl = "/yottaquake/";
     	L.Icon.Default.imagePath = 'assets/images/lib/leaflet';
     	var mapDefault = {
    			lat : 41.90278, 
